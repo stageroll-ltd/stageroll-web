@@ -1,5 +1,9 @@
-import wordmark from "./brand/wordmark-dark.svg";
 import { Stores } from "./stores";
+
+// From public/, by a relative path: the server render and the browser then
+// write the same src, and it resolves at the domain's root and the
+// github.io/<repo>/ preview alike.
+const wordmark = "./brand/wordmark-dark.svg";
 
 // The holding page: the wordmark, "Coming soon", one line, a way to reach
 // us, and the company details the UK requires at the foot.

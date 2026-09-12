@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { hydrateRoot } from 'react-dom/client'
 
 import { App } from './App'
 import './styles.css'
@@ -7,7 +7,9 @@ import './styles.css'
 const root = document.getElementById('root')
 if (!root) throw new Error('index.html has no #root')
 
-createRoot(root).render(
+// The markup is already in the HTML (entry-server.tsx); hydrate it.
+hydrateRoot(
+  root,
   <StrictMode>
     <App />
   </StrictMode>,
