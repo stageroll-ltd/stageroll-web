@@ -1,0 +1,286 @@
+/* One global sheet. The ground is the app's splash ground (`frame`), the
+   wordmark is the drawn logo, and the type is the system's. */
+:root {
+  --ground: #14161b;
+  --ink: rgba(255, 255, 255, 0.86);
+  --ink-quiet: rgba(255, 255, 255, 0.6);
+  --ink-faint: rgba(255, 255, 255, 0.5);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ground);
+  -webkit-text-size-adjust: 100%;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem 2rem 2.5rem;
+  /* A faint lift behind the centre, falling to the ground at the edges. */
+  background: radial-gradient(110% 70% at 50% 38%, #1b1e25 0%, var(--ground) 60%, #111318 100%);
+}
+
+.centre {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* Sat a touch above true centre: the eye reads that as centred. */
+  padding: 2rem 0 8vh;
+  animation: fade 800ms ease-out both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Film grain over the whole page, faint. An inline SVG so nothing loads. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+.top,
+.centre,
+.foot {
+  position: relative;
+  z-index: 1;
+}
+
+.top {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.brand {
+  margin: 0;
+  line-height: 0;
+}
+
+.brand img {
+  width: 112px;
+  height: auto;
+}
+
+.soon {
+  margin: 0;
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.line {
+  margin-top: 1rem;
+  font-size: 1.0625rem;
+  text-wrap: balance;
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.stores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The store badge's shape: black, a light rule, glyph left, two lines. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 46px;
+  padding: 0 0.875rem 0 0.75rem;
+  border: 1px solid #a6a6a6;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+}
+
+.badge-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.badge-line {
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.badge-name {
+  margin-top: 2px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.tally {
+  display: flex;
+  gap: 10px;
+  margin-top: 2.5rem;
+}
+
+.tally span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* The three roll: a wave left to right, then a rest before it goes again. */
+.tally span {
+  animation: roll 5.2s ease-in-out infinite;
+}
+
+.tally-todo {
+  background: #ff0000;
+}
+
+.tally-shooting {
+  background: #ff751f;
+}
+
+.tally-done {
+  background: #00bf63;
+}
+
+/* Written at `.tally span`'s specificity, or its shorthand resets them. */
+.tally .tally-shooting {
+  animation-delay: 0.9s;
+}
+
+.tally .tally-done {
+  animation-delay: 1.8s;
+}
+
+/* Each dot crests inside the first 2s of a 5.2s cycle and then rests, so
+   after the green there is a pause before the red goes again. */
+@keyframes roll {
+  0% {
+    opacity: 0.35;
+  }
+  18% {
+    opacity: 1;
+  }
+  38%,
+  100% {
+    opacity: 0.35;
+  }
+}
+
+.foot {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--ink-faint);
+}
+
+.foot p {
+  text-wrap: balance;
+}
+
+.foot p + p {
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 480px) {
+  .shell {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+.contact {
+  margin-bottom: 1rem;
+  font-size: 1.0625rem;
+  color: var(--ink-quiet);
+}
+
+.mail {
+  color: var(--ink);
+  transition: color 120ms ease;
+}
+
+.mail:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .centre,
+  .tally span {
+    animation: none;
+  }
+
+  .mail {
+    transition: none;
+  }
+}
