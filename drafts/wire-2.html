@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Wireframe 2 · Bento</title><link rel="stylesheet" href="/drafts/wire.css">
+<style>
+.hero{display:grid;grid-template-columns:1fr 1.25fr;gap:48px;align-items:center;padding:72px 0}
+.hero p{color:var(--mute);max-width:26em;margin:0 0 22px}
+.hero .cta{display:flex;gap:10px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:150px;gap:12px}
+.grid .box{justify-items:start;align-content:end;text-align:left;padding:14px}
+.grid .box span{background:none;padding:0;color:var(--ink);font-weight:600;font-size:15px}
+.grid .tall{grid-row:span 2}
+.grid .wide{grid-column:span 2}
+.band{padding:64px 0 0}
+.band .box{height:520px;border-radius:24px 24px 0 0;border-bottom:0}
+.band h2{max-width:14em}
+.band p{color:var(--mute);margin:0 0 24px;max-width:30em}
+.depts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.depts .box{height:120px}
+.close{text-align:center}
+@media (max-width:820px){.hero{grid-template-columns:1fr;gap:28px;padding:40px 0}.grid{grid-template-columns:1fr 1fr;grid-auto-rows:130px}.grid .wide{grid-column:span 2}.band .box{height:380px}.depts{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<div class="wrap">
+  <header class="bar"><div class="logo"></div><div class="navs"><i></i><i></i><i></i></div></header>
+
+  <section class="hero">
+    <div>
+      <h1>Production management, done right.</h1>
+      <p>One line. The script, the days, continuity, inventory. For every department.</p>
+      <div class="cta"><span class="btn solid">Get in touch</span><span class="btn">See the product</span></div>
+      <div class="badges"><i></i><i></i></div>
+    </div>
+    <div class="grid">
+      <div class="box x tall"><span class="tag">HERO BENTO</span><span>Phone · Home</span></div>
+      <div class="box x"><span>Script → scenes</span></div>
+      <div class="box x"><span>Continuity photos</span></div>
+      <div class="box x wide"><span>Calendar · Day 8 of 29</span></div>
+      <div class="box x"><span>Crate · QR</span></div>
+      <div class="box x"><span>Reports</span></div>
+      <div class="box x"><span>Research</span></div>
+    </div>
+  </section>
+
+  <section class="band"><h2>Starts with the script.</h2><p>Import a draft. Scenes and characters come out. Redrafts show what changed.</p><div class="box x"><span class="tag">FULL-WIDTH VISUAL</span><span>Three phones side by side: draft → what changed → scenes</span></div></section>
+  <section class="band"><h2>Every scene, every department.</h2><p>One page per scene, with your department’s card on it.</p><div class="box x"><span class="tag">FULL-WIDTH VISUAL</span><span>Scene page, large, cropped off the bottom</span></div></section>
+  <section class="band"><h2>The day, laid out.</h2><p>Shoot days with their scenes and notes.</p><div class="box x"><span class="tag">FULL-WIDTH VISUAL</span><span>Calendar + day sheet</span></div></section>
+
+  <section>
+    <h2>Four departments. One production.</h2>
+    <div class="depts"><div class="box"><span>Costume</span></div><div class="box"><span>Props</span></div><div class="box"><span>Hair</span></div><div class="box"><span>Makeup</span></div></div>
+  </section>
+
+  <section class="close"><h2>Use it on your next production.</h2><span class="btn solid">Get in touch</span></section>
+  <footer><div class="line w40"></div><div class="line w80"></div><div class="line w60"></div></footer>
+</div>
+<nav class="switch"><a href="/drafts/wire-1.html">1 Big picture</a><a href="/drafts/wire-2.html" aria-current="page">2 Bento</a><a href="/drafts/wire-3.html">3 Sticky phone</a></nav>
+</body></html>

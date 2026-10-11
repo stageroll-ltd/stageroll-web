@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StageRoll — cells mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--frame:#1b1b1b;--card:#fff;--ink:#0b101b;--mute:#6f7480;--line:#e2e2e6;--soft:#f4f4f6;
+  --scene:#0a9a15;--char:#cd4bfe;--ch:#e02e78;--hr:#2469f2;--mu:#0891b2;--orange:#ff9500;--rust:#9a3412;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+html{background:var(--card)}
+body{margin:0;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+.card{background:var(--card);min-height:100vh}
+
+/* Everything sits in cells divided by hairlines. */
+.nav{display:flex;align-items:stretch;height:52px;border-bottom:1px solid var(--line);font-size:13.5px}
+.nav > *{display:flex;align-items:center;padding:0 16px;border-right:1px solid var(--line);color:var(--ink);text-decoration:none;white-space:nowrap}
+.nav .logo{padding:0 18px}
+.nav .logo img{width:96px;height:auto;display:block}
+.nav .sp{flex:1;border-right:0}
+.nav .quiet{border-left:1px solid var(--line);color:var(--ink)}
+.nav .dark{background:var(--ink);color:#fff;border-right:0;padding:0 18px;gap:10px}
+.nav .dark::after{content:"›";font-size:16px}
+
+.hero{display:grid;grid-template-columns:1fr 400px;min-height:440px}
+.hero .l{padding:150px 32px 48px;border-right:1px solid var(--line)}
+.hero h1{font-size:clamp(44px,5.4vw,80px);font-weight:500;letter-spacing:-.035em;line-height:1.02;margin:0}
+.hero .r{padding:210px 28px 40px;background:var(--soft)}
+.hero .r p{margin:0;font-size:18px;line-height:1.4;max-width:22em;text-wrap:pretty}
+
+
+.band{border-top:1px solid var(--line)}
+
+
+/* Then: why it is built the way it is, in three soft cards. */
+.why{padding:96px 32px 72px;border-top:1px solid var(--line)}
+.why .eyebrow{font-size:20px;color:var(--mute);margin:0 0 6px;max-width:22em;line-height:1.25}
+.why h2{font-size:clamp(34px,4vw,56px);font-weight:500;letter-spacing:-.035em;line-height:1.02;margin:0 0 32px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cards .k{background:var(--soft);border-radius:14px;padding:22px;min-height:220px;display:flex;flex-direction:column}
+.cards svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cards h3{margin:auto 0 6px;font-size:15px;font-weight:600}
+.cards p{margin:0;font-size:14px;color:var(--mute);max-width:28em}
+/* Departments: photographs and text as one tile grid. */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:calc(100vw / 4 * .8);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tiles > *{overflow:hidden;background:var(--soft)}
+.tiles img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
+.tiles .t{padding:24px;display:flex;flex-direction:column;justify-content:space-between;font-size:13px;color:var(--mute)}
+.tiles .t b{font-size:22px;letter-spacing:-.03em;color:var(--ink);font-weight:500;line-height:1.1}
+.tiles .tall{grid-row:span 2}
+.tiles .wide{grid-column:span 2}
+.field{height:50vh;background-color:#f6f6f8;background-image:linear-gradient(#e3e3e7 1px,transparent 1px),linear-gradient(90deg,#e3e3e7 1px,transparent 1px);background-size:44px 44px;background-position:-1px -1px}
+
+footer{padding:20px 32px 28px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.switch{position:fixed;right:16px;bottom:16px;display:flex;gap:6px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;font-size:13px;z-index:9}
+.switch a{padding:6px 10px;border-radius:6px;text-decoration:none;color:var(--ink)}
+.switch a[aria-current]{background:var(--ink);color:#fff}
+@media (max-width:900px){.nav .quiet,.nav .mid{display:none}.hero{grid-template-columns:1fr}.hero .l{padding:64px 20px 32px;border:0}.hero .r{padding:20px}.cards{grid-template-columns:1fr}.why{padding:56px 20px 40px}.tiles{grid-template-columns:1fr 1fr;grid-auto-rows:calc(100vw / 2 * .8)}}
+</style>
+</head>
+<body>
+<div class="card">
+  <nav class="nav">
+    <a class="logo" href="#"><img src="/brand/wordmark.svg" alt="StageRoll"></a>
+    <a class="mid" href="#">Product</a><a class="mid" href="#">Departments</a><a class="mid" href="#">Reports</a><a class="mid" href="#">About</a>
+    <span class="sp"></span>
+    <a class="quiet" href="#">Contact</a>
+    <a class="dark" href="#">Get in touch</a>
+  </nav>
+
+  <section class="hero">
+    <div class="l"><h1>Production management.<br>Done right.</h1></div>
+    <div class="r"><p>StageRoll reads the script, lays out the shoot days, and keeps each department’s continuity, inventory and research in one production the whole team shares.</p></div>
+  </section>
+
+  <section class="band">
+    <div class="field" aria-hidden="true"></div>
+  </section>
+
+  <section class="why">
+    <p class="eyebrow">Binders, camera rolls and radio calls don’t scale to a shoot.</p>
+    <h2>StageRoll is built differently.</h2>
+    <div class="cards">
+      <div class="k"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h6M9 16h6"/></svg><h3>Starts with the script</h3><p>Import a draft. Scenes and characters come out. Redrafts show what changed before anything moves.</p></div>
+      <div class="k"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg><h3>Every scene, every department</h3><p>One page per scene with your department’s card on it: who is in it, what they wear, what is in the room.</p></div>
+      <div class="k"><svg viewBox="0 0 24 24"><path d="M6 9V4h12v5"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M8 17v3h8v-3"/></svg><h3>Paperwork in a tap</h3><p>Costume plots, continuity books, bag tags and wrap boxes as PDF or CSV, from live data.</p></div>
+    </div>
+  </section>
+
+  <section class="tiles" aria-hidden="true">
+    <div class="tall"><img src="https://media.gettyimages.com/id/2228651510/photo/non-binary-designer-is-fitting-an-elegant-dress-on-young-beautiful-woman.jpg?s=612x612&w=0&k=20&c=Qwwr61EBdFAt0Ls_zLzM9HratFc3IPMSPpgJkF0nmKM=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Costume</span><b>Changes with their kit, fittings and the costume plot.</b></div>
+    <div class="wide"><img src="https://media.gettyimages.com/id/1544838134/photo/rack-of-vintage-dresses-at-antique-flea-market.jpg?s=612x612&w=0&k=20&c=B8ugxslpyAwXQw8HXlbASqXeJ0Xq1CNki0-kW0b1YE0=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/1474799619/photo/hairdressers-make-beautiful-curls-with-a-curler-on-the-hair-of-a-theater-actress.jpg?s=612x612&w=0&k=20&c=Fnh0u-JEcXw_8TcAix2Hkmq2PiI00TCtmk5rRTa61L0=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Hair and makeup</span><b>Styles and looks by character, in script order.</b></div>
+    <div><img src="https://media.gettyimages.com/id/1297823171/photo/makeup-artist-at-work-in-a-studio.jpg?s=612x612&w=0&k=20&c=TsW_w_hWindxV7ibymNxRm97vH4md5LxE1BsmHvS4C8=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Props</span><b>Items and crates by scene, with a QR code on each.</b></div>
+    <div><img src="https://media.gettyimages.com/id/998264254/photo/boxes-stage-equipment.jpg?s=612x612&w=0&k=20&c=jFpjpT2WFRLwfgNn45hVKPTbve1rtNrX4LfSYqOJMv0=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/1185947339/photo/flight-cases-behind-concert-hall.jpg?s=612x612&w=0&k=20&c=lkvP3sJwD2Gy0Xaafj-5xaA2K7dP_MzT7WZ7Ma4pniw=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/2175183604/photo/stack-of-audio-equipment-boxes.jpg?s=612x612&w=0&k=20&c=NCJDLHoUcK8k-j6sA10_tZjF4gQLE6jazJ-nJ49CIT0=" referrerpolicy="no-referrer"></div>
+    <div class="wide"><img src="https://media.gettyimages.com/id/1090128792/photo/70s-style-living-room.jpg?s=612x612&w=0&k=20&c=nWmTcf4IcnJDYzOt-G8RQ-_c2w-jLzOXsemf25fm0QM=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/546824345/photo/students-constructing-theater-set-on-stage.jpg?s=612x612&w=0&k=20&c=IpJQCiyt9QneOKtmARa460X9wzN99MfrFC59Wfuunow=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Set</span><b>Dressing by scene, and where every piece went.</b></div>
+  </section>
+
+  <footer><span>StageRoll Ltd · London</span><span>Company 17436723</span><span>hello@stageroll.co</span></footer>
+</div>
+<nav class="switch"><a href="/drafts/grid-hero.html">Grid hero</a><a href="/drafts/cells.html" aria-current="page">Cells</a><a href="/drafts/soft.html">Soft</a></nav>
+
+</body>
+</html>
