@@ -36,11 +36,11 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [menu])
-  // On a phone the header stays put and turns to glass once the page has
-  // scrolled (styles.css); `scrolled` is what it keys off.
+  // The header stays put and turns to glass once the page has scrolled a
+  // little way (styles.css); `scrolled` is what it keys off.
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
+    const onScroll = () => setScrolled(window.scrollY > 120)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)

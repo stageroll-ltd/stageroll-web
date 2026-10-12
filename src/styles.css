@@ -214,7 +214,7 @@ a:focus-visible {
 }
 
 .nav.scrolled {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.5);
   -webkit-backdrop-filter: blur(18px) saturate(1.5);
   backdrop-filter: blur(18px) saturate(1.5);
   box-shadow: 0 1px 0 var(--hair);
@@ -1544,20 +1544,29 @@ html.still .hero-stage > * {
 
   /* The hero stacks: the words, then the phone rising out of the foot, no
      photographs. Plain pixels, not the frame's unit. */
+  /* Exactly the first screen, whatever the phone: the stage gives way if
+     the words need the room. */
   .hero {
     --u: 1px;
     display: flex;
     flex-direction: column;
-    height: auto;
-    min-height: 100svh;
+    height: 100svh;
     padding-top: calc(var(--nav-h) + 28px);
   }
 
+  /* The words and the store badges are one group, a fixed 40px apart,
+     sitting a little above the middle of the room between the header and
+     the phone (the bottom padding is the bias), however much room that is. */
   .hero-copy {
     position: relative;
     top: 0;
     bottom: auto;
-    padding: 0 20px 40px;
+    flex: 1 1 auto;
+    padding: 0 20px 64px;
+  }
+
+  .hero .stores {
+    margin-top: 40px;
   }
 
   .hero h1 {
@@ -1566,21 +1575,21 @@ html.still .hero-stage > * {
 
   .hero p {
     font-size: 17px;
+    margin-bottom: 0;
   }
 
-  /* The stage takes whatever the screen has left under the words, so the
-     hero is the whole first screen and the phone rises out of its foot. */
+  /* The stage is a strip at the hero's foot that shows the top 290px of the
+     phone, cut just above halfway, whatever the screen's height. */
   .hero-stage {
     position: relative;
-    flex: 1 0 auto;
-    min-height: 320px;
+    flex: none;
+    height: 290px;
   }
 
   /* `left` is already 50% minus half the phone (--u is 1px here); a
-     `translate` would be overridden by the rise animation and snap after.
-     It sits a little lower than the stage's top, so less of it shows. */
+     `translate` would be overridden by the rise animation and snap after. */
   .hero-stage .phone {
-    top: 140px;
+    top: 0;
   }
 
   .hero-card {
