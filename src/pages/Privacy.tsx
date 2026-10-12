@@ -4,7 +4,7 @@ export function Privacy() {
   return (
     <article className="prose">
       <h1>Privacy policy</h1>
-      <p className="updated">Last updated 21 September 2026</p>
+      <p className="updated">Last updated 12 October 2026</p>
 
       <p className="lede">
         This policy covers the StageRoll app, on iPhone, Android and the web, and this website. It
@@ -20,9 +20,9 @@ export function Privacy() {
 
       <h2>This website</h2>
       <p>
-        This site sets no cookies, runs no analytics and collects no personal data. It is a static
-        site served by GitHub Pages, whose servers may keep standard access logs, such as your IP
-        address and the pages requested, for their own operation and security. If you email us, we
+        This site sets no cookies, runs no analytics and collects no personal data. Our hosting
+        provider may keep standard access logs, such as your IP address and the pages requested, for
+        its own operation and security. If you email us, we
         keep the correspondence for as long as we need it to deal with your enquiry.
       </p>
 
@@ -61,9 +61,9 @@ export function Privacy() {
 
       <h2>Where it lives</h2>
       <p>
-        Data is stored with Supabase, our database, authentication and file storage provider, with
-        access controlled per production member. Sign-in codes are delivered through our email
-        provider, Resend. These providers process data only to run the service for us.
+        Data is stored with our database, authentication and file storage provider, with access
+        controlled per production member. Sign-in codes are delivered through our email provider.
+        These providers process data only to run the service for us.
       </p>
 
       <h2>Who can see production content</h2>
@@ -77,9 +77,12 @@ export function Privacy() {
       <p>
         We keep your account and content for as long as your account exists. You can change your
         name and department in the app. You can delete your account from the app or by writing to
-        us. Deletion is scheduled with a 14-day grace period, in which you can change your mind,
-        after which your account and personal data are removed. Content you added to a production stays with that production, without your name,
-        so the rest of the team's records are not broken.
+        us. Deletion is immediate and cannot be undone: your account and personal data are removed
+        at once, along with any free production only you belong to and any production you had
+        already deleted. A production you own that is on a paid plan or has other members has to be
+        dealt with first: delete it, or move it to the free plan and remove the other members. That
+        way no team is left without an owner. Content you added to other people's productions stays
+        with them, without your name, so the rest of the team's records are not broken.
       </p>
 
       <h2>Your rights</h2>

@@ -1,10 +1,17 @@
 import { photos, type Photo as PhotoSlot, type PhotoKey } from '../photos'
 
-// A photograph slot. Licensed file if there is one; otherwise the comp in the
-// dev server and a quiet placeholder in the build (comps are not ours to ship).
-export function Photo({ slot, className }: { slot: PhotoKey; className?: string }) {
+// A photograph slot: its file if there is one, else a quiet placeholder.
+// `eager` is for the photographs on screen at load, the hero's.
+export function Photo({ slot, className, eager = false }: { slot: PhotoKey; className?: string; eager?: boolean }) {
   const photo: PhotoSlot = photos[slot]
-  const src = photo.file ? `/photos/${photo.file}` : import.meta.env.DEV ? photo.comp : null
+  const src = photo.file ? `/photos/${photo.file}` : null
   if (!src) return <div className={`photo photo-empty ${className ?? ''}`} role="img" aria-label={photo.alt} />
-  return <img className={`photo ${className ?? ''}`} src={src} alt={photo.alt} loading="lazy" referrerPolicy="no-referrer" />
+  return (
+    <img
+      className={`photo ${className ?? ''}`}
+      src={src}
+      alt={photo.alt}
+      loading={eager ? 'eager' : 'lazy'}
+    />
+  )
 }

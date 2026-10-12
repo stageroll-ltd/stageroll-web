@@ -4,7 +4,7 @@ export function Terms() {
   return (
     <article className="prose">
       <h1>Terms of service</h1>
-      <p className="updated">Last updated 21 September 2026</p>
+      <p className="updated">Last updated 12 October 2026</p>
 
       <h2>The service</h2>
       <p>
@@ -46,8 +46,9 @@ export function Terms() {
       <h2>Ending things</h2>
       <p>
         You can delete your account from the app, or by writing to us, at any time. Deletion is
-        scheduled with a 14-day grace period, after which your account and personal data are
-        removed.
+        immediate and cannot be undone. If you own a production on a paid plan or with other
+        members, you will need to delete it, or move it to the free plan and remove the other
+        members, first.
       </p>
 
       <h2>Law</h2>

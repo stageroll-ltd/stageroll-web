@@ -6,7 +6,7 @@ import { findRoute } from './routes'
 export function App({ path }: { path: string }) {
   const route = findRoute(path)
   return (
-    <Layout current={route.path}>
+    <Layout current={route.path} end={route.End && <route.End />}>
       <route.Page />
     </Layout>
   )
