@@ -1,0 +1,205 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>StageRoll · photo shortlist (Getty comps)</title>
+<style>
+:root{--bg:#fafafa;--line:#c9c9cf;--ink:#1a1a1f;--mute:#7b7b85}
+*{box-sizing:border-box}html{background:var(--bg)}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;color:var(--ink);font-size:15px;line-height:1.4}
+.wrap{max-width:1280px;margin:0 auto;padding:24px}
+h1{font-size:28px;letter-spacing:-.03em;margin:8px 0 4px}
+.note{color:var(--mute);margin:0 0 24px;max-width:60em}
+.jump{position:sticky;top:0;z-index:5;display:flex;gap:6px;flex-wrap:wrap;padding:10px 0;background:var(--bg);border-bottom:1px solid var(--line);font-size:13px;margin-bottom:24px}
+.jump a{padding:6px 10px;border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--ink);background:#fff}
+.jump .k{margin-left:auto;background:var(--ink);color:#fff;border-color:var(--ink)}
+section{margin:0 0 40px}
+h2{font-size:20px;letter-spacing:-.02em;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 12px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.t{position:relative;border-radius:12px;overflow:hidden;background:#e9e9ee;border:2px solid transparent;cursor:pointer}
+.t img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.t .c{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:12px;line-height:1.25}
+.t .c b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t .c span{opacity:.8}
+.t .c a{color:#fff;text-decoration:underline;text-underline-offset:2px}
+.t.kept{border-color:var(--ink)}
+.t.kept::after{content:"✓ keep";position:absolute;top:8px;left:8px;background:var(--ink);color:#fff;font-size:11px;font-weight:600;padding:3px 7px;border-radius:6px}
+#keep{margin-top:32px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#fff}
+#keep textarea{width:100%;min-height:120px;font:12px/1.5 ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:8px}
+</style></head><body><div class="wrap">
+<h1>Photo shortlist</h1>
+<p class="note">Getty comps, hot-linked from Getty’s preview CDN for looking at only. Nothing here is licensed. Click a photo to keep it; the keep list at the bottom collects the Getty IDs to buy later. Each caption links to the asset on Getty.</p>
+<nav class="jump" id="jump"></nav>
+<div id="sections"></div>
+<div id="keep"><b>Keep list</b> <span id="count" style="color:var(--mute)"></span><textarea id="keeptext" readonly></textarea></div>
+</div>
+<script>
+const P = (id, t, slug, c) => [id, t, `https://media.gettyimages.com/id/${id}/photo/${slug}.jpg?s=612x612&w=0&k=20&c=${c}`]
+const CATS = [
+  ['On set', 'Crew, cameras, studios. Hero and story backgrounds.', [
+    P('1028404620','People working behind the scenes on a film set','people-working-behind-the-scenes-on-a-film-set','FXtkmoE68BcsKLt7O-ZC8Ld5wbpvGs0jHNxf4pouwiA='),
+    P('1026792026','People working behind the scenes on a film set (2)','people-working-behind-the-scenes-on-a-film-set','ULK2d9O-zzcqpLmkl9lgiM6LdIf7k7ROzfsO_K3K614='),
+    P('1026791776','Behind the scenes while filming','people-working-behind-the-scenes-while-filming-on-a-film-set','NBJf80pJiutUmpKm9LmGbQfaAoLMwI9-I0u3Y0k_IBk='),
+    P('1092281460','Behind the scenes while filming (2)','people-working-behind-the-scenes-while-filming-on-a-film-set','0ZODNNhv7oaLS4sRLrBsMcTfhs_rOlHcUv-jpCt2nHQ='),
+    P('1026791828','Behind the scenes while filming (3)','people-working-behind-the-scenes-while-filming-on-a-film-set','ymEuosH0bTOMh4pcMkJ9YExrRC7oyDActqSM8HXuXA0='),
+    P('1026791840','Camerawoman behind the scenes','camerawoman-behind-the-scenes-on-a-film-set','6rX_b5NILjLcfE9qwxo73vzjqHMLq9Ljb7DLjo0r6uI='),
+    P('1028404544','Actor working behind the scenes','actor-working-behind-the-scenes-on-a-film-set','d2aovDWpme_vrLBcLZK_CPbmU5XtbSVP1rJBb6rpXlo='),
+    P('1026792032','Working on a laptop behind the scenes','people-working-on-a-laptop-behind-the-scenes-on-a-film-set','sbSvt_lnqnC05QLgV2pUXdUjK9GQyJCNdwZAEW4kzh8='),
+    P('1091237146','Film crew in the studio','film-crew-in-the-studio','2X3peR0EsqXrhTKYJvmf_vp5haz6f7YnEDb_ex5PHqQ='),
+    P('1091237134','Film crew in the studio (2)','film-crew-in-the-studio','8cEoe8euUG83Zcs1PeXIZQtBXgbL3SkMmy9R11Tm3x0='),
+    P('1091237152','Film studio','film-studio','8ToZBE999bHAgFacHR7JObo0y4Eg_HbBwhRmLGv46FY='),
+    P('1088109762','Film studio (2)','film-studio','5U1m-8ltWjQYgrzxtDX03mRpr_t_Y_GjobD3Pdi35xE='),
+    P('483621103','Film crew working on set','film-crew-working-on-set','5QPkPDL3Ewi4uMaHdXxN1rpHe6RT8O9QJxs1qaBtFtg='),
+    P('1394715302','Modern movie set','modern-movie-set','sICAF5J6u0WXQ_uADVbMRtvurAWwboXbNiXag9hPQXQ='),
+    P('108914663','Actors performing a scene on a film set','actors-performing-a-scene-on-a-film-set','N2NVk89OUEq5x1abHbqIzUId78iYo2RNfJMfqZidFyI='),
+    P('108914661','Director watching actors perform','a-director-on-a-film-set-watching-actors-perform-a-scene','4uLZ2IYhtH6Bf0XOHWJF1_VEWZ_3gEplJrxaezoXVAA='),
+    P('1298550006','Movie set in silhouettes','movie-set-in-silhouettes-large-screen-with-projection-in-background','ktrV4ukCuy1oIkHkztA4PTdziwnDcuFcL16aBlGV-Jw='),
+    P('636517950','Actress behind the scenes','actress-behind-the-scenes','cruVzdVrguSeIW7sxqFBEE7SzKh6MzJn4Gkap2SlovY='),
+    P('2213970451','Director listening to actor in rehearsal','director-listening-to-actor-during-rehearsal-in-a-loft-studio','UoFb2nH4xt3JZx9wB7hrYdw_fUzsyZMeDN2Q4rpXTAI='),
+    P('2160278093','Filming set','filming-set','XXxYSI2ij6uMG8KiUcegdxtAjTfdq1LMQoiAAmt-jWs='),
+    P('1248972919','Camera, lights, action','camera-lights-action','wDVSqabMiQ1LVs_DA0tlfSMTK8r_qGJYu_rqq_-VK5w='),
+    P('1452644430','Filmmaker using cinema camera','filmmaker-use-cinema-camera-shooting-footage','73Kb2JA1WpFgEf1178of8YCass7oF-sYAG6Q4QtZmrU='),
+    P('1383940509','Cameraman setting display on set, outdoors','cameraman-at-work-setting-display-on-movie-set','EKfH1h3pporrYvQQGisOjdgweSrpZ-DZ-GZQ0NMYL4o='),
+    P('155002857','Studio shooting set','studio-shooting-set','iLbIaA2Ut6qDOyzwzQcv-Co3vNPPhC6If-CfOtMqLQs='),
+  ]],
+  ['On location', 'Outdoor units. Shoot-day and calendar imagery.', [
+    P('200336440-001','Film crew shooting in desert','film-crew-shooting-in-desert','cfUsKWtt_n6C3YXT5v5jVtWXWZU3AJGA6J7f7xtNwbI='),
+    P('2167817148','Cameraman and sound recordist on location','cameraman-and-sound-recordist-at-work-on-location','g1dEQ89FuOzQqglL0nlWEg2zU3b4kNRfGNVMppv9Up8='),
+    P('1251306115','Two filmmakers working together on set','two-filmmaker-working-together-on-set','vq7PMyhXZIPst6UYK3n8Syp38K26xBw3QlA2PS7xFDo='),
+    P('2191120075','Camera operator with gimbal, Tokyo at night','camera-operator-man-using-camera-on-gimbal-in-tokyo-streets-at-night','TN63jQGlEUcizV9p0KkrmkEsYklnOEalaXWfWpwhKt0='),
+    P('2111818219','Filmmaker using camera on gimbal','filmmaker-using-camera-on-stabilizer-gimbal','jdi5glgin1cfBkCHcwmNK6lr_wiB1nSk0Z9IW0qZcqs='),
+  ]],
+  ['Costume', 'Fittings, designers, rails, workrooms. The costume lens.', [
+    P('1028404604','Makeup artist and wardrobe stylist on an actor','makeup-artist-and-wardrobe-stylist-working-on-actor-behind-the-scenes-on-a-film-set','qkhJuEILrdguimXn3tYYg8Hv2_CWB3fpjxy861f6qes='),
+    P('1028404552','Makeup artist and wardrobe stylist on an actor (2)','makeup-artist-and-wardrobe-stylist-working-on-actor-behind-the-scenes-on-a-film-set','T0L66julBefKH28L04f-yLZZEOUEH6hdqnV96DLP1MY='),
+    P('1026840932','Makeup artist and wardrobe stylist on an actor (3)','makeup-artist-and-wardrobe-stylist-working-on-actor-behind-the-scenes-on-a-film-set','tyNj6m12HCuWmlvTjczqrquAdK5zLjFcmyWzqt1Cvc0='),
+    P('1028404656','Makeup artist and wardrobe stylist on an actor (4)','makeup-artist-and-wardrobe-stylist-working-on-actor-behind-the-scenes-on-a-film-set','xKNBPf6ushCHcVBFFL7hdYhttuWGGokppFegY4Ki5Y4='),
+    P('1192938225','Costume designer working','costume-designer-working','rdjUdvUTbaMbmvFQfgXAFZO1CLEY8Xfw-bTmbZQCzhM='),
+    P('1193548073','Costume designer working (2)','costume-designer-working','xuL9ig1aRbDU09n75R1lrxB4Gmk8_AGLwEnvQ0zwnSo='),
+    P('1193155512','Costume designer working (3)','costume-designer-working','h2PlYrOgwxBVeSXsvpGiUK3sROl92r1AcTCH12bpTUE='),
+    P('1192339893','Costume designer working (4)','costume-designer-working','YdYinz4yY0aK9TesdpqWbLQf_P1e2qTR58d35mYQTXQ='),
+    P('1193156203','Costume designer working (5)','costume-designer-working','_LtOZHD5t2fAkCtmSr1-1GN8TXKRLy388bh0nFeg0iQ='),
+    P('2201793084','Costume designer dressing an actress','mature-woman-costume-designer-dressing-up-actress-in-her-home-studio','fazIni7ohTogY_s2Yvlkdms6XwYkGe6VDaxWy7Gy-Ak='),
+    P('2228651510','Designer fitting a dress','non-binary-designer-is-fitting-an-elegant-dress-on-young-beautiful-woman','Qwwr61EBdFAt0Ls_zLzM9HratFc3IPMSPpgJkF0nmKM='),
+    P('200424342-005','Two designers adjusting a dress','two-fashion-designers-adjusting-female-models-dress-in-studio','JXjrVsqewc-dwOZLR0ksrDPQszveLepucAH7FhDRP3s='),
+    P('1291935127','Tailor measuring a jacket','mature-male-tailor-measuring-jacket-with-measuring-tape-at-work-studio','nsUGv198VzXSGLxQYz6vlbZQQbcZDBLT3YKw3Mr8UEI='),
+    P('1134353349','Costumes on a rack','costumes-on-a-rack','SzyT6O3aYnaZm6yhWwYhnWzx7n_JUF-1eKcgx-4kGwA='),
+    P('1544838134','Rack of vintage dresses','rack-of-vintage-dresses-at-antique-flea-market','B8ugxslpyAwXQw8HXlbASqXeJ0Xq1CNki0-kW0b1YE0='),
+    P('2193390640','Festive clothes hanging in a row','festive-clothes-hanging-in-a-row','YRpIn9yJZkexp9EpWHlGlwa4vqP1RBOBIMhWMKZWmlA='),
+    P('1214970051','Blouses on a rack by colour','colorful-blouses-hanging-on-a-clothing-rack-arranged-by-color','qYejcixFE9AoZhTAiMQE5KhEphdolIHjvHwJHdTtcLY='),
+    P('1033222894','Seamstress at work','seamstress-at-work','Fw0YS5CZ9SnbKlXAySdzeWUQGQlGip-FUfv9wmKbz9g='),
+    P('1007461878','Seamstress at work (2)','seamstress-at-work','fpUVhSnATwPZPUtFcT5u3DnljqbswcQEAIVMuBgfnUc='),
+    P('945666964','Seamstress at work (3)','seamstress-at-work','60giACMJlzbiDosILlfct1TT3hFB_dEQLVa9izqwwOI='),
+    P('1461350631','Tailor in a fashion studio','tailor-carefully-tailoring-clothes-in-fashion-studio','mLO7edjCzq_ui43NGmQfUa_RBvJXV6r92Uu6HT60cNY='),
+    P('1471896135','Fitting in a dressmaker’s salon','fitting-in-the-dressmakers-salon-adjusting-seams-on-newly-made-clothes','vCYcAJFnXTteSDa5blQ5zUo_Vx_km4gHqiCbc9pPy7Q='),
+    P('1068215668','Designer at work','designer','2u9c8aj2iQAZ4vdDvDfyAA4H9iV2pBmkdFU6LLFRl7s='),
+    P('1068216038','Designer at work (2)','designer','ffyQI6fJVebMoHdIoAzareoV-tS3hx9_opQ7VeEoeas='),
+  ]],
+  ['Makeup', 'Artists at work, on set and in the chair.', [
+    P('1356990543','Getting ready for filming','getting-ready-for-filming','nOwkebRjW67B8aSp3HQ3fi9GpV3oDJrCKognCk-239E='),
+    P('1297823112','Makeup artist at work in a studio','makeup-artist-at-work-in-a-studio','sZY-nK9mDTCMcPbZkBGXfqT7YKCahtiAcXgomoJDSuI='),
+    P('1297823171','Makeup artist at work in a studio (2)','makeup-artist-at-work-in-a-studio','TsW_w_hWindxV7ibymNxRm97vH4md5LxE1BsmHvS4C8='),
+    P('474322875','Makeup artist and stylist on a model','makeup-artist-and-stylist-working-on-model','hmFdKNrX1gZM4TRPSpe2KgtKG_3hacNGOWG6KBDE-Ig='),
+    P('460973481','Makeup artist and stylist on a model (2)','makeup-artist-and-stylist-working-on-model','bEADydfDg8643W4R1ekYN1s0_Qt_jbj7awhAXJb8x1c='),
+    P('1502551485','Makeup for a drag queen backstage','makeup-artist-woman-doing-makeup-for-drag-queen-backstage-before-performance-at-theater','rf30VbPfZoyGO5I0FHB89iSNL0lj9EognHznJPxUgZo='),
+    P('562453401','Makeup artist applying makeup','makeup-artist-applying-makeup-on-a-model','-pd-RwRK7qe6oHjfB-j4bRyXnklAq-HKWAaD5pzx_w8='),
+    P('530857796','Makeup artist applying makeup (2)','makeup-artist-applying-makeup-on-a-model','V1olo3_q5jqZXsIwuFTqLrv0CXoC4GupM2W6Gz5qI94='),
+    P('649660433','Model having makeup applied','model-having-makeup-applied-by-stylist','DhS4tkiN7b-T3p5KUxFSzMDvhd3CgW1_F1q4Y8uTZV4='),
+    P('1526313279','Applying eyeshadow','makeup-artist-working-applying-the-eyeshadow','R23n2awomjKg9FJvK9xrXmU8YqckqApyrmlQIZ8QPQw='),
+    P('1282625169','Professional makeup artist at work','professional-makeup-artist-at-work','GG4t-_UUgrUVkl0075SyBFVOXMoraB-BZMNyPmCVeQs='),
+    P('475159578','Eye makeup with a brush','makeup-artist-applying-eye-makeup-with-a-brush','EYrQfeQLS1qy8XdPI9n9mfW1PUg2uoBGNvC5sgX3qGM='),
+    P('970369952','Preparing the show clown','preparing-the-show-clown','1n1jfPwzQDmtQMGjXhHfg1t5U6e3ZBRBb6tGMnIZ3PE='),
+    P('2210373318','Studio behind the scenes, makeup touch-up','studio-behind-the-scenes-with-diverse-team-and-makeup-artist-applying-touch-up','XH1vcmQX3S4p7ynVXtlh-tC-EwcHT-U63aUvXqmme3g='),
+  ]],
+  ['Hair', 'Curlers, mirrors, dressing rooms.', [
+    P('1474799619','Hairdresser curling a theatre actress’s hair','hairdressers-make-beautiful-curls-with-a-curler-on-the-hair-of-a-theater-actress','Fnh0u-JEcXw_8TcAix2Hkmq2PiI00TCtmk5rRTa61L0='),
+    P('1474800492','Makeup artist and hairdresser preparing an actress','the-make-up-artist-and-the-hairdresser-are-preparing-the-actress-for-the-performance','ybxzNZgUc9iZ8jnUuMLgH0pgE4v9Q5VVFC7a9YFLxXA='),
+    P('1474799691','Mirror view, hairdresser curling hair','a-mirror-view-of-the-actress-sitting-while-the-hairdresser-curls-her-hair','0zgXof-rHf2-zYtQRI0ehEPutTvBdzGZSm5OSx9jQOQ='),
+    P('1474800462','Senior actress in the mirror while her hair is done','a-senior-actress-looks-at-herself-in-the-mirror-while-a-hairdresser-does-her-hair','7ktgcaSDDGHwMZnMP9wzdXmQNybSPQ79isMo1-vr0L8='),
+    P('1474799580','Hairdresser and makeup artist preparing a theatre actress','the-hairdresser-and-make-up-artist-are-preparing-the-theater-actress-for-the-performance-of','ZHk041A34U0CL74qHBE0ks6zzLXddKeFpYMukgUcWRY='),
+    P('1474800557','Makeup and hairspray on an older actress','a-make-up-artist-applies-make-up-to-an-older-actress-and-a-hairdresser-styles-her-hair-and','oJfqR1gtPShzDS5YLhcip7ylUdT5HQLpe6n8Or7qfU8='),
+    P('1482281219','Stylist doing hair in a dressing room','freelance-stylist-is-doing-hairstyling-for-famous-female-artist-actress-in-dressing-room','5Puwu2S9KSe8CIXAgshwndj-0VmkbHSrIhKWtERgSj4='),
+    P('97561137','Performer and makeup artist in a dressing room','performer-and-makeup-artist-in-a-dressing-room','3T3YzmPzp7NzQd6ExHpS62iVGWwuekMgCWho26PCxyE='),
+    P('97565534','Performer being made up','performer-being-made-up','V0JlRJgtVOc70locHdjPcGCBn1KfdEDynHjGqwcOYnE='),
+    P('475159576','At the hairdresser','at-the-hairdresser','DW5j-pFeHpVuW4bMXN6AMhjCkpUxd2zxCTrP2dSC0qI='),
+  ]],
+  ['Backstage and dressing rooms', 'Theatre side of the product. Mirrors, bulbs, doors.', [
+    P('2204390888','Theatre dressing room with bulb mirrors','a-theatre-dressing-room-with-a-long-worktop-and-seats-and-big-mirrors-with-bulb-lighting','ZqmANVEiDL5Hke7NNspKn4Qhfug8eG5BILtIBZGY6YY='),
+    P('154945972','Dressing room','dressing-room','l6Kna67dCcK3cWCWXmWS7aXXM5jEYA3POud6GXYRYbA='),
+    P('1474799489','Actress rehearsing in front of the mirror','the-actress-in-the-dressing-room-rehearses-the-scene-sitting-in-front-of-the-mirror-before','ajHZhjCnrCTCjLcb6Z57OrStJgeeLCdA0XdiSmhiphM='),
+    P('1474799770','Actress powdering backstage','while-sitting-in-front-of-the-mirror-in-the-backstage-of-the-theater-the-actress-puts-powder','RaOEHChQ1JyOi5IS3aMKZoBoU4MrAjjJyLyhTr5uB2A='),
+    P('1269709923','Theatre actress backstage','beautiful-theatre-actress-backstage','TndgzGSayAcUE-353Z5WMQfEB_RrJGqqzgNPTKawarE='),
+    P('97560724','Open door of a star’s dressing room','open-door-of-stars-dressing-room','bli3FIgMimNsbv3_941DhEGYXL3BwEPujw_O4SaHuxA='),
+    P('85630236','Flowers in a dressing room','flowers-in-dressing-room','MDw1apra9TKW0EJX69-GUPTBDXeHtOka167bOCIs1qM='),
+    P('1349065421','Actress in period costume in a dressing room','actress-in-period-costume-in-dressing-room','DLAoyQ5svZKrb2hiEOtbePGXKW8zkm3wM6CN6gzPXug='),
+    P('1349065386','Two actresses in period costume in a dressing room','two-actresses-in-period-costume-in-dressing-room','wjBcaQrmagsaMI5otmr5b4zTwLiTgLnBFjjemxlPhjA='),
+    P('1480013023','Director and actress in a dressing room','portrait-of-female-director-and-actress-in-dressing-room-in-backstage','BtYj97nnRlmbik5lPvezWsF6EZomVyc-w3QGwMe0u_g='),
+    P('2086960391','Dancer putting on makeup backstage','young-dancer-actress-putting-on-makeup-backstage-to-perform','dBOt_cJYU04FViriPMttf9RnjuZOXsGTaXqbx1XEBWU='),
+    P('1501456908','Performer applying powder before a premiere','confident-female-performer-applying-powder-getting-ready-for-student-drama-club-premiere-event','yVFxWZcDH0mNR4RYjvyLPo3d22B9ELVQVCSCaD1kjO4='),
+    P('1188482485','Opera singer getting ready','opera-singer-getting-ready-in-dressing-room','wiK8bDwbrF6gaJ1vQeUZFw0DNbt5wwdqZm3sWAyz1AQ='),
+  ]],
+  ['On stage', 'Rehearsals and performance. Period costume.', [
+    P('1469260192','Two actors performing on stage','two-actors-performing-on-stage','W8CYr9oZskR0iynXbyRqUu1DMDlyUuUWGv6HC5CxV-s='),
+    P('156410653','Actors rehearsing on stage','actors-rehearsing-on-stage','VDI4RgNdMCA4TH-eVVM48dodcSH0QNSeXFiI6NtavYo='),
+    P('1464430229','Giving notes on a performance','giving-notes-on-performance','cfqDMt8pldVrsuE-avyU6BuxP61cnQYlhoM5d0X2jfw='),
+    P('636899815','Theatre group learning a script on stage','community-theatre-group-learning-script-on-stage','tWRjUqDqUWVRNDZ-ad9xlsTbIIqEjPXQWsR9dzhr1cE='),
+    P('636899811','Actor rehearsing on stage','actor-rehearsing-on-stage','Rnb4g40AG2pPS5XuIj3R8VM8aZvpoR3yoWRTVGmQSck='),
+    P('636899805','Theatre group rehearsing on stage','community-theatre-group-rehearse-on-stage','SFWtQ_Iap6km-Tt1fXV9AM75VwoHEPcDl1aWMkxgN5A='),
+    P('1468939224','Actress on stage','beautiful-black-actress-on-stage','DNFzekp-JLPLfUfenf-86O3Fd8k0QDqXLfX2p05aYY8='),
+    P('1890144615','Actresses singing on a theatre stage','actresses-singing-in-the-theater-stage','mCT0qCOoUmTFN8-LYLalTnwe0JWt8gsWubjMLhwFgXQ='),
+    P('1349066319','Three actresses in period costume on stage','three-actresses-in-period-costumes-on-theatre-stage','x3sjqNcfGHUuRT58vGFo0Q4pL4Ep3ebBc8Ls520SSbs='),
+    P('1349307526','Mature performer on stage','mature-female-performer-on-the-stage','_Qi8AIUPukCs2EgkjHxPQAjcHdiPg5e5sVoLAg6wT68='),
+    P('1333241660','Behind-the-scenes portrait of a mature actor','bts-portrait-of-mature-actor-against-backdrop','eG4ADE1479ZpWP0QQpVQWM7jCN0j8oD2e-SwYkWO0dQ='),
+    P('1333053380','Actors in an outdoor theatre','actors-during-the-play-in-outdoor-theatre','6XznH61dRQ8QvoV95mfyAFd14ZdO6fV66HvVWv_bYTs='),
+    P('171553869','Opera on stage','opera-at-the-stage','xCSuWj_BrcXAeiN8mWZ_yhm82ZZXSsYa_l0abmD1JnQ='),
+    P('2174587265','Actress in a long red dress on stage','expressive-young-lady-in-long-red-dress-holding-long-strings-of-white-beads-acting-on-stage','pHHSQKQbL1RPcKpdKrBq-LwlOBcWRlRmSb3D88ca4-g='),
+  ]],
+  ['Slates and script', 'Clapperboards, sides, pages. Script and scenes steps.', [
+    P('1272237702','Film slate on a wooden table','high-angle-view-of-film-slate-on-wooden-table','1yVUcZgy9f94k0zJ9X6zFCpXTun5wcP3fEjVhupcXM0='),
+    P('1216803153','Close-up film slate','close-up-of-film-clap-board-film-slate','EVCqMrXIGgxyrCnZpGKV7dCs-ca8f1JLIKPTGdzfaHs='),
+    P('1149022220','Movie clapperboard','movie-clapperboard','NE6hjVkUdfGuyHqHUyBmgm7V8wywn9kfvtEx5nACGBc='),
+    P('1149749421','Distressed clapperboard','distressed-image-of-movie-clapperboard','8mLrxyZmOFtDW-98eQwAHtB2pt5ba9cD3JRHYyVHfLc='),
+    P('135541683','Director’s chair and clapperboard','a-spot-lit-directors-chair-and-a-clapper-board','CA3ze4IkjwODiQSYuqKX0Q36RrRVhhE6Ku0qj02nNWI='),
+    P('1473912947','Director with a clapboard on set','smiling-director-sitting-on-chair-holding-clapboard-at-film-set','6x3p9rSGwYQ-fOrfW4KIJIQ_LTiCj8LMZ69qJEb09wY='),
+    P('78366783','Screenplay','screenplay','6YlaykC1n-8NCHKnaiqyGC8rLKUlI31sJo2Kl9IZASY='),
+    P('1394017833','Script in the foreground as actors discuss parts','focus-on-script-in-foreground-as-actors-discuss-parts','kjnfgravXc3tbc9aRj_hzkWqT4JEAmzGu-Q9zEImhrs='),
+    P('1395164242','Three people discuss a script','three-unrecognizable-people-discuss-script','qaqa5LHlTAPJzps8406areCDgomsetsoNRtF9G6Sx-A='),
+  ]],
+  ['Cases and crates', 'Flight cases, trucks, backstage kit. Inventory imagery.', [
+    P('1984562076','Backstage sound equipment case','backstage-sound-equipment-case','thSkKcg-ihz9utNWhNkrzuQbxVAKHyJCJ787H7HcKz0='),
+    P('1984562071','Backstage sound equipment case (2)','backstage-sound-equipment-case','HUrFntSyR22v_6dA2CqPT6baq0SWRb_TEIA6M1vakJQ='),
+    P('1984561580','Backstage sound equipment case (3)','backstage-sound-equipment-case','Q_MZ1bwU2jB0AGuG7fVlOFm16cYYX_HyGexkEXOCbeo='),
+    P('2175183604','Stack of equipment boxes','stack-of-audio-equipment-boxes','NCJDLHoUcK8k-j6sA10_tZjF4gQLE6jazJ-nJ49CIT0='),
+    P('2175183580','Stack of equipment boxes (2)','stack-of-audio-equipment-boxes','_MHBB-XgIzSGSDlm5a1ElAsuW-nj2itZQ97CjzebLMg='),
+    P('1305619816','Stack of equipment boxes (3)','stack-of-audio-equipment-boxes','LEDMiEwoYYZGw1mGcN4Io8AGgqIZ_59JPuH3EQweyy0='),
+    P('998264254','Boxes of stage equipment','boxes-stage-equipment','jFpjpT2WFRLwfgNn45hVKPTbve1rtNrX4LfSYqOJMv0='),
+    P('998264240','Boxes of stage equipment (2)','boxes-stage-equipment','m_1LSbxNUZpeTM2Pplh623a0Kfg3D7mH92nb-NMVZ24='),
+    P('1185947339','Flight cases behind a concert hall','flight-cases-behind-concert-hall','lkvP3sJwD2Gy0Xaafj-5xaA2K7dP_MzT7WZ7Ma4pniw='),
+    P('2290805955','Outdoor stage with flight cases','outdoor-concert-stage-equipment-with-flight-cases-cables-and-sound-gear-being-set-up','KaZEYc5d6n8V5BQA2zp29VYFrO3JLXxSKaVDAz2Xim8='),
+  ]],
+  ['Boards and instant photos', 'Pinned photographs. Research boards and continuity.', [
+    P('1354718071','Collection of instant photo memories','collection-of-instant-photo-memories','ywWz18gvLtTw9wqtd9xJXYIc3OG0DK-AAzR2zKPcaks='),
+    P('1448341096','Creating a collection of instant photos','girl-creating-collection-of-instant-photo-memories','N5EpGQWfpvmVjMj9hljjusQSFVRvVnLBg7rJV_vzAd0='),
+    P('1354718266','Creating a collection of instant photos (2)','girl-creating-collection-of-instant-photo-memories','0AfNpkjRyUaaut1ZSEWMbE11Nz0taFCnqtBFYYmTJr0='),
+    P('121127895','Photos on a cork board','photos-on-cork-board','JanS-CT1_Jz91mrblCa1g2-0_-_xn_0DNoOOEzvDhEo='),
+    P('157333006','Pictures fixed with pins','picture-frames-fixed-with-needles','jeD6efWaaUB2iVvYHsijD4qbpYWzUNGR3Ig67Tp6J4U='),
+    P('939202460','Polaroids','polaroids','xyInaFHbxTNVtlWpi1-oBGHhJBjYCX71MgcYL0uzN-0='),
+    P('1345110481','Instant photos on a fridge door','instant-photos-stuck-to-refrigerator-door','hjogX2_jMb4zW9Vpd9YTwzDWkTtuuDVw7XynEZlgcEI='),
+    P('1273744307','Polaroid frames set','polaroid-photo-frames-set','PRic-7yoIqrDKo7qU8Q-Aoc40FKY0Wzj0EN8qN5U-qY='),
+    P('1273744313','Polaroid frames set (2)','polaroid-photo-frames-set','vnQBrIS8ocyd96Q7rosZMkHOY_imnNpKFz-xvL4oVww='),
+  ]],
+]
+const kept = new Set(JSON.parse(localStorage.getItem('sr-keep') || '[]'))
+const jump = document.getElementById('jump'), secs = document.getElementById('sections')
+CATS.forEach(([name, sub, items], i) => {
+  const id = 'c' + i
+  jump.insertAdjacentHTML('beforeend', `<a href="#${id}">${name} · ${items.length}</a>`)
+  secs.insertAdjacentHTML('beforeend', `<section id="${id}"><h2>${name}</h2><p class="sub">${sub}</p><div class="grid">${items.map(([gid, t, url]) =>
+    `<div class="t${kept.has(gid) ? ' kept' : ''}" data-id="${gid}"><img src="${url}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.t').remove()"><div class="c"><b>${t}</b><span>${gid} · <a href="https://www.gettyimages.co.uk/search/2/image?phrase=${gid}" target="_blank" rel="noopener">Getty</a></span></div></div>`).join('')}</div></section>`)
+})
+jump.insertAdjacentHTML('beforeend', `<a href="#keep" class="k">Keep list</a>`)
+document.querySelectorAll('.t').forEach(t => t.addEventListener('click', e => { if (e.target.tagName === 'A') return; const id = t.dataset.id; kept.has(id) ? kept.delete(id) : kept.add(id); t.classList.toggle('kept', kept.has(id)); save() }))
+function save() {
+  localStorage.setItem('sr-keep', JSON.stringify([...kept]))
+  document.getElementById('count').textContent = kept.size ? `${kept.size} kept` : 'nothing kept yet'
+  document.getElementById('keeptext').value = [...kept].map(id => { const t = document.querySelector(`.t[data-id="${id}"] b`)?.textContent || ''; return `${id}  ${t}  https://www.gettyimages.co.uk/search/2/image?phrase=${id}` }).join('\n')
+}
+save()
+</script></body></html>

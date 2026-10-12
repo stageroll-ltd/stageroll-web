@@ -1,0 +1,581 @@
+/* The product page (pages/Product.tsx), whose pieces the pricing page borrows.
+   Kept beside styles.css while the home page is being worked on; it reads the
+   same tokens and folds into that sheet once both settle. Everything is under
+   .prod so nothing leaks to other pages. */
+
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.prod) {
+    scroll-behavior: smooth;
+  }
+}
+
+.prod h2 {
+  font-size: clamp(32px, 3.4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  margin: 0 0 20px;
+  text-wrap: balance;
+}
+
+.prod .lede {
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.45;
+  color: var(--ink2);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* Hero: the promise, then the five departments, Sets still to come. */
+.prod-hero {
+  padding: 72px 0 80px;
+  text-align: center;
+}
+
+.prod-hero h1 {
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0 auto 24px;
+  max-width: 12em;
+  text-wrap: balance;
+}
+
+.prod-hero .lede {
+  max-width: 36em;
+  margin: 0 auto;
+}
+
+.prod-depts {
+  list-style: none;
+  margin: 56px auto 0;
+  padding: 0;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  text-align: left;
+}
+
+.prod-depts li {
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  background: var(--paper);
+}
+
+.prod-depts b {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+}
+
+.prod-depts span {
+  display: block;
+  font-size: 14.5px;
+  color: var(--ink2);
+}
+
+
+
+/* The links to each section, held at the top of the screen while the page
+   scrolls under them. */
+.prod-bar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: inset 0 -1px 0 var(--hair);
+}
+
+.prod-bar > div {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  max-width: 1640px;
+  margin: 0 auto;
+  padding: 10px 28px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.prod-bar > div::-webkit-scrollbar {
+  display: none;
+}
+
+.prod-bar a {
+  flex: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink2);
+  text-decoration: none;
+  transition: background-color 0.16s ease-in, color 0.16s ease-in;
+}
+
+.prod-bar a:hover {
+  color: var(--ink);
+  transition-duration: 0.2s;
+  transition-timing-function: var(--ease-out);
+}
+
+.prod-bar a[aria-current='true'] {
+  background: var(--ink);
+  color: #fff;
+}
+
+/* A section: the words on one side, the points (or a screenshot) on the other. */
+.prod-sec {
+  padding: 128px 0;
+  scroll-margin-top: 56px;
+}
+
+.prod-row {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 48px 80px;
+  align-items: start;
+}
+
+.prod-head {
+  position: sticky;
+  top: 96px;
+}
+
+.prod-shot {
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: center;
+}
+
+.prod-shot.flip {
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+
+.prod-shot.flip .phone {
+  order: -1;
+}
+
+.prod-words .pts {
+  margin-top: 40px;
+}
+
+.prod .pts {
+  margin-bottom: 0;
+  gap: 24px;
+}
+
+.prod .pts li {
+  align-items: flex-start;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.prod .pts svg {
+  width: 24px;
+  height: 24px;
+  margin-top: -1px;
+}
+
+.prod .pts b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.prod-screen {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* The specifics, for the reader who wants them: a term and its answer. */
+.prod-specs {
+  margin: 40px 0 0;
+  box-shadow: inset 0 1px 0 var(--hair);
+}
+
+.prod-specs div {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr);
+  gap: 16px;
+  padding: 13px 0;
+  box-shadow: inset 0 -1px 0 var(--hair);
+}
+
+.prod-specs dt {
+  font-size: 14.5px;
+  color: var(--mute);
+}
+
+.prod-specs dd {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+/* Centred heads over a grid of tiles: privacy, what’s next, pricing. */
+.prod-center {
+  max-width: 40em;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.prod-tiles {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.prod-tiles li {
+  padding: 28px 28px 30px;
+  border-radius: 24px;
+  background: var(--paper);
+}
+
+.tint .prod-tiles li {
+  background: var(--card);
+}
+
+.prod-tiles svg {
+  width: 26px;
+  height: 26px;
+  margin: 0 0 18px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.prod-tiles h3 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 6px;
+}
+
+.prod-tiles p {
+  font-size: 15.5px;
+  color: var(--ink2);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.prod .acts {
+  margin-top: 48px;
+}
+
+/* The product page's last band: where to go next. */
+.prod-end .prod-center {
+  margin-bottom: 0;
+}
+
+.prod-center .acts {
+  margin-top: 32px;
+}
+
+/* The pricing page: the four plans, then every plan side by side, then the
+   fine print, all in the hero's one white band. */
+.prod-plans {
+  list-style: none;
+  margin: 56px auto 0;
+  padding: 0;
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  text-align: left;
+}
+
+.prod-plans li {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 26px 24px;
+  border-radius: 24px;
+  background: var(--paper);
+}
+
+.prod-plans h2 {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+}
+
+.prod-plans .who {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--ink2);
+}
+
+.prod-plans .price {
+  margin: 28px 0 0;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.prod-plans .per {
+  margin: 4px 0 22px;
+  font-size: 14px;
+  color: var(--mute);
+}
+
+.prod-plans .seats {
+  margin: auto 0 0;
+  padding-top: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: inset 0 1px 0 var(--hair);
+}
+
+.prod-compare {
+  max-width: 1180px;
+  margin: 80px auto 0;
+  overflow-x: auto;
+  text-align: left;
+}
+
+.prod-compare table {
+  width: 100%;
+  min-width: 760px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+/* The labels take the first column; the four plans share the rest evenly. */
+.prod-compare thead td {
+  width: 28%;
+}
+
+.prod-compare thead th {
+  padding: 0 16px 14px;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.prod-compare tbody th[scope='row'] {
+  padding: 13px 16px 13px 0;
+  font-weight: 400;
+  color: var(--ink2);
+  text-align: left;
+}
+
+.prod-compare td {
+  padding: 13px 16px;
+  color: var(--ink);
+}
+
+.prod-compare tbody tr:not(.group) {
+  box-shadow: inset 0 1px 0 var(--hair);
+}
+
+.prod-compare .group th {
+  padding: 40px 0 10px;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.prod-compare .yes {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.prod-compare td .note {
+  display: block;
+  margin-top: 1px;
+  font-size: 13.5px;
+  color: var(--mute);
+}
+
+.prod-compare .no {
+  color: var(--mute);
+}
+
+.prod-compare .soon {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink2);
+  white-space: nowrap;
+  vertical-align: 1px;
+}
+
+.prod-notes {
+  max-width: 1180px;
+  margin: 48px auto 0;
+  padding: 24px 0 0 1.1em;
+  box-shadow: inset 0 1px 0 var(--hair);
+  text-align: left;
+  font-size: 15px;
+  color: var(--ink2);
+}
+
+.prod-notes li + li {
+  margin-top: 6px;
+}
+
+.prod-pricing .acts {
+  margin-top: 56px;
+}
+
+.prod-note {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 14.5px;
+  color: var(--mute);
+}
+
+@media (max-width: 900px) {
+  .prod-hero {
+    padding: 40px 0 56px;
+  }
+
+  .prod-depts {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 40px;
+  }
+
+  .prod-depts li {
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+  }
+
+  .prod-depts span {
+    font-size: 13.5px;
+  }
+
+  .prod-bar > div {
+    justify-content: flex-start;
+    padding: 8px 20px;
+  }
+
+  .prod-sec {
+    padding: 72px 0;
+  }
+
+  .prod-row,
+  .prod-shot,
+  .prod-shot.flip {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .prod-head {
+    position: static;
+  }
+
+  .prod-shot .phone,
+  .prod-shot.flip .phone {
+    order: 0;
+    justify-self: center;
+  }
+
+  .prod-specs div {
+    grid-template-columns: 7.5em minmax(0, 1fr);
+  }
+
+
+  .prod-center {
+    margin-bottom: 36px;
+  }
+
+  .prod-plans {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    margin-top: 40px;
+  }
+
+  .prod-plans li {
+    padding: 22px;
+    border-radius: 20px;
+  }
+
+  .prod-plans .price {
+    margin-top: 18px;
+    font-size: 34px;
+  }
+
+  /* The table scrolls sideways inside its own box; the labels stay put. */
+  .prod-compare {
+    margin: 56px -20px 0;
+    padding: 0 20px;
+  }
+
+  .prod-compare thead td {
+    width: 150px;
+  }
+
+  .prod-compare tbody th[scope='row'] {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--card);
+  }
+
+  .prod-tiles {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  /* One column of short rows: the icon beside the words, not above them. */
+  .prod-tiles li {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    column-gap: 14px;
+    padding: 18px 20px 20px 18px;
+    border-radius: 18px;
+  }
+
+  .prod-tiles svg {
+    grid-row: span 2;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+  }
+
+  .prod-tiles h3 {
+    font-size: 16.5px;
+    margin-bottom: 4px;
+  }
+
+  .prod-tiles p {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1100px) {
+  .prod-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .prod-plans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

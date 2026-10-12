@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StageRoll — cells mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--frame:#1b1b1b;--card:#fff;--line:#e2e2e6;--ink:#0b101b;--mute:#6f7480;--line:#e6e6ea;--grid:#e3e3e7;--paper:#f6f6f8;--green:#1fbf5a;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+html{background:var(--card)}
+body{margin:0;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+.card{background:var(--card);min-height:100vh}
+.nav{display:flex;align-items:stretch;height:56px;border-bottom:1px solid var(--line);font-family:var(--sans);font-size:14px;letter-spacing:0}
+.nav > *{display:flex;align-items:center;padding:0 18px;border-right:1px solid var(--line);color:var(--ink);text-decoration:none;white-space:nowrap}
+.nav .logo{display:block;width:104px;height:auto;margin:0}
+.nav .brand{padding:0 20px}
+.nav .home::before{content:"";display:inline-block;width:0;height:0;border-left:7px solid var(--green);border-top:5px solid transparent;border-bottom:5px solid transparent;margin-right:10px;vertical-align:1px}
+.nav .sp{flex:1;border-right:0}
+.nav .right{display:contents}
+.nav .pill{background:var(--ink);color:#fff;border-right:0;padding:0 22px;gap:10px}
+.nav .pill::after{content:"›";font-size:16px}
+.nav .dot{display:none}
+
+.hero .l{padding:88px 28px 56px}
+.hero h1{font-size:clamp(44px,6.2vw,88px);font-weight:700;letter-spacing:-.04em;line-height:.98;margin:0 0 36px;max-width:11em}
+.hero .row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.hero .sub{font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0}
+.hero h1{position:relative;z-index:0}
+.hero h1 em{font-style:normal;position:relative;display:inline-block;z-index:0}
+/* The highlight sits a little low and to the left of the words, so it clears the line above. */
+.hero h1 em::before{content:"";position:absolute;z-index:-1;left:-.22em;right:-.12em;top:.08em;bottom:-.12em;background:#eef0f4;border-radius:.08em}
+.cta{display:inline-flex;align-items:center;gap:18px;padding:8px 26px 8px 8px;background:var(--ink);color:#fff;border-radius:4px;text-decoration:none;font-family:var(--mono);font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.cta img{width:72px;height:72px;border-radius:2px;object-fit:cover;display:block}
+
+/* The field: grid paper, scattered photographs, one big search. */
+.field{position:relative;aspect-ratio:1600/760;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:44px 44px;background-position:-1px -1px}
+/* The photographs may spill up into the hero; the card clips the sides. */
+.field img{position:absolute;object-fit:cover;border-radius:3px;display:block;height:auto}
+
+/* Below the field: why it is built the way it is, then the departments. Rounded, like the app. */
+/* The statement: a third of the screen tall. The words play in from the sides
+   as it climbs the viewport, driven by scroll, and reverse on the way back. */
+.why{--a:0;--b:0;--c:0;--h:0;min-height:33vh;display:flex;flex-direction:column;justify-content:center;padding:48px 28px;border-top:1px solid var(--line)}
+.why .eyebrow{font-size:clamp(18px,1.6vw,22px);color:var(--mute);margin:0 0 14px;line-height:1.3;opacity:var(--a);transform:translateX(calc((1 - var(--a)) * -90px))}
+.why h2{font-size:clamp(36px,5.2vw,80px);font-weight:700;letter-spacing:-.035em;line-height:1.06;margin:0}
+.why h2 .l{display:inline-block;opacity:var(--b);transform:translateX(calc((1 - var(--b)) * -28vw))}
+.why h2 .r{display:inline-block;position:relative;z-index:0;opacity:var(--c);transform:translateX(calc((1 - var(--c)) * 28vw))}
+.why h2 .r::before{content:"";position:absolute;z-index:-1;left:-.16em;right:-.1em;top:.06em;bottom:-.1em;background:#eef0f4;border-radius:.08em;transform:scaleX(var(--h));transform-origin:left center}
+.why .eyebrow,.why h2 .l,.why h2 .r{will-change:transform,opacity}
+@media (prefers-reduced-motion:reduce){.why{--a:1;--b:1;--c:1;--h:1}}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:calc(100vw / 4 * .8);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tiles > *{overflow:hidden;background:var(--paper)}
+.tiles img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
+.tiles .t{padding:24px;display:flex;flex-direction:column;justify-content:space-between;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.tiles .t b{font-family:var(--sans);font-size:22px;letter-spacing:-.03em;color:var(--ink);font-weight:600;line-height:1.1;text-transform:none}
+.tiles .tall{grid-row:span 2}
+.tiles .wide{grid-column:span 2}
+footer{padding:20px 28px 28px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .nav .mid,.nav .home{display:none}
+  .nav .logo{width:92px}
+  .hero .l{padding:40px 16px 24px}
+  .hero h1{margin-bottom:24px}
+  .field{aspect-ratio:auto;padding:24px 16px 120px;overflow:hidden}
+  .why{padding:40px 16px}.tiles{grid-template-columns:1fr 1fr;grid-auto-rows:calc(100vw / 2 * .8)}
+  .field img{position:static;width:100%!important;height:auto;aspect-ratio:4/3!important;margin-bottom:12px}
+  .field .g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <nav class="nav">
+    <a class="brand" href="#"><img class="logo" src="/brand/wordmark.svg" alt="StageRoll" width="456" height="124"></a>
+    <a class="home" href="#">Home</a>
+    <a class="mid" href="#">Product</a>
+    <a class="mid" href="#">About</a>
+    <span class="sp"></span>
+    <a href="#">Contact</a>
+    <a class="pill" href="#">Get in touch</a>
+  </nav>
+
+  <section class="hero">
+    <div class="l">
+    <h1>Production management,<br><em>done right.</em></h1>
+    <div class="row">
+      <p class="sub">Made for the phone · Built for set</p>
+      <a class="cta" href="#"><img src="https://media.gettyimages.com/id/1028404604/photo/makeup-artist-and-wardrobe-stylist-working-on-actor-behind-the-scenes-on-a-film-set.jpg?s=612x612&w=0&k=20&c=qkhJuEILrdguimXn3tYYg8Hv2_CWB3fpjxy861f6qes=" alt="" referrerpolicy="no-referrer">Get in touch</a>
+    </div>
+    </div>
+  </section>
+
+  <section class="field" aria-hidden="true">
+    <div class="g">
+      <img style="left:4%;top:8%;width:15%;aspect-ratio:1" src="https://media.gettyimages.com/id/1028404604/photo/makeup-artist-and-wardrobe-stylist-working-on-actor-behind-the-scenes-on-a-film-set.jpg?s=612x612&w=0&k=20&c=qkhJuEILrdguimXn3tYYg8Hv2_CWB3fpjxy861f6qes=" referrerpolicy="no-referrer">
+      <img style="left:24%;top:38%;width:14%;aspect-ratio:1" src="https://media.gettyimages.com/id/2201793084/photo/mature-woman-costume-designer-dressing-up-actress-in-her-home-studio.jpg?s=612x612&w=0&k=20&c=fazIni7ohTogY_s2Yvlkdms6XwYkGe6VDaxWy7Gy-Ak=" referrerpolicy="no-referrer">
+      <img style="left:42%;top:6%;width:22%;aspect-ratio:18/11" src="https://media.gettyimages.com/id/1091237134/photo/film-crew-in-the-studio.jpg?s=612x612&w=0&k=20&c=8cEoe8euUG83Zcs1PeXIZQtBXgbL3SkMmy9R11Tm3x0=" referrerpolicy="no-referrer">
+      <img style="left:69%;top:10%;width:12%;aspect-ratio:13/9" src="https://media.gettyimages.com/id/1192938225/photo/costume-designer-working.jpg?s=612x612&w=0&k=20&c=rdjUdvUTbaMbmvFQfgXAFZO1CLEY8Xfw-bTmbZQCzhM=" referrerpolicy="no-referrer">
+      <img style="right:-3%;top:44%;width:21%;aspect-ratio:8/5" src="https://media.gettyimages.com/id/2204390888/photo/a-theatre-dressing-room-with-a-long-worktop-and-seats-and-big-mirrors-with-bulb-lighting.jpg?s=612x612&w=0&k=20&c=ZqmANVEiDL5Hke7NNspKn4Qhfug8eG5BILtIBZGY6YY=" referrerpolicy="no-referrer">
+      <img style="left:47%;top:56%;width:18%;aspect-ratio:8/5" src="https://media.gettyimages.com/id/1984562071/photo/backstage-sound-equipment-case.jpg?s=612x612&w=0&k=20&c=HUrFntSyR22v_6dA2CqPT6baq0SWRb_TEIA6M1vakJQ=" referrerpolicy="no-referrer">
+      <img style="left:8%;bottom:-6%;width:16%;aspect-ratio:1" src="https://media.gettyimages.com/id/1474800492/photo/the-make-up-artist-and-the-hairdresser-are-preparing-the-actress-for-the-performance.jpg?s=612x612&w=0&k=20&c=ybxzNZgUc9iZ8jnUuMLgH0pgE4v9Q5VVFC7a9YFLxXA=" referrerpolicy="no-referrer">
+    </div>
+  </section>
+
+  <section class="why" id="why">
+    <p class="eyebrow">Binders, camera rolls and radio calls don’t scale to a shoot.</p>
+    <h2><span class="l">StageRoll is built</span> <span class="r">differently.</span></h2>
+  </section>
+
+  <section class="tiles" aria-hidden="true">
+    <div class="tall"><img src="https://media.gettyimages.com/id/2228651510/photo/non-binary-designer-is-fitting-an-elegant-dress-on-young-beautiful-woman.jpg?s=612x612&w=0&k=20&c=Qwwr61EBdFAt0Ls_zLzM9HratFc3IPMSPpgJkF0nmKM=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Costume</span><b>Changes with their kit, fittings and the costume plot.</b></div>
+    <div class="wide"><img src="https://media.gettyimages.com/id/1544838134/photo/rack-of-vintage-dresses-at-antique-flea-market.jpg?s=612x612&w=0&k=20&c=B8ugxslpyAwXQw8HXlbASqXeJ0Xq1CNki0-kW0b1YE0=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/1474799619/photo/hairdressers-make-beautiful-curls-with-a-curler-on-the-hair-of-a-theater-actress.jpg?s=612x612&w=0&k=20&c=Fnh0u-JEcXw_8TcAix2Hkmq2PiI00TCtmk5rRTa61L0=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Hair and makeup</span><b>Styles and looks by character, in script order.</b></div>
+    <div><img src="https://media.gettyimages.com/id/1297823171/photo/makeup-artist-at-work-in-a-studio.jpg?s=612x612&w=0&k=20&c=TsW_w_hWindxV7ibymNxRm97vH4md5LxE1BsmHvS4C8=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Props</span><b>Items and crates by scene, with a QR code on each.</b></div>
+    <div><img src="https://media.gettyimages.com/id/998264254/photo/boxes-stage-equipment.jpg?s=612x612&w=0&k=20&c=jFpjpT2WFRLwfgNn45hVKPTbve1rtNrX4LfSYqOJMv0=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/1185947339/photo/flight-cases-behind-concert-hall.jpg?s=612x612&w=0&k=20&c=lkvP3sJwD2Gy0Xaafj-5xaA2K7dP_MzT7WZ7Ma4pniw=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/2175183604/photo/stack-of-audio-equipment-boxes.jpg?s=612x612&w=0&k=20&c=NCJDLHoUcK8k-j6sA10_tZjF4gQLE6jazJ-nJ49CIT0=" referrerpolicy="no-referrer"></div>
+    <div class="wide"><img src="https://media.gettyimages.com/id/1090128792/photo/70s-style-living-room.jpg?s=612x612&w=0&k=20&c=nWmTcf4IcnJDYzOt-G8RQ-_c2w-jLzOXsemf25fm0QM=" referrerpolicy="no-referrer"></div>
+    <div><img src="https://media.gettyimages.com/id/546824345/photo/students-constructing-theater-set-on-stage.jpg?s=612x612&w=0&k=20&c=IpJQCiyt9QneOKtmARa460X9wzN99MfrFC59Wfuunow=" referrerpolicy="no-referrer"></div>
+    <div class="t"><span>Set</span><b>Dressing by scene, and where every piece went.</b></div>
+  </section>
+
+  <footer><span>StageRoll Ltd · London</span><span>Company 17436723</span><span>hello@stageroll.co</span></footer>
+</div>
+<style>.switch{position:fixed;right:16px;bottom:16px;display:flex;gap:6px;background:#fff;border:1px solid #e2e2e6;border-radius:10px;padding:6px;font-size:13px;z-index:9;font-family:var(--sans)}.switch a{padding:6px 10px;border-radius:6px;text-decoration:none;color:#0b101b}.switch a[aria-current]{background:#0b101b;color:#fff}</style>
+<nav class="switch"><a href="/drafts/grid-hero.html">Grid hero</a><a href="/drafts/cells.html" aria-current="page">Cells</a><a href="/drafts/soft.html">Soft</a></nav>
+<script>
+const why = document.getElementById('why')
+const ease = t => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3)
+// A window of the overall progress, eased: from a to b maps onto 0 to 1.
+const part = (p, a, b) => ease((p - a) / (b - a))
+const shot = new URLSearchParams(location.search).get('shot')
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches || shot !== null
+function scrub() {
+  let p
+  if (still) p = isNaN(+shot) ? 1 : Math.min(1, +shot || 1)
+  else {
+    // 0 when the section's top reaches 90% down the screen, 1 when it reaches 35%.
+    const r = why.getBoundingClientRect(), vh = innerHeight
+    p = Math.min(1, Math.max(0, (vh * .9 - r.top) / (vh * .55)))
+  }
+  why.style.setProperty('--a', part(p, .05, .35).toFixed(3))   // the grey line, from the left
+  why.style.setProperty('--b', part(p, .2, .6).toFixed(3))     // "StageRoll is built", from the left
+  why.style.setProperty('--c', part(p, .3, .7).toFixed(3))     // "differently.", from the right
+  why.style.setProperty('--h', part(p, .72, .9).toFixed(3))    // the highlight, left to right
+}
+addEventListener('scroll', () => requestAnimationFrame(scrub), { passive: true })
+addEventListener('resize', scrub)
+scrub()
+</script>
+</body>
+</html>

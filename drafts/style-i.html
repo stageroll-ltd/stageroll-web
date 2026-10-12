@@ -1,0 +1,155 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>StageRoll — Production management, done right</title>
+<style>
+:root{--paper:#f0f1f4;--card:#fff;--ink:#0b101b;--ink2:rgba(11,16,27,.72);--mute:rgba(11,16,27,.55);--hair:rgba(11,16,27,.1);--blue:#007aff;--green:#0a9a15;
+  --ch:#e02e78;--pr:#ff9500;--hr:#2469f2;--mu:#0891b2;--sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif}
+
+:root{--ease:cubic-bezier(.2,.7,.2,1);--ease-out:cubic-bezier(.16,1,.3,1);--spring:linear(0,.006,.025 2.8%,.101 6.1%,.539 18.9%,.721 25.3%,.849 31.5%,.937 38.1%,.968 41.8%,.991 45.7%,1.006 50.1%,1.014 56.3%,1.009 65.1%,.996 72.4%,.999 86.2%,1)}
+[data-reveal]{opacity:0;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+[data-reveal="wipe"]{opacity:1;transform:none;clip-path:inset(0 100% 0 0);transition:clip-path .75s var(--ease-out)}
+[data-reveal="rise"]{clip-path:inset(0 0 100% 0);opacity:1;transform:none;transition:clip-path .7s var(--ease-out)}
+[data-reveal="pop"]{transform:var(--rest,none) scale(.96);transition:opacity .45s var(--ease),transform .55s var(--spring)}
+[data-reveal="tilt"]{transform:var(--rest,none) rotate(2.5deg) translateY(10px);transition:opacity .45s var(--ease),transform .6s var(--spring)}
+[data-reveal="slide"]{transform:translateX(-28px);transition:opacity .5s var(--ease),transform .55s var(--ease)}
+[data-reveal].in{opacity:1;transform:var(--rest,none);clip-path:inset(0 0 0 0)}
+[data-reveal][data-delay="1"]{transition-delay:.1s}[data-reveal][data-delay="2"]{transition-delay:.2s}
+.btn,.link,.pill,.badge,nav a{transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease),transform .18s var(--ease)}
+.btn:active,.pill:active{transform:scale(.97)}
+html.still [data-reveal],html.still .load{opacity:1!important;transform:var(--rest,none)!important;clip-path:none!important;transition:none!important;animation:none!important;filter:none!important}
+html.still .load *{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+html.shot .hero{min-height:0!important}
+
+*{box-sizing:border-box}html{background:var(--card)}
+body{margin:0;font-family:var(--sans);color:var(--ink);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px;font-weight:500;font-size:14.5px}
+.nav img{width:104px;height:auto;display:block}
+.nav nav{display:flex;gap:26px;align-items:center}.nav a{text-decoration:none;color:var(--ink2)}.nav a:hover{color:var(--ink)}
+.nav .pill{background:var(--ink);color:#fff;padding:9px 16px;border-radius:6px}.nav .pill:hover{background:#1c2333}
+
+/* Hero: the words left, three photographs in a row right, on a panel cut at a slight angle. */
+.hero{position:relative;padding:56px 0 72px;overflow:hidden}
+.slab{position:absolute;right:0;top:0;bottom:0;width:58%;background:var(--paper);clip-path:polygon(14% 0,100% 0,100% 100%,0 100%);z-index:0}
+.hero .g{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;align-items:center}
+.hero h1{font-size:clamp(40px,5.2vw,76px);font-weight:700;letter-spacing:-.04em;line-height:1;margin:0 0 20px;position:relative;z-index:0}
+.hero h1 span{display:block}
+.hero h1 em{font-style:normal;position:relative;display:inline-block}
+.hero h1 em::before{content:"";position:absolute;z-index:-1;left:-.14em;right:-.08em;top:.1em;bottom:-.08em;background:#e6e8ee;border-radius:.1em}
+.hero p{font-size:18px;color:var(--ink2);max-width:26em;margin:0 0 26px}
+.btn{display:inline-flex;align-items:center;height:46px;padding:0 24px;border-radius:6px;background:var(--ink);color:#fff;text-decoration:none;font-weight:500;font-size:15px}
+.btn:hover{background:#1c2333}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(11,16,27,.2)}.btn.ghost:hover{background:var(--paper)}
+.acts{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.acts .note{font-size:14px;color:var(--ink2)}
+.tl{display:inline-flex;align-items:center;gap:6px;font-weight:500;font-size:15px;color:var(--blue);text-decoration:none}.tl:hover{text-decoration:underline;text-underline-offset:.2em}
+.tl svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:end}
+.row img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;border-radius:14px;background:var(--card);box-shadow:0 1px 2px rgba(11,16,27,.06),0 0 0 1px rgba(11,16,27,.06)}
+.row img:nth-child(2){margin-bottom:28px}.row img:nth-child(3){margin-bottom:56px}
+html.loaded .load-line{animation:rise .6s var(--ease) both}
+html.loaded .load-line:nth-child(2){animation-delay:.06s}html.loaded .load-line:nth-child(3){animation-delay:.12s}
+html.loaded .load-copy{animation:rise .55s var(--ease) .24s both}
+html.loaded .slab{animation:cut .8s var(--ease-out) both}
+html.loaded .row img{animation:rise .7s var(--ease-out) both}
+html.loaded .row img:nth-child(2){animation-delay:.08s}html.loaded .row img:nth-child(3){animation-delay:.16s}
+html:not(.loaded):not(.still) .load-line,html:not(.loaded):not(.still) .load-copy,html:not(.loaded):not(.still) .row img{opacity:0}
+html:not(.loaded):not(.still) .slab{clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes cut{from{clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}to{clip-path:polygon(14% 0,100% 0,100% 100%,0 100%)}}
+
+/* Statement band: ink, cut on the diagonal. */
+.band{position:relative;padding:104px 0 88px;background:var(--ink);color:#fff;clip-path:polygon(0 40px,100% 0,100% calc(100% - 40px),0 100%)}
+.band p{font-size:clamp(26px,3.2vw,46px);font-weight:700;letter-spacing:-.03em;line-height:1.08;max-width:20em;margin:0}
+.band p span{color:rgba(255,255,255,.55)}
+
+/* Features: a white card with the photograph, the words beside it. */
+.feats{padding:40px 0 8px}
+.feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;padding:56px 0}
+.feat + .feat{border-top:1px solid var(--hair)}
+.feat.flip .pic{order:2}
+.pic{border-radius:16px;overflow:hidden;background:var(--card);box-shadow:0 1px 2px rgba(11,16,27,.06),0 0 0 1px rgba(11,16,27,.06)}
+.pic img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.k{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;color:var(--ink);margin:0 0 14px}
+.k svg{width:26px;height:26px;stroke:var(--ink);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.feat h2{font-size:clamp(28px,3vw,42px);font-weight:700;letter-spacing:-.03em;line-height:1.08;margin:0 0 20px}
+.pts{list-style:none;margin:0 0 28px;padding:0;display:grid;gap:22px;max-width:32em}
+.pts li{display:flex;gap:18px;align-items:center;font-size:16px;color:var(--ink)}
+.pts svg{flex:none;width:28px;height:28px;stroke:var(--ink2);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* Mobile: paper band, cut on the diagonal. */
+.mob{position:relative;padding:96px 0 80px;background:var(--paper);clip-path:polygon(0 0,100% 40px,100% 100%,0 calc(100% - 40px));margin-top:16px}
+.mob .g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.mob h2{font-size:clamp(28px,3vw,42px);font-weight:700;letter-spacing:-.03em;line-height:1.08;margin:0 0 14px}
+.mob p{color:var(--ink2);max-width:30em;margin:0 0 20px}
+.stores{display:flex;gap:10px;flex-wrap:wrap}
+.store{display:inline-flex;align-items:center;gap:9px;height:46px;padding:0 16px 0 13px;border-radius:6px;background:var(--ink);color:#fff;text-decoration:none}
+.store:hover{background:#1c2333}
+.store svg{width:22px;height:22px;flex:none}
+.store small{display:block;font-size:10px;line-height:1;opacity:.8;margin-bottom:3px}
+.store b{display:block;font-size:15px;line-height:1;font-weight:600;letter-spacing:-.01em}
+.mob .ph{aspect-ratio:16/10;background:var(--card);border-radius:16px;box-shadow:0 1px 2px rgba(11,16,27,.06),0 0 0 1px rgba(11,16,27,.06);display:grid;place-items:center;color:var(--mute);font-size:13px;font-weight:500}
+
+/* Departments: white cards, a colour mark each. */
+.depts{padding:72px 0 48px}
+.depts h2{font-size:clamp(28px,3vw,42px);font-weight:700;letter-spacing:-.03em;margin:0 0 20px}
+.dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.d{display:block;text-decoration:none;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(11,16,27,.06),0 0 0 1px rgba(11,16,27,.06);transition:box-shadow .18s var(--ease),transform .18s var(--ease)}
+.d:hover{box-shadow:0 8px 20px -12px rgba(11,16,27,.3),0 0 0 1px rgba(11,16,27,.08);transform:translateY(-2px)}
+.d img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.d span{display:block;padding:14px 16px 16px}
+.d b{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px}
+.d b::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+.d i{display:block;font-style:normal;font-size:14px;color:var(--ink2)}
+.early{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;padding:32px 36px;border-radius:16px;background:var(--card);box-shadow:0 1px 2px rgba(11,16,27,.06),0 0 0 1px rgba(11,16,27,.06)}
+.early h3{font-size:clamp(22px,2.4vw,30px);font-weight:700;letter-spacing:-.03em;margin:0 0 6px;line-height:1.1}
+.early p{margin:0;color:var(--ink2);max-width:34em}
+.price{padding:48px 0;text-align:center;font-size:17px;color:var(--ink2)}
+.price a{margin-left:10px;font-weight:500;color:var(--blue);text-decoration:none}.price a::after{content:" ›"}
+.close{position:relative;padding:120px 0 96px;background:var(--ink);color:#fff;clip-path:polygon(0 40px,100% 0,100% 100%,0 100%)}
+.close h2{font-size:clamp(36px,5.4vw,80px);font-weight:700;letter-spacing:-.04em;line-height:1;margin:0 0 14px}
+.close p{margin:0 0 26px;color:rgba(255,255,255,.66);font-size:18px}
+.close .store.light{background:#fff;color:var(--ink)}.close .store.light:hover{background:#e6e8ee}
+.close .acts{justify-content:flex-start}
+footer{padding:24px 0 40px;background:var(--ink);color:rgba(255,255,255,.55);font-size:12.5px;border-top:1px solid rgba(255,255,255,.1)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px 32px;flex-wrap:wrap}
+footer nav{display:flex;gap:18px}footer a{color:#fff;text-decoration:none}
+@media (prefers-reduced-motion:reduce){.load-line,.load-copy,.row img,.slab{animation:none!important;opacity:1!important;transform:none!important}.slab{clip-path:polygon(14% 0,100% 0,100% 100%,0 100%)!important}}
+@media (max-width:900px){.wrap{padding:0 18px}.nav nav{gap:14px}.nav nav{gap:18px}.hero{padding:16px 0 40px}.hero .g{grid-template-columns:1fr;gap:28px}.slab{display:none}.row img:nth-child(n){margin:0}.band,.mob,.close{clip-path:none;padding:56px 0}.feat,.feat.flip,.mob .g{grid-template-columns:1fr;gap:24px;padding:40px 0}.feat.flip .pic{order:0}.dgrid{grid-template-columns:1fr 1fr}.early{padding:24px}}
+</style></head><body>
+<header class="nav wrap"><img src="/brand/wordmark.svg" alt="StageRoll"><nav><a href="#">About</a><a href="#">Plans</a><a href="#">Support</a></nav></header>
+<section class="hero load">
+  <div class="slab" aria-hidden="true"></div>
+  <div class="wrap g">
+    <div>
+      <h1><span class="load-line">Production</span><span class="load-line">management,</span><span class="load-line"><em>done right.</em></span></h1>
+      <div class="load-copy"><p>Continuity management for productions of any size, from research and physical inventory through to wrap.</p><div class="acts"><div class="stores"><a class="store" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span><small>Download on the</small><b>App Store</b></span></a><a class="store" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg><span><small>Get it on</small><b>Google Play</b></span></a></div></div></div>
+    </div>
+    <div class="row" aria-hidden="true"><img src="https://media.gettyimages.com/id/2228651510/photo/non-binary-designer-is-fitting-an-elegant-dress-on-young-beautiful-woman.jpg?s=612x612&w=0&k=20&c=Qwwr61EBdFAt0Ls_zLzM9HratFc3IPMSPpgJkF0nmKM=" alt="" referrerpolicy="no-referrer"><img src="https://media.gettyimages.com/id/1474799619/photo/hairdressers-make-beautiful-curls-with-a-curler-on-the-hair-of-a-theater-actress.jpg?s=612x612&w=0&k=20&c=Fnh0u-JEcXw_8TcAix2Hkmq2PiI00TCtmk5rRTa61L0=" alt="" referrerpolicy="no-referrer"><img src="https://media.gettyimages.com/id/998264254/photo/boxes-stage-equipment.jpg?s=612x612&w=0&k=20&c=jFpjpT2WFRLwfgNn45hVKPTbve1rtNrX4LfSYqOJMv0=" alt="" referrerpolicy="no-referrer"></div>
+  </div>
+</section>
+<section class="band"><div class="wrap"><p>From the first reference to the last wrap box. <span>The whole team in sync, scene by scene, from prep to the last day of the shoot.</span></p></div></section>
+<div class="wrap feats"><section class="feat"><div class="pic" data-reveal="rise"><img src="https://media.gettyimages.com/id/1354718071/photo/collection-of-instant-photo-memories.jpg?s=612x612&w=0&k=20&c=ywWz18gvLtTw9wqtd9xJXYIc3OG0DK-AAzR2zKPcaks=" alt="" referrerpolicy="no-referrer"></div><div data-reveal data-delay="1"><p class="k"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>Research and inventory</p><h2>From research to inventory.</h2><ul class="pts"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.8-6.5-11a6.5 6.5 0 0 1 13 0c0 5.2-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg><span>Pin references to characters, scenes and sets.</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.5V4.5h8l8.5 8.5-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/></svg><span>Turn a reference into an item the moment it’s bought, made or hired.</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="9" y="9" width="6" height="6"/></svg><span>Track every item with photos, cost and a label to scan.</span></li></ul><div class="acts"><a class="btn" href="#">Start free</a><a class="tl" href="#">See how it works <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div></div></section>
+<section class="feat flip"><div class="pic" data-reveal="rise"><img src="https://media.gettyimages.com/id/1028404552/photo/makeup-artist-and-wardrobe-stylist-working-on-actor-behind-the-scenes-on-a-film-set.jpg?s=612x612&w=0&k=20&c=T0L66julBefKH28L04f-yLZZEOUEH6hdqnV96DLP1MY=" alt="" referrerpolicy="no-referrer"></div><div data-reveal data-delay="1"><p class="k"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3.2l1.6-2.5h6.4L16.8 8H20v11H4z"/><circle cx="12" cy="13" r="3.4"/></svg>Continuity</p><h2>Every scene, locked.</h2><ul class="pts"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg><span>Log every change for every character, scene by scene.</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3.2l1.6-2.5h6.4L16.8 8H20v11H4z"/><circle cx="12" cy="13" r="3.4"/></svg><span>Keep the continuity photos taken on the day with each change.</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4v4h4"/><path d="M12 8v4.5l3 1.8"/></svg><span>See exactly what was worn when a scene comes back.</span></li></ul><div class="acts"><a class="btn" href="#">Start free</a><a class="tl" href="#">See how it works <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div></div></section>
+<section class="feat"><div class="pic" data-reveal="rise"><img src="https://media.gettyimages.com/id/1033222894/photo/seamstress-at-work.jpg?s=612x612&w=0&k=20&c=Fw0YS5CZ9SnbKlXAySdzeWUQGQlGip-FUfv9wmKbz9g=" alt="" referrerpolicy="no-referrer"></div><div data-reveal data-delay="1"><p class="k"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 20c.9-3.6 3.4-5.6 6.2-5.6s5.3 2 6.2 5.6"/><circle cx="17" cy="9" r="2.7"/><path d="M17 14.2c2.3 0 3.9 1.6 4.6 4.4"/></svg>Teams</p><h2>Everyone on the same page.</h2><ul class="pts"><li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="3.5"/><path d="M3 20c1-4 4-6 7-6s6 2 7 6"/><path d="M19 7.5v6M16 10.5h6"/></svg><span>Invite your department and give each person a role.</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.8-5.5L20 8.5"/><path d="M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.8 5.5L4 15.5"/><path d="M4 20v-4.5h4.5"/></svg><span>Changes show up for the whole team straight away.</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 5-9 5-9-5z"/><path d="M3 13.5l9 5 9-5"/></svg><span>Costume, props, hair and makeup in one production.</span></li></ul><div class="acts"><a class="btn" href="#">Start free</a><a class="tl" href="#">See plans <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div></div></section>
+</div>
+<section class="mob" data-reveal><div class="wrap g">
+  <div><p class="k"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17.5h2"/></svg>Mobile</p><h2>Modern by design.</h2><p>Take photos, scan labels and check the day’s scenes from the phone or tablet already in your pocket. Download it and start free today.</p><div class="stores"><a class="store" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span><small>Download on the</small><b>App Store</b></span></a><a class="store" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg><span><small>Get it on</small><b>Google Play</b></span></a></div></div>
+  <div class="ph">Phone and tablet, side by side</div>
+</div></section>
+<section class="depts wrap"><h2>Made for your department</h2><div class="dgrid" data-reveal><a class="d" href="#" style="--c:#e02e78"><img src="https://media.gettyimages.com/id/2228651510/photo/non-binary-designer-is-fitting-an-elegant-dress-on-young-beautiful-woman.jpg?s=612x612&w=0&k=20&c=Qwwr61EBdFAt0Ls_zLzM9HratFc3IPMSPpgJkF0nmKM=" alt="" referrerpolicy="no-referrer"><span><b>Costume</b><i>Changes, fittings and continuity for every character.</i></span></a><a class="d" href="#" style="--c:#ff9500"><img src="https://media.gettyimages.com/id/998264254/photo/boxes-stage-equipment.jpg?s=612x612&w=0&k=20&c=jFpjpT2WFRLwfgNn45hVKPTbve1rtNrX4LfSYqOJMv0=" alt="" referrerpolicy="no-referrer"><span><b>Props</b><i>Every piece, where it’s used and where it lives.</i></span></a><a class="d" href="#" style="--c:#2469f2"><img src="https://media.gettyimages.com/id/1474799619/photo/hairdressers-make-beautiful-curls-with-a-curler-on-the-hair-of-a-theater-actress.jpg?s=612x612&w=0&k=20&c=Fnh0u-JEcXw_8TcAix2Hkmq2PiI00TCtmk5rRTa61L0=" alt="" referrerpolicy="no-referrer"><span><b>Hair</b><i>Looks and references, scene by scene.</i></span></a><a class="d" href="#" style="--c:#0891b2"><img src="https://media.gettyimages.com/id/1297823171/photo/makeup-artist-at-work-in-a-studio.jpg?s=612x612&w=0&k=20&c=TsW_w_hWindxV7ibymNxRm97vH4md5LxE1BsmHvS4C8=" alt="" referrerpolicy="no-referrer"><span><b>Makeup</b><i>Continuity photos and notes, ready for every call.</i></span></a></div></section>
+<div class="wrap"><section class="early" data-reveal><div><h3>Be one of our first productions</h3><p>We’re working closely with our first teams. Tell us what your department needs and help shape what we build next.</p></div><a class="tl" href="#">Get in touch <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></section>
+<p class="price">Free for your first production. Paid plans per production.<a href="#">See plans</a></p></div>
+<section class="close"><div class="wrap"><h2 data-reveal>Your next production, sorted.</h2><p>Private to your team. No ads, no tracking.</p><div class="stores"><a class="store light" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span><small>Download on the</small><b>App Store</b></span></a><a class="store light" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg><span><small>Get it on</small><b>Google Play</b></span></a></div></div></section>
+<footer><div class="wrap"><span>© 2026 StageRoll Ltd. Registered in England and Wales, company no. 17436723. 124-128 City Road, London, EC1V 2NX.</span><nav><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Support</a><a href="#">Delete your account</a></nav></div></footer>
+<script>
+(function(){
+  var html=document.documentElement, q=new URLSearchParams(location.search)
+  var still=matchMedia('(prefers-reduced-motion: reduce)').matches||q.has('shot')
+  if(q.has('shot'))html.classList.add('shot')
+  if(still){html.classList.add('still');document.querySelectorAll('[data-reveal]').forEach(function(el){el.classList.add('in')});return}
+  requestAnimationFrame(function(){requestAnimationFrame(function(){html.classList.add('loaded')})})
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:.12})
+  document.querySelectorAll('[data-reveal]').forEach(function(el){io.observe(el)})
+})()
+</script>
+</body></html>
