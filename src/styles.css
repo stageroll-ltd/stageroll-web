@@ -199,11 +199,46 @@ a:focus-visible {
   transform: rotate(-45deg);
 }
 
-.nav.over {
-  position: absolute;
+/* The header stays at the top as the page scrolls, and once it has scrolled
+   it turns to frosted glass with ink on it. Over the hero it starts out
+   transparent with white on it: the hero runs up under it (the negative
+   margin), so the header's ground is the hero's own colour. */
+.nav {
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
+  transition: background-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.nav.over {
+  margin-bottom: calc(-1 * var(--nav-h));
+}
+
+.nav.scrolled {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  backdrop-filter: blur(18px) saturate(1.5);
+  box-shadow: 0 1px 0 var(--hair);
+}
+
+.nav.over.scrolled nav a {
+  color: var(--ink2);
+}
+
+.nav.over.scrolled nav a:hover,
+.nav.over.scrolled nav a[aria-current='page'] {
+  color: var(--ink);
+}
+
+.nav.over.scrolled .burger {
+  color: var(--ink);
+}
+
+.nav.over.scrolled .wm-ink {
+  display: block;
+}
+
+.nav.over.scrolled .wm-white {
+  display: none;
 }
 
 /* Over the hero only the colours change: the header is the same size on
@@ -896,6 +931,24 @@ html.js .steps li.on {
     color: rgb(255 255 255 / 0.8);
   }
 
+  /* The header steps aside once the story starts to scroll, and comes back
+     after the three steps, when the features page has risen over the last
+     frame (html.in-story, storyMotion.ts). At the top of the page it stays,
+     and it shows again if a link in it takes keyboard focus. */
+  html.pinned .nav {
+    transition:
+      background-color 0.25s var(--ease),
+      box-shadow 0.25s var(--ease),
+      translate 0.35s var(--ease),
+      opacity 0.35s var(--ease);
+  }
+
+  html.in-story .nav.scrolled:not(:focus-within) {
+    translate: 0 -100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   /* The features page rises over the story's last frame: it overlaps the
      pinned story by one screen, with a rounded top edge. Only once the story
      is pinned (html.pinned, storyMotion.ts): before that there is no pinned
@@ -1443,42 +1496,6 @@ html.still .hero-stage > * {
 
   .wordmark {
     width: 80px;
-  }
-
-  /* The header stays at the top as the page scrolls, and once it has
-     scrolled it turns to frosted glass with ink on it, the hero included:
-     the hero still runs up under it (the negative margin) so at the top it
-     is the hero's own colour with white on it. */
-  .nav,
-  .nav.over {
-    position: sticky;
-    top: 0;
-    left: auto;
-    right: auto;
-    transition: background-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
-  }
-
-  .nav.over {
-    margin-bottom: calc(-1 * var(--nav-h));
-  }
-
-  .nav.scrolled {
-    background: rgba(255, 255, 255, 0.72);
-    -webkit-backdrop-filter: blur(18px) saturate(1.5);
-    backdrop-filter: blur(18px) saturate(1.5);
-    box-shadow: 0 1px 0 var(--hair);
-  }
-
-  .nav.over.scrolled .burger {
-    color: var(--ink);
-  }
-
-  .nav.over.scrolled .wm-ink {
-    display: block;
-  }
-
-  .nav.over.scrolled .wm-white {
-    display: none;
   }
 
   /* The links fold into a menu behind the burger: a white card dropped

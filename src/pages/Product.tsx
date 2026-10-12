@@ -325,7 +325,7 @@ const privacy: Tile[] = [
   {
     icon: 'doc',
     heading: 'The script stays on your premises',
-    text: 'It’s read on your own device, and the file is never uploaded. Only the scenes and cast are kept.',
+    text: 'It’s read on your own device, and the file is never uploaded. Only the scene headings, the cast and the file’s name are kept.',
   },
   {
     icon: 'lock',
@@ -340,17 +340,17 @@ const privacy: Tile[] = [
   {
     icon: 'shield',
     heading: 'Encrypted on your device',
-    text: 'What’s kept for offline use is encrypted, and cleared when you sign out.',
+    text: 'The copy of your production kept for offline use is encrypted, and cleared when you sign out.',
   },
   {
     icon: 'users',
     heading: 'Members only',
-    text: 'A production’s work and photos are seen only by the people on it.',
+    text: 'In the app, a production’s work and photos are shown only to the people on it.',
   },
   {
     icon: 'eyeoff',
-    heading: 'No ads, no tracking',
-    text: 'Nothing in the app records what you do, and your work is never sold or used to train AI.',
+    heading: 'No ads, no selling',
+    text: 'Your work is never sold, used for advertising or used to train AI.',
   },
 ]
 

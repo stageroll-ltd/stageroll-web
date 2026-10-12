@@ -143,6 +143,9 @@ function story(gsap: Gsap, ScrollTrigger: Trigger) {
     pin: true,
     scrub: 0.6,
     invalidateOnRefresh: true,
+    // The header steps aside while the story plays and comes back once the
+    // features page has risen over it (`in-story`, styles.css).
+    onToggle: (self) => document.documentElement.classList.toggle('in-story', self.isActive),
   })
 }
 
@@ -180,7 +183,7 @@ export function useStoryMotion() {
         document.documentElement.classList.add('pinned')
         story(gsap, ScrollTrigger)
         features(gsap)
-        return () => document.documentElement.classList.remove('pinned')
+        return () => document.documentElement.classList.remove('pinned', 'in-story')
       })
     })()
     return () => {
