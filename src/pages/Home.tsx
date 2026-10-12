@@ -328,7 +328,7 @@ export function Home() {
                 </li>
               ))}
             </ul>
-            <p className="pick-line">{departments[dept].line}</p>
+            <p className="pick-line">{departments[dept]?.line}</p>
           </div>
         </div>
       </section>

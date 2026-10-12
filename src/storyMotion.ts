@@ -115,9 +115,11 @@ function story(gsap: Gsap, ScrollTrigger: Trigger) {
       FIRST_STEP + STEP * from,
     )
     const sides = [...phone2.querySelectorAll('.scr')]
-    sides.slice(1).forEach((side, k) => {
-      const at = FIRST_STEP + STEP * (from + k + 1) - 0.1
-      tl.to(sides[k], { autoAlpha: 0, duration: 0.25 }, at)
+    sides.forEach((side, k) => {
+      const prev = sides[k - 1]
+      if (!prev) return
+      const at = FIRST_STEP + STEP * (from + k) - 0.1
+      tl.to(prev, { autoAlpha: 0, duration: 0.25 }, at)
       tl.to(side, { autoAlpha: 1, duration: 0.25 }, at)
     })
   }
