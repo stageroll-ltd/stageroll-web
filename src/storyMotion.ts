@@ -108,10 +108,16 @@ function story(gsap: Gsap, ScrollTrigger: Trigger) {
   const phone2 = root.querySelector<HTMLElement>('.hero-stage .phone2')
   if (phone2) {
     const from = Number(phone2.dataset.from ?? 0)
+    // How far it slides: 265u, or less in a narrow window, so its left edge
+    // (it is 0.9 of the first phone's 300u wide) stays 24px inside the screen.
+    const slide = () => {
+      const room = window.innerWidth / 2 + phoneX() - 135 * u() - 24
+      return Math.min(265 * u(), Math.max(90 * u(), room))
+    }
     tl.fromTo(
       phone2,
       { x: phoneX, y: phoneY, scale: 0.9, autoAlpha: 0 },
-      { x: () => phoneX() - 265 * u(), y: () => phoneY() + 24 * u(), scale: 0.9, autoAlpha: 1, duration: 0.45, ease: 'power2.out' },
+      { x: () => phoneX() - slide(), y: () => phoneY() + 24 * u(), scale: 0.9, autoAlpha: 1, duration: 0.45, ease: 'power2.out' },
       FIRST_STEP + STEP * from,
     )
     const sides = [...phone2.querySelectorAll('.scr')]

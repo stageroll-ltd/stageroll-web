@@ -91,6 +91,17 @@ const steps: { heading: string; text: string; screen: string; side?: string; ico
 const sideSteps = steps.filter((s) => s.side)
 const firstSideStep = steps.findIndex((s) => s.side)
 
+// The screens a phone swipes through at the end of the page (the gallery,
+// shown instead of the scroll story on a phone), in the order of a day.
+const gallery: { screen: string; caption: string }[] = [
+  { screen: 'Home', caption: 'Today' },
+  { screen: 'Script found', caption: 'Script analysis' },
+  { screen: 'Character', caption: 'A character' },
+  { screen: 'Scene', caption: 'A scene' },
+  { screen: 'Today', caption: 'Shoot day' },
+  { screen: 'Team', caption: 'The team' },
+]
+
 const privacy: { icon: IconName; heading: string; text: string }[] = [
   { icon: 'phone', heading: 'Read on your device.', text: 'The script file is never uploaded, only the scene and character metadata you choose to submit.' },
   { icon: 'lock', heading: 'Locked to you.', text: 'A PIN and Face ID, with screen protection for productions that need it.' },
@@ -333,6 +344,29 @@ export function Home() {
         </div>
       </section>
 
+      {/* On a phone, where the scroll story and its steps are not shown, the
+          app's screens come as a row of phones to swipe through, after the
+          features have said what they are. */}
+      <section className="gallery tint" aria-labelledby="gallery-title">
+        <div className="wrap">
+          <div className="reveal">
+            <p className="k">
+              <Icon name="phone" />
+              Mobile
+            </p>
+            <h2 id="gallery-title">Modern by design.</h2>
+            <p className="lede">Take photos, scan labels and check the day’s scenes from the phone already in your pocket.</p>
+          </div>
+        </div>
+        <div className="gallery-row">
+          {gallery.map((g) => (
+            <figure key={g.screen}>
+              <Phone shots={[g.screen]} className="phone small" />
+              <figcaption>{g.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
     </>
   )
 }

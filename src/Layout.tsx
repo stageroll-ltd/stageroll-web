@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 
 import { useMotion } from './motion'
 
@@ -18,36 +18,62 @@ const nav = [
   { href: '/contact/', label: 'Support' },
 ]
 
-// The header sits straight on the page: the logo left, the links centred, Get
-// the app right. On the home page it lies over the hero in white (`over`).
+// The header sits straight on the page: the logo left, the links centred.
+// On the home page it lies over the hero in white (`over`).
+// On a phone the links fold into a menu behind a burger (styles.css).
 // The footer is plain at the bottom of every page: the wordmark, links and
 // small print straight on the page. A route's `end` (the home page's closing
 // band) is a dark rounded frame above it.
 export function Layout({ current, end, children }: { current: string; end?: ReactNode; children: ReactNode }) {
   useMotion()
   const over = current === '/'
+  const [menu, setMenu] = useState(false)
+  useEffect(() => {
+    if (!menu) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenu(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menu])
+  // On a phone the header stays put and turns to glass once the page has
+  // scrolled (styles.css); `scrolled` is what it keys off.
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  const cls = ['nav', over && 'over', scrolled && 'scrolled'].filter(Boolean).join(' ')
   return (
     <>
-      <header className={over ? 'nav over' : 'nav'}>
+      <header className={cls}>
         <a className="brand" href="/" aria-label="StageRoll home">
-          <img
-            className="wordmark"
-            src={over ? '/brand/wordmark-dark.svg' : '/brand/wordmark.svg'}
-            width={92}
-            height={25}
-            alt="StageRoll"
-          />
+          {/* Both wordmarks, ink and white; CSS shows the one for the ground. */}
+          <img className="wordmark wm-ink" src="/brand/wordmark.svg" width={92} height={25} alt="StageRoll" />
+          <img className="wordmark wm-white" src="/brand/wordmark-dark.svg" width={92} height={25} alt="" />
         </a>
-        <nav aria-label="Site">
+        <nav id="site-nav" aria-label="Site" className={menu ? 'open' : undefined}>
           {nav.map((item) => (
             <a key={item.href} href={item.href} aria-current={item.href === current ? 'page' : undefined}>
               {item.label}
             </a>
           ))}
         </nav>
-        <a className="pill dark get" href="/#get">
-          Get the app
-        </a>
+        <div className="nav-right">
+          <button
+            type="button"
+            className="burger"
+            aria-label={menu ? 'Close menu' : 'Menu'}
+            aria-expanded={menu}
+            aria-controls="site-nav"
+            onClick={() => setMenu((m) => !m)}
+          >
+            <span />
+            <span />
+          </button>
+        </div>
       </header>
 
       <main>{children}</main>

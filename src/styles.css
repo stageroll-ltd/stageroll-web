@@ -118,6 +118,16 @@ a:focus-visible {
   height: auto;
 }
 
+/* The header carries both wordmarks: ink on the page, white over the hero. */
+.wm-white,
+.nav.over .wm-ink {
+  display: none;
+}
+
+.nav.over .wm-white {
+  display: block;
+}
+
 .nav nav {
   position: absolute;
   left: 50%;
@@ -138,11 +148,55 @@ a:focus-visible {
   color: var(--ink);
 }
 
-.pill.get {
-  height: 34px;
-  padding: 0 15px;
-  font-size: 13.5px;
-  font-weight: 600;
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* The burger, on a phone only: two lines that cross when the menu is open. */
+.burger {
+  display: none;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.nav.over .burger {
+  color: #fff;
+}
+
+.burger span {
+  position: absolute;
+  left: 11px;
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform 0.25s var(--ease), top 0.25s var(--ease);
+}
+
+.burger span:first-child {
+  top: 15px;
+}
+
+.burger span:last-child {
+  top: 23px;
+}
+
+.burger[aria-expanded='true'] span:first-child {
+  top: 19px;
+  transform: rotate(45deg);
+}
+
+.burger[aria-expanded='true'] span:last-child {
+  top: 19px;
+  transform: rotate(-45deg);
 }
 
 .nav.over {
@@ -160,11 +214,6 @@ a:focus-visible {
 
 .nav.over nav a:hover {
   color: #fff;
-}
-
-.nav.over .pill.get {
-  background: #fff;
-  color: var(--ink);
 }
 
 /* Buttons */
@@ -304,7 +353,8 @@ a:focus-visible {
 
 /* Section headings and eyebrows, shared by every band below the hero. */
 .how h2,
-.depts h2 {
+.depts h2,
+.gallery h2 {
   font-size: clamp(34px, 4.2vw, 56px);
   font-weight: 600;
   letter-spacing: -0.035em;
@@ -631,11 +681,41 @@ a:focus-visible {
   padding: 136px 0 96px;
 }
 
-.how .lede {
+.how .lede,
+.gallery .lede {
   font-size: 19px;
   color: var(--ink2);
   max-width: 30em;
   margin: -12px 0 0;
+}
+
+/* The gallery: a phone only (the scroll story has the screens on a wide
+   screen). A row of small phones to swipe through, snapping to each. */
+.gallery {
+  display: none;
+}
+
+.phone.small {
+  width: 200px;
+  height: 414px;
+  border-radius: 34px;
+  padding: 8px;
+}
+
+.phone.small .screen {
+  border-radius: 27px;
+}
+
+.phone.small .screen::before {
+  top: 5px;
+  width: 54px;
+  height: 16px;
+}
+
+/* Only a placeholder's words are inset; a screenshot fills the screen. */
+.phone.small .scr:not(.shot) {
+  padding: 16px;
+  font-size: 11px;
 }
 
 .how-g {
@@ -1365,25 +1445,94 @@ html.still .hero-stage > * {
     width: 80px;
   }
 
-  .nav nav {
-    position: static;
-    translate: none;
-    gap: 16px;
+  /* The header stays at the top as the page scrolls, and once it has
+     scrolled it turns to frosted glass with ink on it, the hero included:
+     the hero still runs up under it (the negative margin) so at the top it
+     is the hero's own colour with white on it. */
+  .nav,
+  .nav.over {
+    position: sticky;
+    top: 0;
+    left: auto;
+    right: auto;
+    transition: background-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
   }
 
-  .nav nav a {
-    font-size: 13.5px;
+  .nav.over {
+    margin-bottom: calc(-1 * var(--nav-h));
   }
 
-  .pill.get {
+  .nav.scrolled {
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    backdrop-filter: blur(18px) saturate(1.5);
+    box-shadow: 0 1px 0 var(--hair);
+  }
+
+  .nav.over.scrolled .burger {
+    color: var(--ink);
+  }
+
+  .nav.over.scrolled .wm-ink {
+    display: block;
+  }
+
+  .nav.over.scrolled .wm-white {
     display: none;
+  }
+
+  /* The links fold into a menu behind the burger: a white card dropped
+     under the header, on every page, the hero included. */
+  .nav nav {
+    display: none;
+    position: absolute;
+    z-index: 30;
+    top: calc(var(--nav-h) + 4px);
+    left: 12px;
+    right: 12px;
+    translate: none;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px;
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: 0 24px 60px -24px rgba(11, 16, 27, 0.4), 0 0 0 1px var(--hair);
+  }
+
+  .nav nav.open {
+    display: flex;
+  }
+
+  .nav nav a,
+  .nav.over nav a {
+    display: block;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    color: var(--ink);
+  }
+
+  .nav nav a:hover,
+  .nav nav a[aria-current='page'] {
+    background: var(--paper);
+  }
+
+  .nav-right {
+    gap: 8px;
+  }
+
+  .burger {
+    display: inline-flex;
   }
 
   /* The hero stacks: the words, then the phone rising out of the foot, no
      photographs. Plain pixels, not the frame's unit. */
   .hero {
     --u: 1px;
+    display: flex;
+    flex-direction: column;
     height: auto;
+    min-height: 100svh;
     padding-top: calc(var(--nav-h) + 28px);
   }
 
@@ -1402,24 +1551,77 @@ html.still .hero-stage > * {
     font-size: 17px;
   }
 
+  /* The stage takes whatever the screen has left under the words, so the
+     hero is the whole first screen and the phone rises out of its foot. */
   .hero-stage {
     position: relative;
-    height: 380px;
+    flex: 1 0 auto;
+    min-height: 320px;
   }
 
+  /* `left` is already 50% minus half the phone (--u is 1px here); a
+     `translate` would be overridden by the rise animation and snap after.
+     It sits a little lower than the stage's top, so less of it shows. */
   .hero-stage .phone {
-    left: 50%;
-    top: 0;
-    translate: -50% 0;
+    top: 140px;
   }
 
   .hero-card {
     display: none;
   }
 
-  .how,
   .depts {
     padding: 72px 0;
+  }
+
+  /* No scroll story on a phone: How it works goes, and the screens come
+     as the gallery at the end of the page instead. */
+  .how {
+    display: none;
+  }
+
+  .gallery {
+    display: block;
+    padding: 72px 0 64px;
+  }
+
+  .gallery .reveal {
+    text-align: center;
+  }
+
+  .gallery .lede {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Padded at both ends by half the screen less half a phone, so the row
+     opens with the first phone in the middle and the last can get there too. */
+  .gallery-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 36px;
+    padding: 8px calc(50vw - 100px) 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .gallery-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-row figure {
+    flex: none;
+    margin: 0;
+    scroll-snap-align: center;
+    text-align: center;
+  }
+
+  .gallery-row figcaption {
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--mute);
   }
 
   .features {
@@ -1430,26 +1632,12 @@ html.still .hero-stage > * {
     gap: 72px;
   }
 
-
-  .how-g {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 40px;
+  .steps h3 {
+    font-size: 30px;
   }
 
-  .how-phone {
-    position: static;
-    padding: 32px 0;
-    border-radius: 24px;
-  }
-
-  .steps li {
-    min-height: 0;
-    padding: 28px 0;
-  }
-
-  html.js .steps li {
-    opacity: 1;
+  .steps p {
+    font-size: 17px;
   }
 
   .private {
