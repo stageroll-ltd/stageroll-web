@@ -4,7 +4,7 @@ import { Icon } from './Icon'
 // Where to get the app. Apple and Google allow only their official badge
 // artwork, unaltered, and only for a live (or pre-order) listing, and neither
 // lets the Apple or Google Play logo stand in a badge of our own. So until a
-// listing exists (links.ts) this is one plain "coming soon" mark with no store
+// listing exists (links.ts) this is one plain "launching on" mark with no store
 // logos. At launch, swap the links below for the official badges, downloaded
 // from Apple's and Google's marketing pages.
 export function StoreBadges({ light = false }: { light?: boolean }) {
@@ -15,7 +15,7 @@ export function StoreBadges({ light = false }: { light?: boolean }) {
         <span className={`store soon${tone}`}>
           <Icon name="phone" />
           <span>
-            <small>Coming soon to</small>
+            <small>Launching on</small>
             <b>iPhone, iPad and Android</b>
           </span>
         </span>

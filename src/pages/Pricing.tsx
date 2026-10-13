@@ -164,7 +164,7 @@ export function Pricing() {
               Get in touch
             </a>
           </div>
-          <p className="prod-note">To use StageRoll on a production before launch, write to us.</p>
+          <p className="prod-note">Questions about plans, or setting up a production? Write to us.</p>
         </div>
       </section>
     </div>

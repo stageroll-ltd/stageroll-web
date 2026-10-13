@@ -106,6 +106,15 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
               <a href="/privacy/">Privacy</a>
               <a href="/terms/">Terms</a>
             </div>
+            <div>
+              <p>Contact</p>
+              <a href={`mailto:${company.email}`}>{company.email}</a>
+              <address>
+                {company.name}
+                <br />
+                {company.address.slice(0, 3).join(', ')}
+              </address>
+            </div>
           </nav>
         </div>
         <p className="foot-small">

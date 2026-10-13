@@ -56,7 +56,7 @@ export const routes: Route[] = [
     path: '/pricing/',
     title: 'Pricing — StageRoll',
     description:
-      'StageRoll is priced per production: the production pays, and every crew member’s account is free. Starter, Pro and Enterprise plans are published at launch.',
+      'StageRoll is priced per production: the production pays, and every crew account is free. Free, Starter, Pro and Enterprise plans, with every department included.',
     nav: 'Pricing',
     Page: Pricing,
   },
