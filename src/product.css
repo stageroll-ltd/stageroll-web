@@ -1,4 +1,6 @@
-/* The product page (pages/Product.tsx), whose pieces the pricing page borrows.
+/* The product overview (pages/Product.tsx), the feature pages under it
+   (pages/ProductScript.tsx and the rest), and the pricing page, which borrows
+   their pieces.
    Kept beside styles.css while the home page is being worked on; it reads the
    same tokens and folds into that sheet once both settle. Everything is under
    .prod so nothing leaks to other pages. */
@@ -26,7 +28,7 @@
   text-wrap: pretty;
 }
 
-/* Hero: the promise, then the five departments, Sets still to come. */
+/* Hero: the promise, then the five departments. */
 .prod-hero {
   padding: 72px 0 80px;
   text-align: center;
@@ -78,180 +80,228 @@
   color: var(--ink2);
 }
 
-
-
-/* The links to each section, held at the top of the screen while the page
-   scrolls under them. */
-.prod-bar {
-  position: sticky;
-  top: 0;
-  z-index: 15;
-  background: rgba(255, 255, 255, 0.86);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: inset 0 -1px 0 var(--hair);
-}
-
-.prod-bar > div {
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-  max-width: 1640px;
-  margin: 0 auto;
-  padding: 10px 28px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.prod-bar > div::-webkit-scrollbar {
-  display: none;
-}
-
-.prod-bar a {
-  flex: none;
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink2);
-  text-decoration: none;
-  transition: background-color 0.16s ease-in, color 0.16s ease-in;
-}
-
-.prod-bar a:hover {
-  color: var(--ink);
-  transition-duration: 0.2s;
-  transition-timing-function: var(--ease-out);
-}
-
-.prod-bar a[aria-current='true'] {
-  background: var(--ink);
-  color: #fff;
-}
-
-/* A section: the words on one side, the points (or a screenshot) on the other. */
+/* A band down the page: a part of a feature page, or the closing band. */
 .prod-sec {
   padding: 128px 0;
-  scroll-margin-top: 56px;
+  scroll-margin-top: calc(var(--nav-h) + 56px);
 }
 
-.prod-row {
+/* The overview's areas: continuity and inventory as two large cards, then
+   every other area as a smaller one. Each card is a link to its page. */
+.prod-areas {
+  padding: 0 0 128px;
+}
+
+.prod-lead,
+.prod-grid {
   max-width: 1180px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: 48px 80px;
-  align-items: start;
+  gap: 16px;
 }
 
-.prod-head {
-  position: sticky;
-  top: 96px;
+.prod-lead {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 16px;
 }
 
-.prod-shot {
-  grid-template-columns: minmax(0, 1fr) 300px;
+.prod-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.prod-card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 26px 24px;
+  border-radius: 24px;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.2s var(--ease);
+}
+
+.prod-card:hover {
+  background: #e7e8ec;
+}
+
+.prod-card svg {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.prod-card > svg {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 20px;
+  stroke-width: 1.5;
+}
+
+.prod .prod-card h2 {
+  font-size: clamp(28px, 2.6vw, 36px);
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+}
+
+.prod-card h3 {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 6px;
+}
+
+.prod-card p {
+  margin: 0;
+  font-size: 15.5px;
+  color: var(--ink2);
+  text-wrap: pretty;
+}
+
+.prod-card .go {
+  margin-top: auto;
+  padding-top: 22px;
+  display: inline-flex;
   align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 500;
 }
 
-.prod-shot.flip {
-  grid-template-columns: 300px minmax(0, 1fr);
+.prod-card .go svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.2;
+  transition: transform 0.2s var(--ease-out);
 }
 
-.prod-shot.flip .phone {
-  order: -1;
+.prod-card:hover .go svg {
+  transform: translateX(3px);
 }
 
-.prod-words .pts {
-  margin-top: 40px;
+.prod-card.big {
+  min-height: 340px;
+  padding: 36px;
+  border-radius: 28px;
 }
 
-.prod .pts {
-  margin-bottom: 0;
-  gap: 24px;
+.prod-card.big > svg {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 28px;
 }
 
-.prod .pts li {
-  align-items: flex-start;
-  font-size: 17px;
-  line-height: 1.45;
+.prod-card.big p {
+  max-width: 26em;
+  font-size: 17.5px;
 }
 
-.prod .pts svg {
-  width: 24px;
-  height: 24px;
-  margin-top: -1px;
+.prod-card.big ul {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
 }
 
-.prod .pts b {
+.prod-card.big li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
+.prod-card.big li svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--ink2);
+  stroke-width: 1.75;
+}
+
+/* A feature page (pages/ProductScript.tsx and the rest): a plain document,
+   wider than the legal pages, its steps numbered down a rule and its key
+   features two to a row. Each item's lead sits on its own line. */
+.prose.prod-doc {
+  max-width: 60rem;
+  padding-top: 56px;
+}
+
+.prod-doc h1 {
+  font-size: clamp(36px, 4.4vw, 52px);
+  letter-spacing: -0.04em;
+}
+
+.prod-doc .lede {
+  max-width: 38em;
+  font-size: 1.25rem;
+  color: var(--ink2);
+}
+
+.prose.prod-doc h2 {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  margin: 3.5rem 0 0.5rem;
+}
+
+.prose.prod-doc ol,
+.prose.prod-doc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.prose.prod-doc li {
+  margin: 0;
+  padding: 1.125rem 0 1.25rem;
+  box-shadow: inset 0 1px 0 var(--hair);
+}
+
+.prod-doc li strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 1.0625rem;
   font-weight: 600;
   color: var(--ink);
 }
 
-.prod-screen {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
+.prod-doc ol {
+  counter-reset: step;
 }
 
-/* The specifics, for the reader who wants them: a term and its answer. */
-.prod-specs {
-  margin: 40px 0 0;
-  box-shadow: inset 0 1px 0 var(--hair);
-}
-
-.prod-specs div {
+.prod-doc ol li {
+  counter-increment: step;
   display: grid;
-  grid-template-columns: 9.5em minmax(0, 1fr);
-  gap: 16px;
-  padding: 13px 0;
-  box-shadow: inset 0 -1px 0 var(--hair);
+  grid-template-columns: 3rem minmax(0, 1fr);
 }
 
-.prod-specs dt {
-  font-size: 14.5px;
+.prod-doc ol li::before {
+  content: counter(step);
+  grid-row: span 2;
+  font-size: 1.0625rem;
+  font-weight: 600;
   color: var(--mute);
 }
 
-.prod-specs dd {
-  margin: 0;
-  font-size: 15px;
-  color: var(--ink);
-}
-
-/* Centred heads over a grid of tiles: privacy, what’s next, pricing. */
-.prod-center {
-  max-width: 40em;
-  margin: 0 auto 56px;
-  text-align: center;
-}
-
-.prod-tiles {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  max-width: 1180px;
+.prod-doc ul {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 40px;
 }
 
-.prod-tiles li {
-  padding: 28px 28px 30px;
-  border-radius: 24px;
-  background: var(--paper);
+/* A key feature's icon sits beside its lead, the text running under both. */
+.prod-doc-feats li {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: start;
+  align-content: start;
 }
 
-.tint .prod-tiles li {
-  background: var(--card);
-}
-
-.prod-tiles svg {
-  width: 26px;
-  height: 26px;
-  margin: 0 0 18px;
+.prod-doc-feats svg {
+  grid-row: span 2;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
   fill: none;
   stroke: var(--ink);
   stroke-width: 1.5;
@@ -259,18 +309,11 @@
   stroke-linejoin: round;
 }
 
-.prod-tiles h3 {
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  margin: 0 0 6px;
-}
-
-.prod-tiles p {
-  font-size: 15.5px;
-  color: var(--ink2);
-  margin: 0;
-  text-wrap: pretty;
+/* Centred heads: the closing band, and the pricing page. */
+.prod-center {
+  max-width: 40em;
+  margin: 0 auto 56px;
+  text-align: center;
 }
 
 .prod .acts {
@@ -471,36 +514,50 @@
     font-size: 13.5px;
   }
 
-  .prod-bar > div {
-    justify-content: flex-start;
-    padding: 8px 20px;
-  }
-
   .prod-sec {
     padding: 72px 0;
   }
 
-  .prod-row,
-  .prod-shot,
-  .prod-shot.flip {
+  .prod-areas {
+    padding-bottom: 72px;
+  }
+
+  .prod-lead {
     grid-template-columns: minmax(0, 1fr);
-    gap: 40px;
+    gap: 10px;
+    margin-bottom: 10px;
   }
 
-  .prod-head {
-    position: static;
+  .prod-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
-  .prod-shot .phone,
-  .prod-shot.flip .phone {
-    order: 0;
-    justify-self: center;
+  .prod-card {
+    padding: 20px 18px 18px;
+    border-radius: 20px;
   }
 
-  .prod-specs div {
-    grid-template-columns: 7.5em minmax(0, 1fr);
+  .prod-card.big {
+    min-height: 0;
+    padding: 26px 24px;
   }
 
+  .prod-card h3 {
+    font-size: 17px;
+  }
+
+  .prod-card p {
+    font-size: 14.5px;
+  }
+
+  .prod-doc ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .prod-doc ol li {
+    grid-template-columns: 2rem minmax(0, 1fr);
+  }
 
   .prod-center {
     margin-bottom: 36px;
@@ -538,43 +595,9 @@
     z-index: 1;
     background: var(--card);
   }
-
-  .prod-tiles {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
-  }
-
-  /* One column of short rows: the icon beside the words, not above them. */
-  .prod-tiles li {
-    display: grid;
-    grid-template-columns: 24px minmax(0, 1fr);
-    column-gap: 14px;
-    padding: 18px 20px 20px 18px;
-    border-radius: 18px;
-  }
-
-  .prod-tiles svg {
-    grid-row: span 2;
-    width: 24px;
-    height: 24px;
-    margin: 0;
-  }
-
-  .prod-tiles h3 {
-    font-size: 16.5px;
-    margin-bottom: 4px;
-  }
-
-  .prod-tiles p {
-    font-size: 15px;
-  }
 }
 
 @media (min-width: 901px) and (max-width: 1100px) {
-  .prod-tiles {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .prod-plans {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

@@ -34,9 +34,9 @@ export function About() {
         never uploaded.
       </p>
       <p>
-        Your work is yours. In the app, breakdowns, photos and records are shown only to the
-        people on the production. We don&rsquo;t sell data, show ads, or use your work to train AI. The details
-        are in our <a href="/privacy/">privacy policy</a>.
+        A production&rsquo;s work stays private. In the app, breakdowns, photos and records are
+        shown only to the people on the production. We don&rsquo;t sell data, show ads, or use your
+        work to train AI. The details are in our <a href="/privacy/">privacy policy</a>.
       </p>
 
       <h2>Company details</h2>

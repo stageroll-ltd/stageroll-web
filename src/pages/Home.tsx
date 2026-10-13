@@ -229,6 +229,13 @@ export function Home() {
             {sideSteps.length > 0 && (
               <Phone shots={sideSteps.map((s) => s.side as string)} className="phone phone2" from={firstSideStep} />
             )}
+            {/* Page dots under the phone, one per step, lit as each step arrives.
+                Only the scroll story shows them (storyMotion.ts). */}
+            <div className="dots" aria-hidden="true">
+              {steps.map((s) => (
+                <i key={s.heading} />
+              ))}
+            </div>
           </div>
         </section>
 
@@ -256,7 +263,6 @@ export function Home() {
                       refs.current[i] = el
                     }}
                   >
-                    <span className="n">0{i + 1}</span>
                     <h3>
                       {s.icon && <Icon name={s.icon} className="step-icon" />}
                       {s.heading}

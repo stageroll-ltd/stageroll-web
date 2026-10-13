@@ -24,6 +24,13 @@ const nav = [
 // The footer is plain at the bottom of every page: the wordmark, links and
 // small print straight on the page. A route's `end` (the home page's closing
 // band) is a dark rounded frame above it.
+/** A header link is the page itself, or the section a sub-page sits in (Product for /product/script/). */
+function here(href: string, current: string): 'page' | 'true' | undefined {
+  if (href === current) return 'page'
+  if (href !== '/' && current.startsWith(href)) return 'true'
+  return undefined
+}
+
 export function Layout({ current, end, children }: { current: string; end?: ReactNode; children: ReactNode }) {
   useMotion()
   const over = current === '/'
@@ -56,7 +63,7 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
         </a>
         <nav id="site-nav" aria-label="Site" className={menu ? 'open' : undefined}>
           {nav.map((item) => (
-            <a key={item.href} href={item.href} aria-current={item.href === current ? 'page' : undefined}>
+            <a key={item.href} href={item.href} aria-current={here(item.href, current)}>
               {item.label}
             </a>
           ))}

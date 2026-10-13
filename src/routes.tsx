@@ -7,6 +7,8 @@ import { NotFound } from './pages/NotFound'
 import { Pricing } from './pages/Pricing'
 import { Privacy } from './pages/Privacy'
 import { Product } from './pages/Product'
+import { Feature } from './pages/Feature'
+import { featurePages } from './pages/features'
 import { Terms } from './pages/Terms'
 
 export type Route = {
@@ -37,10 +39,19 @@ export const routes: Route[] = [
     path: '/product/',
     title: 'Product — StageRoll',
     description:
-      'Everything in StageRoll: script analysis, scenes, continuity, research, inventory and labels, the schedule, reports and team, for costume, props, hair, makeup and sets.',
+      'Everything StageRoll does, area by area: script analysis, scenes, continuity, research, inventory, scanning, the schedule, reports, team and privacy, for costume, props, hair, makeup and sets.',
     nav: 'Product',
     Page: Product,
   },
+  // The feature pages, one per area of the overview (pages/features.ts).
+  ...featurePages.map(
+    (page): Route => ({
+      path: `/product/${page.slug}/`,
+      title: `${page.title} — StageRoll`,
+      description: page.description,
+      Page: () => <Feature page={page} />,
+    }),
+  ),
   {
     path: '/pricing/',
     title: 'Pricing — StageRoll',

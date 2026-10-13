@@ -144,7 +144,7 @@ a:focus-visible {
 }
 
 .nav nav a:hover,
-.nav nav a[aria-current='page'] {
+.nav nav a[aria-current] {
   color: var(--ink);
 }
 
@@ -225,7 +225,7 @@ a:focus-visible {
 }
 
 .nav.over.scrolled nav a:hover,
-.nav.over.scrolled nav a[aria-current='page'] {
+.nav.over.scrolled nav a[aria-current] {
   color: var(--ink);
 }
 
@@ -354,6 +354,11 @@ a:focus-visible {
   width: 17px;
   height: 17px;
   flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .store small {
@@ -576,8 +581,10 @@ a:focus-visible {
 }
 
 /* The second phone starts where the first is, behind it and unseen; the
-   scroll story slides it out for "Run the day" and nothing else shows it. */
-.hero-stage .phone2 {
+   scroll story slides it out for "Run the day" and nothing else shows it.
+   The page dots likewise. */
+.hero-stage .phone2,
+.hero-stage .dots {
   display: none;
   z-index: 3;
   opacity: 0;
@@ -813,13 +820,6 @@ html.js .steps li.on {
   stroke-linejoin: round;
 }
 
-.steps .n {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--mute);
-  font-variant-numeric: tabular-nums;
-  margin: 0 0 14px;
-}
 
 .steps h3 {
   font-size: clamp(30px, 3.2vw, 44px);
@@ -915,10 +915,25 @@ html.js .steps li.on {
     transition: none;
   }
 
-  html.js .story .steps .n {
-    font-size: calc(14 * var(--u));
-    color: rgb(255 255 255 / 0.6);
-    margin: 0 0 calc(12 * var(--u));
+  /* The page dots start where the phone's foot will be, hidden, and the
+     story carries them with the phone and lights one per step. */
+  html.js .story .dots {
+    display: flex;
+    justify-content: center;
+    gap: calc(8 * var(--u));
+    left: calc(50% - 150 * var(--u));
+    top: calc(100% + 238 * var(--u));
+    width: calc(300 * var(--u));
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  html.js .story .dots i {
+    width: calc(7 * var(--u));
+    height: calc(7 * var(--u));
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0.35;
   }
 
   html.js .story .steps h3 {
@@ -1530,7 +1545,7 @@ html.still .hero-stage > * {
   }
 
   .nav nav a:hover,
-  .nav nav a[aria-current='page'] {
+  .nav nav a[aria-current] {
     background: var(--paper);
   }
 

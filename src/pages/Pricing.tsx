@@ -57,14 +57,16 @@ const table: { group: string; rows: Row[] }[] = [
       { label: 'Several scripts and episodes', cells: [false, false, true, true] },
       { label: 'Reports as spreadsheets (CSV)', cells: [false, false, true, true] },
       { label: 'Production-wide reports', cells: [false, false, true, true], soon: true },
+      { label: 'Production and department budgets', cells: [false, false, true, true], soon: true },
       { label: 'QR labels printed in bulk', cells: [false, false, true, true], soon: true },
       { label: 'Enhanced security', cells: [false, false, true, true], soon: true },
     ],
   },
   {
-    group: 'Billing and support',
+    group: 'Contract and support',
     rows: [
-      { label: 'Billing, monthly', cells: ['Card', 'Card', 'Card', 'Invoice or purchase order'] },
+      { label: 'Contract', cells: [false, 'Monthly, rolling', 'Monthly, rolling', 'Custom length'] },
+      { label: 'Payment', cells: [false, 'Card', 'Card', 'Invoice or purchase order'] },
       { label: 'Support', cells: ['Help pages', 'Email', 'Email', 'Priority'] },
     ],
   },
@@ -73,7 +75,8 @@ const table: { group: string; rows: Row[] }[] = [
 const notes = [
   'Crew never pay. Joining someone else’s production doesn’t use up your free one.',
   'Every plan includes every department.',
-  'Enterprise limits are set with each production.',
+  'Starter and Pro roll monthly: cancel any time, and the plan ends at the close of the month you’ve paid for.',
+  'Enterprise limits and contract length are set with each production.',
   'Photos are made smaller on your phone before they’re uploaded, to about 1 MB each, so the photo counts are a fair guide.',
   'Moving to a smaller plan never deletes your work. Anything over a limit stays; you can add more once you’re back under it.',
   'If your team is bigger than a smaller plan’s seats, its members are removed and can be invited again up to the new limit.',

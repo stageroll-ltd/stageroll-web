@@ -130,6 +130,21 @@ function story(gsap: Gsap, ScrollTrigger: Trigger) {
     })
   }
 
+  // The page dots ride under the phone, appear with the heading, and light
+  // up one per step.
+  const dots = root.querySelector<HTMLElement>('.hero-stage .dots')
+  if (dots) {
+    tl.fromTo(dots, { x: 0, y: 0 }, { x: phoneX, y: phoneY, duration: 1, ease: 'power2.inOut' }, 0)
+    tl.fromTo(dots, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 0.65)
+    const lights = [...dots.querySelectorAll('i')]
+    lights.forEach((dot, i) => {
+      const at = FIRST_STEP + STEP * i
+      tl.to(dot, { opacity: 1, duration: 0.2 }, at)
+      const prev = lights[i - 1]
+      if (prev) tl.to(prev, { opacity: 0.35, duration: 0.2 }, at)
+    })
+  }
+
   // 3. Hold the last step for one more screen while the features page
   // slides up over the frame.
   tl.to({}, { duration: STEP_LEAVES + 1 / SCROLL_PER_UNIT })
