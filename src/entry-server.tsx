@@ -12,6 +12,6 @@ export function render(path: string): string {
 }
 
 /** The routes to prerender, without their components. */
-export function pages(): { path: string; title: string; description: string }[] {
-  return [...routes, notFound].map(({ path, title, description }) => ({ path, title, description }))
+export function pages(): { path: string; title: string; description: string; noindex?: boolean }[] {
+  return [...routes, notFound].map(({ path, title, description, noindex }) => ({ path, title, description, noindex }))
 }

@@ -51,8 +51,10 @@ export function Privacy() {
       <h2>What we collect in the app</h2>
       <p>
         <strong>Your account.</strong> Your email address, your name, your department, and a
-        profile photo if you add one. You sign in with a one-time code sent to your email, or with
-        Apple or Google, and never set a StageRoll password. If you sign in with Apple or Google,
+        profile photo if you add one. You sign in with a one-time code sent to your email and a
+        password you choose, or with Apple or Google. We keep your password only in a scrambled form
+        that can&rsquo;t be turned back into it, and check it against a public list of leaked
+        passwords without the password itself leaving our servers. If you sign in with Apple or Google,
         they share your name and email address with us; Apple may give us a private relay address
         instead of your own. If your production signs in through its organisation&rsquo;s own
         sign-in service, we receive your name and email address from it. You need to give your
@@ -151,7 +153,7 @@ export function Privacy() {
       <p>
         Our providers handle data on our instructions, to run StageRoll: Supabase, for our database,
         sign-in and file storage, running on Amazon Web Services with traffic passing through
-        Cloudflare; our email delivery provider, for sign-in codes; our payment provider, for card
+        Cloudflare; our email delivery provider, for sign-in codes and account alerts; our payment provider, for card
         payments; our diagnostics and analytics providers, for error reports and usage information;
         and Microsoft, for our own email. Businesses can ask us for our data processing agreement
         and the full list of our providers.

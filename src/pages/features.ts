@@ -286,7 +286,7 @@ export const featurePages: FeaturePage[] = [
     icon: 'lock',
     summary: 'Scripts stay on your device. Work stays with your team.',
     description:
-      'How StageRoll keeps a production private: scripts read on your device, sign-in with no password, an app lock, signed-in devices, an encrypted offline copy and members-only access.',
+      'How StageRoll keeps a production private: scripts read on your device, sign-in with a code and a password, an app lock, signed-in devices, an encrypted offline copy and members-only access.',
     lede: 'Productions hold unreleased scripts and private work, so StageRoll keeps what it can on your device and shows the rest only to the people on the production.',
     steps: [
       ['Lock the app', 'StageRoll locks when you leave it and opens with your PIN or Face ID. You choose how quickly it locks.'],
@@ -295,7 +295,7 @@ export const featurePages: FeaturePage[] = [
     ],
     features: [
       ['Scripts stay on your device', 'The script is read on your phone and the file is never uploaded. Only the scene list and the cast are kept.', 'doc'],
-      ['Sign in with a code', 'A one-time code sent to your email, so there’s no password to remember.', 'key'],
+      ['Code and password', 'A one-time code from your email and your password, so your inbox alone never opens your account.', 'key'],
       ['App lock', 'PIN or Face ID, and it locks itself when you step away.', 'shield'],
       ['Signed-in devices', 'Every device on your account, and any of them can be signed out.', 'phone'],
       ['Encrypted offline copy', 'The copy of your production kept for offline use is encrypted on your phone, and cleared when you sign out.', 'lock'],

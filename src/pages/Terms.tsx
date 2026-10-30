@@ -32,8 +32,9 @@ export function Terms() {
 
       <h2>Your account</h2>
       <p>
-        You sign in with a one-time code sent to your email, with Apple or Google, or through your
-        organisation&rsquo;s sign-in service. Keep your device and your PIN secure. You&rsquo;re
+        You sign in with a one-time code sent to your email and your password, with Apple or Google,
+        or through your organisation&rsquo;s sign-in service. Keep your device, your password and
+        your PIN secure. You&rsquo;re
         responsible for what happens under your account, and you should tell us straight away if you
         think someone else has used it.
       </p>

@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
+import { signedIn } from './account/keys'
 import { useMotion } from './motion'
 
 export const company = {
@@ -31,8 +32,21 @@ function here(href: string, current: string): 'page' | 'true' | undefined {
   return undefined
 }
 
+/**
+ * The header's way into the account: Sign in, or Your productions once this
+ * browser keeps a session that has passed the password. Read after the page
+ * has hydrated, from the session supabase-js keeps (`account/keys.ts`), so
+ * no page loads Supabase for it. The productions page starts on its own name.
+ */
+function useAccountLink(current: string): { href: string; label: string } {
+  const [inside, setInside] = useState(current === '/productions/')
+  useEffect(() => setInside(signedIn()), [])
+  return inside ? { href: '/productions/', label: 'Your productions' } : { href: '/sign-in/', label: 'Sign in' }
+}
+
 export function Layout({ current, end, children }: { current: string; end?: ReactNode; children: ReactNode }) {
   useMotion()
+  const account = useAccountLink(current)
   const over = current === '/'
   const [menu, setMenu] = useState(false)
   useEffect(() => {
@@ -69,6 +83,9 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
           ))}
         </nav>
         <div className="nav-right">
+          <a className="nav-account" href={account.href} aria-current={account.href === current ? 'page' : undefined}>
+            {account.label}
+          </a>
           <button
             type="button"
             className="burger"

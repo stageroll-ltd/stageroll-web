@@ -7,6 +7,8 @@ import { NotFound } from './pages/NotFound'
 import { Pricing } from './pages/Pricing'
 import { Privacy } from './pages/Privacy'
 import { Product } from './pages/Product'
+import { Productions } from './pages/Productions'
+import { SignIn } from './pages/SignIn'
 import { Feature } from './pages/Feature'
 import { featurePages } from './pages/features'
 import { Terms } from './pages/Terms'
@@ -21,6 +23,8 @@ export type Route = {
   Page: ComponentType
   /** A band inside the footer's frame, above the footer card: the home page's closing photograph. */
   End?: ComponentType
+  /** Kept out of search results: the account pages. */
+  noindex?: boolean
 }
 
 export const siteName = 'StageRoll'
@@ -86,6 +90,22 @@ export const routes: Route[] = [
     title: 'Terms of service — StageRoll',
     description: 'The terms on which StageRoll Ltd provides the StageRoll app.',
     Page: Terms,
+  },
+  // The account pages, drawn in the browser behind a prerendered shell. The
+  // header links to them (Layout.tsx); the sitemap leaves them out.
+  {
+    path: '/sign-in/',
+    title: 'Sign in — StageRoll',
+    description: 'Sign in to your StageRoll account.',
+    Page: SignIn,
+    noindex: true,
+  },
+  {
+    path: '/productions/',
+    title: 'Your productions — StageRoll',
+    description: 'The productions on your StageRoll account.',
+    Page: Productions,
+    noindex: true,
   },
 ]
 

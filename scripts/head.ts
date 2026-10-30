@@ -4,7 +4,7 @@
 // (vite.config.ts), so a page in `yarn dev` is the same HTML the build writes.
 // Plain enough for Node to run without a build step (type stripping).
 
-export type Page = { path: string; title: string; description: string }
+export type Page = { path: string; title: string; description: string; noindex?: boolean }
 
 export const siteUrl = 'https://stageroll.co'
 
@@ -32,5 +32,7 @@ export function fill(shell: string, page: Page, body: string): string {
   html = setAttr(html, 'name="twitter:description"', 'content', page.description)
   html = setAttr(html, 'property="og:url"', 'content', url)
   html = setAttr(html, 'rel="canonical"', 'href', url)
+  // The account pages stay out of search results.
+  if (page.noindex) html = html.replace('</head>', '  <meta name="robots" content="noindex" />\n  </head>')
   return html.replace(hole, `<div id="root">${body}</div>`)
 }

@@ -338,13 +338,20 @@
   max-width: 1180px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  /* Each card is five rows of this grid (its name, who it's for, the price,
+     the line under it, the seats), shared through subgrid: a line that wraps
+     in one card moves the same line in the cards beside it, so the prices
+     stay level. No row gap, or it would open inside every card; cards on
+     separate rows are parted by a margin instead. */
+  gap: 0 16px;
   text-align: left;
 }
 
 .prod-plans li {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  row-gap: 0;
   padding: 26px 26px 24px;
   border-radius: 24px;
   background: var(--paper);
@@ -565,8 +572,12 @@
 
   .prod-plans {
     grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
+    gap: 0;
     margin-top: 40px;
+  }
+
+  .prod-plans li + li {
+    margin-top: 10px;
   }
 
   .prod-plans li {
@@ -600,5 +611,9 @@
 @media (min-width: 901px) and (max-width: 1100px) {
   .prod-plans {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .prod-plans li:nth-child(n + 3) {
+    margin-top: 16px;
   }
 }

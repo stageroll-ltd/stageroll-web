@@ -8,10 +8,10 @@ import { Icon } from '../components/Icon'
 type Plan = { name: string; price: string; per: string; who: string; seats: string }
 
 const plans: Plan[] = [
-  { name: 'Free', price: '£0', per: 'One production per account', who: 'Trying it on your own', seats: 'Just you' },
-  { name: 'Starter', price: '£49', per: 'per production a month', who: 'A small indie or a short production', seats: '5 seats' },
-  { name: 'Pro', price: '£299', per: 'per production a month', who: 'Productions with up to 30 crew', seats: '30 seats' },
-  { name: 'Enterprise', price: 'Custom', per: 'Priced with you, per production', who: 'Studio productions', seats: '50+ seats' },
+  { name: 'Free', price: '£0', per: 'Up to three productions per account', who: 'Trying it on your own', seats: 'Just you' },
+  { name: 'Starter', price: '£29', per: 'per production a month', who: 'A small indie or a short production', seats: '10 seats' },
+  { name: 'Pro', price: '£299', per: 'per production a month', who: 'Features and series, with the whole crew', seats: 'Unlimited seats' },
+  { name: 'Enterprise', price: 'Custom', per: 'Priced with you, per production', who: 'Studio productions', seats: 'Unlimited seats' },
 ]
 
 /** A cell: words (with a quieter line under them), or true for included and false for not. */
@@ -23,16 +23,18 @@ const table: { group: string; rows: Row[] }[] = [
   {
     group: 'Team',
     rows: [
-      { label: 'Seats', cells: ['1', '5', '30', '50+'] },
-      { label: 'Who you can invite', cells: [false, 'Crew', 'Coordinators and crew', 'Coordinators and crew'] },
-      { label: 'Role permissions', cells: ['Fixed', 'Fixed', 'Fixed', 'Editable per department'] },
+      { label: 'Seats', cells: ['1', '10', 'Unlimited', 'Unlimited'] },
+      { label: 'Who you can invite', cells: [false, 'Coordinators and crew', 'Coordinators and crew', 'Coordinators and crew'] },
     ],
   },
   {
     group: 'Limits',
     rows: [
-      { label: 'Script analyses a month', cells: ['3', '10', 'Unlimited', 'Unlimited'] },
-      { label: 'Items', cells: ['100', '500', '3,000', 'Custom'] },
+      {
+        label: 'Script analyses',
+        cells: [{ text: '1', note: 'In total' }, { text: '10', note: 'A month' }, 'Unlimited', 'Unlimited'],
+      },
+      { label: 'Items', cells: ['50', '1,000', 'Unlimited', 'Unlimited'] },
       { label: 'Crates', cells: ['10', '50', '300', 'Custom'] },
       { label: 'Research references', cells: [false, '500', '3,000', 'Custom'] },
       // A photo is stored at three sizes, made on the phone (stageroll-native
@@ -42,8 +44,8 @@ const table: { group: string; rows: Row[] }[] = [
       {
         label: 'Storage for photos',
         cells: [
-          { text: '1 GB', note: 'About 1,000 photos' },
-          { text: '10 GB', note: 'About 10,000 photos' },
+          { text: '250 MB', note: 'About 250 photos' },
+          { text: '3 GB', note: 'About 3,000 photos' },
           { text: '100 GB', note: 'About 100,000 photos' },
           'Custom',
         ],
@@ -56,10 +58,10 @@ const table: { group: string; rows: Row[] }[] = [
       { label: 'Every department', cells: [true, true, true, true] },
       { label: 'Several scripts and episodes', cells: [false, false, true, true] },
       { label: 'Reports as spreadsheets (CSV)', cells: [false, false, true, true] },
+      { label: 'Screenshot and recording protection', cells: [false, false, true, true] },
       { label: 'Production-wide reports', cells: [false, false, true, true], soon: true },
       { label: 'Production and department budgets', cells: [false, false, true, true], soon: true },
       { label: 'QR labels printed in bulk', cells: [false, false, true, true], soon: true },
-      { label: 'Enhanced security', cells: [false, false, true, true], soon: true },
     ],
   },
   {
@@ -73,7 +75,7 @@ const table: { group: string; rows: Row[] }[] = [
 ]
 
 const notes = [
-  'Crew never pay. Joining someone else’s production doesn’t use up your free one.',
+  'Crew never pay. Joining someone else’s production doesn’t count towards your free ones.',
   'Every plan includes every department.',
   'Starter and Pro roll monthly: cancel any time, and the plan ends at the close of the month you’ve paid for.',
   'Enterprise limits and contract length are set with each production.',

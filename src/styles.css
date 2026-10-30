@@ -1,5 +1,6 @@
 /* One sheet. Light, the app's paper and ink, system type. */
 @import './product.css';
+@import './account.css';
 
 :root {
   --paper: #f0f1f4;

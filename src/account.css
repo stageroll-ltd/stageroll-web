@@ -1,0 +1,438 @@
+/* The account: sign-in and Your productions, and the header's way in.
+   Paper and ink, one narrow column, the site's pills. */
+
+/* The header's link, at its right end: quiet, the nav links' size and ink. */
+.nav-account {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.16s ease-in;
+}
+
+.nav-account:hover,
+.nav-account[aria-current] {
+  color: var(--ink);
+  transition-duration: 0.2s;
+  transition-timing-function: var(--ease-out);
+}
+
+.nav.over .nav-account {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.nav.over .nav-account:hover {
+  color: #fff;
+}
+
+.nav.over.scrolled .nav-account {
+  color: var(--ink2);
+}
+
+.nav.over.scrolled .nav-account:hover {
+  color: var(--ink);
+}
+
+/* The page */
+.acct {
+  padding: 64px 20px 112px;
+}
+
+.acct-col {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.acct h1 {
+  margin: 0 0 10px;
+  font-size: clamp(28px, 3.4vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.acct-sub {
+  margin: 0 0 28px;
+  font-size: 15px;
+  color: var(--ink2);
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+.acct-sub b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.acct-body {
+  margin: 0 0 14px;
+  font-size: 15px;
+  color: var(--ink2);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.acct-body + .acct-form {
+  margin-top: 26px;
+}
+
+/* Before the page knows anything: a turning mark where it will be. */
+.acct-waiting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 240px;
+  color: var(--mute);
+}
+
+/* A form: the field and its one action close together. */
+.acct-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acct-field {
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--paper);
+  font: inherit;
+  /* 16px or more, or iOS zooms the page in on focus. */
+  font-size: 17px;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: box-shadow 0.16s ease-in;
+}
+
+.acct-field::placeholder {
+  color: var(--mute);
+}
+
+.acct-field:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--blue);
+}
+
+.acct-field:disabled {
+  color: var(--ink2);
+}
+
+/* The code: one field, its digits spaced and centred. */
+.acct-code {
+  height: 58px;
+  padding-left: 0.32em;
+  font-size: 26px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.32em;
+  text-align: center;
+}
+
+.acct-go {
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+}
+
+.acct-go:disabled {
+  cursor: default;
+  transform: none;
+}
+
+.acct-go:disabled:not([aria-busy='true']) {
+  opacity: 0.4;
+}
+
+.pill.acct-go:disabled:hover {
+  box-shadow: inset 0 0 0 1px rgba(11, 16, 27, 0.14);
+}
+
+.pill.dark.acct-go:disabled:hover {
+  background: var(--ink);
+  box-shadow: none;
+}
+
+/* The providers' marks keep their own fills, and stay put on hover. */
+.acct-go .acct-mark {
+  width: 18px;
+  height: 18px;
+  stroke: none;
+  transition: none;
+}
+
+.acct-go:hover .acct-mark {
+  transform: none;
+}
+
+/* A step's refusal, under its action: the space is kept, so a line
+   arriving never moves the form. */
+.acct-notice {
+  min-height: 1.45em;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.acct-wait-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  color: var(--mute);
+}
+
+.acct-or {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0 20px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.acct-or::before,
+.acct-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--hair);
+}
+
+.acct-doors {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acct-small {
+  margin: 28px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--mute);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.acct-small a {
+  color: var(--ink2);
+  text-underline-offset: 0.2em;
+}
+
+.acct-small a:hover {
+  color: var(--ink);
+}
+
+.acct-foot {
+  margin: 20px 0 0;
+  text-align: center;
+}
+
+.acct-link {
+  padding: 6px 8px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.acct-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.acct-link:disabled {
+  opacity: 0.4;
+  cursor: default;
+  text-decoration: none;
+}
+
+.acct-link:focus-visible,
+.acct-go:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* Cloudflare's widget: out of sight but laid out at its real size, so it
+   runs as it would shown, until Cloudflare wants the visitor. Then it
+   takes its place in the form, on paper, with a line and a way out. */
+.acct-captcha {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.acct-captcha.shown {
+  position: static;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 16px 10px;
+  border-radius: 18px;
+  background: var(--paper);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.acct-captcha p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink2);
+  text-align: center;
+}
+
+.acct-captcha-widget {
+  display: flex;
+  justify-content: center;
+  min-height: 65px;
+}
+
+/* The turning mark: a ring with one side open, in the ink around it. */
+.acct-spin {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: acct-turn 0.8s linear infinite;
+}
+
+@keyframes acct-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acct-spin {
+    animation-duration: 2.4s;
+  }
+}
+
+/* Without script the page cannot do anything; it says so instead. */
+html:not(.js) .acct-spin {
+  display: none;
+}
+
+/* Your productions: a wider column, read from the left. */
+.acct-wide .acct-col {
+  max-width: 600px;
+}
+
+.acct-wide h1,
+.acct-wide .acct-sub {
+  text-align: left;
+}
+
+.acct-wide .acct-sub {
+  margin-bottom: 0;
+}
+
+.acct-group {
+  margin-top: 40px;
+}
+
+.acct-group h2 {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.acct-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--hair);
+}
+
+.acct-rows li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.acct-name {
+  min-width: 0;
+  font-size: 17px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.acct-end {
+  flex: none;
+  font-size: 15px;
+  color: var(--mute);
+}
+
+.acct-empty {
+  margin-top: 40px;
+  padding: 36px 24px;
+  border-radius: 20px;
+  background: var(--paper);
+  text-align: center;
+}
+
+.acct-empty h2 {
+  margin: 0 0 6px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.acct-empty p {
+  margin: 0;
+  color: var(--ink2);
+  text-wrap: pretty;
+}
+
+.acct-retry {
+  margin-top: 18px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  border: 0;
+}
+
+.acct-wide .acct-foot {
+  margin-top: 32px;
+  text-align: left;
+}
+
+.acct-wide .acct-link {
+  padding-left: 0;
+}
+
+@media (max-width: 900px) {
+  .acct {
+    padding: 40px 20px 80px;
+  }
+}
