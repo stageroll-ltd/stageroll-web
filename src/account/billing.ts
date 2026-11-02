@@ -75,6 +75,8 @@ export type Move =
   | { kind: 'unbilled' }
   | { kind: 'no-billing' }
   | { kind: 'unavailable' }
+  /** Past the day's billing requests for this production: try tomorrow. */
+  | { kind: 'paced' }
   | Failure
 
 type Answer = { outcome?: unknown; url?: unknown; plan?: unknown }
@@ -96,7 +98,7 @@ async function invoke(
   return { answer: (data as Answer | null) ?? {} }
 }
 
-const KNOWN = new Set(['open', 'same', 'not-owner', 'enterprise', 'unbilled', 'no-billing', 'unavailable'])
+const KNOWN = new Set(['open', 'same', 'not-owner', 'enterprise', 'unbilled', 'no-billing', 'unavailable', 'paced'])
 
 /** Where Stripe's own pages live: Checkout, and the customer portal. */
 const STRIPE_HOSTS = new Set(['checkout.stripe.com', 'billing.stripe.com'])
@@ -147,6 +149,7 @@ export type Confirm =
   | { kind: 'unknown' }
   | { kind: 'not-owner' }
   | { kind: 'unavailable' }
+  | { kind: 'paced' }
   | Failure
 
 /**
@@ -160,7 +163,13 @@ export async function confirmCheckout(productionId: string, session: string): Pr
   if ((outcome === 'paid' || outcome === 'processing') && (plan === 'starter' || plan === 'pro')) {
     return { kind: outcome, plan }
   }
-  if (outcome === 'unpaid' || outcome === 'unknown' || outcome === 'not-owner' || outcome === 'unavailable') {
+  if (
+    outcome === 'unpaid' ||
+    outcome === 'unknown' ||
+    outcome === 'not-owner' ||
+    outcome === 'unavailable' ||
+    outcome === 'paced'
+  ) {
     return { kind: outcome }
   }
   console.error('[plan] billing-checkout answered something else', got.answer)

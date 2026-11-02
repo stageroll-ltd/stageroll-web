@@ -88,6 +88,8 @@ function sayMove(move: Move, production: PlanRead): string | null {
       return 'This production has no billing yet.'
     case 'unavailable':
       return 'Billing isn’t available right now. Try again in a little while.'
+    case 'paced':
+      return `That’s a lot of plan changes for one day. Try again tomorrow, or write to ${CONTACT}.`
     case 'offline':
       return 'No connection. Check your network and try again.'
     case 'failed':
@@ -120,6 +122,8 @@ function sayConfirm(confirm: Confirm): string | null {
       return `Payment is on its way. ${planLabel(confirm.plan)} arrives once it has cleared, and this page shows it then.`
     case 'unpaid':
       return 'That checkout wasn’t completed, so nothing has changed.'
+    case 'paced':
+      return 'That’s a lot of billing requests for one day, so the payment wasn’t checked. If you paid, the plan arrives in a minute or two, and this page shows it once it has.'
     case 'unavailable':
     case 'offline':
     case 'failed':
