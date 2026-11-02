@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 
+import { accountRoutes } from './account/pages'
 import { About } from './pages/About'
 import { Contact } from './pages/Contact'
 import { Home, HomeEnd } from './pages/Home'
@@ -7,8 +8,6 @@ import { NotFound } from './pages/NotFound'
 import { Pricing } from './pages/Pricing'
 import { Privacy } from './pages/Privacy'
 import { Product } from './pages/Product'
-import { Productions } from './pages/Productions'
-import { SignIn } from './pages/SignIn'
 import { Feature } from './pages/Feature'
 import { featurePages } from './pages/features'
 import { Terms } from './pages/Terms'
@@ -91,22 +90,10 @@ export const routes: Route[] = [
     description: 'The terms on which StageRoll Ltd provides the StageRoll app.',
     Page: Terms,
   },
-  // The account pages, drawn in the browser behind a prerendered shell. The
-  // header links to them (Layout.tsx); the sitemap leaves them out.
-  {
-    path: '/sign-in/',
-    title: 'Sign in — StageRoll',
-    description: 'Sign in to your StageRoll account.',
-    Page: SignIn,
-    noindex: true,
-  },
-  {
-    path: '/productions/',
-    title: 'Your productions — StageRoll',
-    description: 'The productions on your StageRoll account.',
-    Page: Productions,
-    noindex: true,
-  },
+  // The account pages (account/pages.ts), in a build that has them; the
+  // header links to them (Layout.tsx). Elsewhere this adds nothing and the
+  // deployed site answers their paths with the 404 page.
+  ...accountRoutes(),
 ]
 
 export const notFound: Route = {

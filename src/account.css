@@ -431,6 +431,169 @@ html:not(.js) .acct-spin {
   padding-left: 0;
 }
 
+/* A row that opens its own page: the whole row is the link, a chevron at its end. */
+.acct-row-link {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  margin: -15px 0;
+  padding: 15px 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.acct-row-link:hover .acct-name {
+  text-decoration: underline;
+  text-decoration-color: var(--hair);
+  text-underline-offset: 0.2em;
+}
+
+.acct-row-link:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.acct-chevron {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin: 0 2px 1px 12px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+
+/* A production's plan: each plan, what it holds, its price and its action. */
+.acct-plans li {
+  align-items: center;
+}
+
+.acct-plan-what {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.acct-plan-holds {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--mute);
+  text-wrap: pretty;
+}
+
+.acct-plan-end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 16px;
+}
+
+.acct-plan-price {
+  font-size: 15px;
+  color: var(--ink2);
+  white-space: nowrap;
+}
+
+.acct-choose,
+.acct-billing {
+  justify-content: center;
+  border: 0;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.acct-choose {
+  min-width: 86px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.acct-billing {
+  min-width: 150px;
+  font-size: 15px;
+}
+
+.acct-choose:disabled,
+.acct-billing:disabled {
+  cursor: default;
+  transform: none;
+}
+
+.acct-choose:disabled:not([aria-busy='true']),
+.acct-billing:disabled:not([aria-busy='true']) {
+  opacity: 0.4;
+}
+
+.acct-choose:focus-visible,
+.acct-billing:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.acct-plan-notice,
+.acct-plan-settling {
+  margin: 28px 0 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--paper);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.acct-plan-settling {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink2);
+}
+
+.acct-plan-settling .acct-spin {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.acct-plan-note {
+  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink2);
+  text-wrap: pretty;
+}
+
+.acct-plan-note a {
+  color: var(--ink2);
+  text-underline-offset: 0.2em;
+}
+
+.acct-plan-note a:hover {
+  color: var(--ink);
+}
+
+.acct-plan-note-first {
+  margin: 0 0 16px;
+}
+
+@media (max-width: 600px) {
+  .acct-plans li {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .acct-plan-end {
+    justify-content: space-between;
+  }
+}
+
 @media (max-width: 900px) {
   .acct {
     padding: 40px 20px 80px;

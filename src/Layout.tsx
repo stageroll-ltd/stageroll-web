@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
-import { signedIn } from './account/keys'
+import { accountPages, signedIn } from './account/pages'
 import { useMotion } from './motion'
 
 export const company = {
@@ -36,11 +36,16 @@ function here(href: string, current: string): 'page' | 'true' | undefined {
  * The header's way into the account: Sign in, or Your productions once this
  * browser keeps a session that has passed the password. Read after the page
  * has hydrated, from the session supabase-js keeps (`account/keys.ts`), so
- * no page loads Supabase for it. The productions page starts on its own name.
+ * no page loads Supabase for it. The productions pages start on its own name.
+ * Null in a build without the account pages (`account/pages.ts`): the header
+ * then has no link, and the nav links, centred absolutely, stay where they are.
  */
-function useAccountLink(current: string): { href: string; label: string } {
-  const [inside, setInside] = useState(current === '/productions/')
-  useEffect(() => setInside(signedIn()), [])
+function useAccountLink(current: string): { href: string; label: string } | null {
+  const [inside, setInside] = useState(current.startsWith('/productions/'))
+  useEffect(() => {
+    if (accountPages) setInside(signedIn())
+  }, [])
+  if (!accountPages) return null
   return inside ? { href: '/productions/', label: 'Your productions' } : { href: '/sign-in/', label: 'Sign in' }
 }
 
@@ -83,9 +88,11 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
           ))}
         </nav>
         <div className="nav-right">
-          <a className="nav-account" href={account.href} aria-current={account.href === current ? 'page' : undefined}>
-            {account.label}
-          </a>
+          {account && (
+            <a className="nav-account" href={account.href} aria-current={account.href === current ? 'page' : undefined}>
+              {account.label}
+            </a>
+          )}
           <button
             type="button"
             className="burger"

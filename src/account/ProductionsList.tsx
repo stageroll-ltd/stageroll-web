@@ -8,8 +8,8 @@ import { useExpiry } from './useExpiry'
 import { Wait } from './Wait'
 
 // /productions/, drawn in the browser: the signed-in account's productions in
-// two groups, its own (with the plan at the row's end) and the ones shared
-// with it (with its role). Signed out, or held at the password, the page
+// two groups, its own (with the plan at the row's end, each opening its plan
+// page, `PlanPage.tsx`) and the ones shared with it (with its role). Signed out, or held at the password, the page
 // sends the person to /sign-in/, which knows which step they are on. A
 // session past the browser's rule (`expiry.ts`) is signed out first, and
 // sign-in says why.
@@ -93,7 +93,7 @@ export default function ProductionsList() {
           </div>
         ) : (
           <>
-            <Group title="Yours" rows={read.yours} end={(p) => planLabel(p.tier)} />
+            <Group title="Yours" rows={read.yours} end={(p) => planLabel(p.tier)} href={planHref} />
             <Group title="Shared with you" rows={read.shared} end={(p) => roleLabel(p.role)} />
           </>
         )}
@@ -104,7 +104,21 @@ export default function ProductionsList() {
   )
 }
 
-function Group({ title, rows, end }: { title: string; rows: Production[]; end: (p: Production) => string }) {
+/** Your own production's plan page, where its plan and billing are changed. */
+const planHref = (production: Production) => `/productions/plan/?id=${encodeURIComponent(production.id)}`
+
+function Group({
+  title,
+  rows,
+  end,
+  href,
+}: {
+  title: string
+  rows: Production[]
+  end: (p: Production) => string
+  /** Rows that open a page of their own. */
+  href?: (p: Production) => string
+}) {
   if (rows.length === 0) return null
   return (
     <section className="acct-group">
@@ -112,8 +126,20 @@ function Group({ title, rows, end }: { title: string; rows: Production[]; end: (
       <ul className="acct-rows">
         {rows.map((production) => (
           <li key={production.id}>
-            <span className="acct-name">{nameOf(production)}</span>
-            <span className="acct-end">{end(production)}</span>
+            {href ? (
+              <a className="acct-row-link" href={href(production)}>
+                <span className="acct-name">{nameOf(production)}</span>
+                <span className="acct-end">
+                  {end(production)}
+                  <span className="acct-chevron" aria-hidden="true" />
+                </span>
+              </a>
+            ) : (
+              <>
+                <span className="acct-name">{nameOf(production)}</span>
+                <span className="acct-end">{end(production)}</span>
+              </>
+            )}
           </li>
         ))}
       </ul>

@@ -244,9 +244,9 @@ export const featurePages: FeaturePage[] = [
       ['Send it', 'Share it straight from your phone, or download it in a browser. StageRoll keeps no copy.'],
     ],
     features: [
-      ['Costume', 'Costume plot, changes by character, continuity book, bag tags, fitting notes, inventory and wrap boxes.', 'shirt'],
-      ['Props', 'Props by scene, props status, inventory and wrap boxes.', 'clapper'],
-      ['Hair and makeup', 'Style and look plots, by character, continuity books and actor notes.', 'scissors'],
+      ['Costume', 'The costume plot, the continuity book and the inventory.', 'shirt'],
+      ['Props', 'Props by scene and the inventory.', 'clapper'],
+      ['Hair and makeup', 'Style and look plots and their continuity books.', 'scissors'],
       ['Spreadsheets', 'Plots, props lists and inventories also export as CSV.', 'table'],
       ['Always current', 'Every report is built when you ask, from the production as it is.', 'refresh'],
       ['A record', 'Which reports were made, by whom and when.', 'history'],

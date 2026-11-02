@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { extname, join } from 'node:path'
 
 import react from '@vitejs/plugin-react'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
 
 import { fill, type Page } from './scripts/head.ts'
 
@@ -46,9 +46,20 @@ function pagesInDev(): Plugin {
 // Served at the domain's root (public/CNAME), so absolute asset paths: the
 // pages live in folders (/about/, /privacy/) and relative paths would
 // resolve against each folder instead of the root.
-export default defineConfig(({ isSsrBuild }) => ({
+export default defineConfig(({ mode, isSsrBuild }) => ({
   base: '/',
   plugins: [react(), pagesInDev()],
+  // A build without the account pages (VITE_ACCOUNT_PAGES not 'on': the
+  // deploy; .env.development turns them on for `yarn dev`) gets
+  // src/account/pages.off.ts in pages.ts's place, so nothing under account/
+  // is built: not the pages' chunks, not Supabase, not its keys. An alias,
+  // not a flag in the code: tree-shaking left the chunks and the keys behind.
+  resolve: {
+    alias:
+      loadEnv(mode, process.cwd(), 'VITE_').VITE_ACCOUNT_PAGES === 'on'
+        ? []
+        : [{ find: /^(\.{1,2}\/account\/pages)$/, replacement: '$1.off' }],
+  },
   // `vite build --ssr src/entry-server.tsx` lands beside the client build
   // for scripts/prerender.mjs, which deletes it once the HTML is written.
   build: isSsrBuild ? { outDir: 'dist/server', copyPublicDir: false } : {},
