@@ -7,7 +7,9 @@ import { supabase } from './client'
 // reads it) and the `billing-checkout` and `billing-portal` Edge Functions
 // (`supabase/functions/_shared/billing.ts`, where each move goes). The plan
 // itself moves only when Stripe tells `billing-webhook`, so after Stripe the
-// page waits for the production to say so (`settle`).
+// page waits for the production to say so (`settle`). Back from Checkout the
+// page asks what the session it came back with came to (`confirmCheckout`)
+// before it says a word about a payment: the address is anyone's to write.
 
 export type Tier = 'free' | 'starter' | 'pro' | 'enterprise'
 export type Plan = 'free' | 'starter' | 'pro'
@@ -62,6 +64,9 @@ export async function readPlan(productionId: string, userId: string): Promise<Re
   }
 }
 
+/** The call went nowhere, or not as the signed-in owner. */
+type Failure = { kind: 'signed-out' } | { kind: 'offline' } | { kind: 'failed' }
+
 export type Move =
   | { kind: 'open'; url: string }
   | { kind: 'same' }
@@ -70,13 +75,15 @@ export type Move =
   | { kind: 'unbilled' }
   | { kind: 'no-billing' }
   | { kind: 'unavailable' }
-  | { kind: 'signed-out' }
-  | { kind: 'offline' }
-  | { kind: 'failed' }
+  | Failure
 
-const KNOWN = new Set(['open', 'same', 'not-owner', 'enterprise', 'unbilled', 'no-billing', 'unavailable'])
+type Answer = { outcome?: unknown; url?: unknown; plan?: unknown }
 
-async function ask(name: 'billing-checkout' | 'billing-portal', body: Record<string, string>): Promise<Move> {
+/** One function's answer, or why there is none. */
+async function invoke(
+  name: 'billing-checkout' | 'billing-portal',
+  body: Record<string, string>,
+): Promise<{ answer: Answer } | Failure> {
   const { data, error } = await supabase.functions.invoke(name, { body })
   if (error) {
     if (error instanceof FunctionsFetchError) return { kind: 'offline' }
@@ -86,13 +93,40 @@ async function ask(name: 'billing-checkout' | 'billing-portal', body: Record<str
     console.error(`[plan] ${name} failed`, error)
     return { kind: 'failed' }
   }
-  const answer = data as { outcome?: unknown; url?: unknown } | null
-  const outcome = typeof answer?.outcome === 'string' ? answer.outcome : ''
-  if (outcome === 'open') {
-    return typeof answer?.url === 'string' ? { kind: 'open', url: answer.url } : { kind: 'failed' }
+  return { answer: (data as Answer | null) ?? {} }
+}
+
+const KNOWN = new Set(['open', 'same', 'not-owner', 'enterprise', 'unbilled', 'no-billing', 'unavailable'])
+
+/** Where Stripe's own pages live: Checkout, and the customer portal. */
+const STRIPE_HOSTS = new Set(['checkout.stripe.com', 'billing.stripe.com'])
+
+/**
+ * Whether an address the server handed back is one of Stripe's pages. The
+ * browser is sent wherever `open` says, so it is checked here as well as
+ * trusted: a server fault could never send a person anywhere else.
+ */
+export function isStripeUrl(url: unknown): url is string {
+  if (typeof url !== 'string') return false
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'https:' && STRIPE_HOSTS.has(parsed.hostname)
+  } catch {
+    return false
   }
-  if (KNOWN.has(outcome)) return { kind: outcome } as Move
-  console.error(`[plan] ${name} answered something else`, data)
+}
+
+async function ask(name: 'billing-checkout' | 'billing-portal', body: Record<string, string>): Promise<Move> {
+  const got = await invoke(name, body)
+  if (!('answer' in got)) return got
+  const { outcome, url } = got.answer
+  if (outcome === 'open') {
+    if (isStripeUrl(url)) return { kind: 'open', url }
+    console.error(`[plan] ${name} opened something that is not Stripe`, url)
+    return { kind: 'failed' }
+  }
+  if (typeof outcome === 'string' && KNOWN.has(outcome)) return { kind: outcome } as Move
+  console.error(`[plan] ${name} answered something else`, got.answer)
   return { kind: 'failed' }
 }
 
@@ -101,6 +135,37 @@ export const movePlan = (productionId: string, plan: Plan) => ask('billing-check
 
 /** Stripe's portal: the card, the invoices, the company's details, renewing a cancelled plan. */
 export const manageBilling = (productionId: string) => ask('billing-portal', { productionId })
+
+export type Confirm =
+  /** Paid, for this plan: the production follows once the webhook has landed. */
+  | { kind: 'paid'; plan: 'starter' | 'pro' }
+  /** Complete, the first payment still clearing (a bank debit). */
+  | { kind: 'processing'; plan: 'starter' | 'pro' }
+  /** Open or expired: nothing was paid. */
+  | { kind: 'unpaid' }
+  /** Not a checkout of this production's. */
+  | { kind: 'unknown' }
+  | { kind: 'not-owner' }
+  | { kind: 'unavailable' }
+  | Failure
+
+/**
+ * Back from Stripe Checkout with `?session=`: what that session came to, as
+ * Stripe has it. The page says "payment received" on this and nothing else.
+ */
+export async function confirmCheckout(productionId: string, session: string): Promise<Confirm> {
+  const got = await invoke('billing-checkout', { productionId, session })
+  if (!('answer' in got)) return got
+  const { outcome, plan } = got.answer
+  if ((outcome === 'paid' || outcome === 'processing') && (plan === 'starter' || plan === 'pro')) {
+    return { kind: outcome, plan }
+  }
+  if (outcome === 'unpaid' || outcome === 'unknown' || outcome === 'not-owner' || outcome === 'unavailable') {
+    return { kind: outcome }
+  }
+  console.error('[plan] billing-checkout answered something else', got.answer)
+  return { kind: 'failed' }
+}
 
 /**
  * Back from Stripe, the plan moves when Stripe's webhook has landed, a

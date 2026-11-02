@@ -1,6 +1,18 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 
-import { isLive, manageBilling, movePlan, readPlan, settle, type Move, type Plan, type PlanRead, type Read } from './billing'
+import {
+  confirmCheckout,
+  isLive,
+  manageBilling,
+  movePlan,
+  readPlan,
+  settle,
+  type Confirm,
+  type Move,
+  type Plan,
+  type PlanRead,
+  type Read,
+} from './billing'
 import { supabase } from './client'
 import { isHeld } from './keys'
 import { planLabel } from './productions'
@@ -13,8 +25,10 @@ import { Wait } from './Wait'
 // Checkout; from a paid plan, a change or a cancel is Stripe's portal, on
 // the page for that change. Either way the plan moves when Stripe tells the
 // server, so back from Stripe the page waits for it (`billing.ts` ›
-// `settle`). Prices and what each plan holds are the pricing page's, from
-// stageroll-docs#18.
+// `settle`). Back from Checkout it first asks the server what the session
+// in the address came to (`confirmCheckout`): "payment received" is Stripe's
+// word, never the address bar's, which anyone can write. Prices and what
+// each plan holds are the pricing page's, from stageroll-docs#18.
 
 const toSignIn = () => window.location.replace('/sign-in/')
 
@@ -82,13 +96,35 @@ function sayMove(move: Move, production: PlanRead): string | null {
 }
 
 /** What the page was sent back with, taken off the address so a reload asks nothing again. */
-function takeReturn(): { id: string | null; paid: Plan | null; fromBilling: boolean } {
+function takeReturn(): { id: string | null; session: string | null; fromBilling: boolean } {
   const params = new URLSearchParams(window.location.search)
   const id = params.get('id')
-  const paid = params.get('paid')
+  const session = params.get('session')
   const fromBilling = params.get('from') === 'billing'
-  if (paid || fromBilling) window.history.replaceState(null, '', `${window.location.pathname}?id=${encodeURIComponent(id ?? '')}`)
-  return { id, paid: paid === 'starter' || paid === 'pro' ? paid : null, fromBilling }
+  if (session || fromBilling) {
+    window.history.replaceState(null, '', `${window.location.pathname}?id=${encodeURIComponent(id ?? '')}`)
+  }
+  return { id, session, fromBilling }
+}
+
+/** Back from Checkout and not paid, in the page's words; null where there is nothing to say. */
+function sayConfirm(confirm: Confirm): string | null {
+  switch (confirm.kind) {
+    case 'paid':
+    case 'signed-out':
+    // A checkout that is not this production's, or not the caller's: a crafted address, and nothing to tell.
+    case 'unknown':
+    case 'not-owner':
+      return null
+    case 'processing':
+      return `Payment is on its way. ${planLabel(confirm.plan)} arrives once it has cleared, and this page shows it then.`
+    case 'unpaid':
+      return 'That checkout wasn’t completed, so nothing has changed.'
+    case 'unavailable':
+    case 'offline':
+    case 'failed':
+      return 'The payment couldn’t be checked with Stripe just now. If you paid, the plan arrives in a minute or two, and this page shows it once it has.'
+  }
 }
 
 /** Every fact the page shows, so a change is any of them moving. */
@@ -114,11 +150,22 @@ export default function PlanPage() {
     if (first.kind !== 'read') return
 
     const was = factsOf(first.production)
-    if (back.paid) {
-      const plan = planLabel(back.paid)
-      if (first.production.tier === back.paid) return setNotice(`${nameOf(first.production)} is on ${plan}.`)
+    if (back.session) {
+      setSettling('Checking the payment with Stripe.')
+      const confirm = await confirmCheckout(back.id, back.session)
+      if (confirm.kind === 'signed-out') return toSignIn()
+      if (confirm.kind !== 'paid') {
+        setSettling(null)
+        return setNotice(sayConfirm(confirm))
+      }
+      const paid = confirm.plan
+      const plan = planLabel(paid)
+      if (first.production.tier === paid) {
+        setSettling(null)
+        return setNotice(`${nameOf(first.production)} is on ${plan}.`)
+      }
       setSettling(`Payment received. Moving to ${plan}.`)
-      const landed = await settle(back.id, session.user.id, (p) => p.tier === back.paid)
+      const landed = await settle(back.id, session.user.id, (p) => p.tier === paid)
       setSettling(null)
       if (landed) {
         setRead({ kind: 'read', production: landed })
