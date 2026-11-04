@@ -1420,8 +1420,9 @@ html.still .hero-stage > * {
  * Store allows no link, button or words inside an app that lead to buying
  * outside it (guidelines 3.1.1 and 3.1.3(f)). So every way to buy is
  * marked `.sells` and goes: Pricing in the nav and footer, the account
- * link, a page's own link to Pricing. A link inside a sentence keeps its
- * words, as `.app-only` text beside it.
+ * link, a page's own link to Pricing. `.app-only` shows only there: a
+ * sentence's words beside a link that went, Help's line about the website.
+ * Nothing `.app-only` mentions a plan, a price or buying.
  */
 html.in-app .sells {
   display: none !important;
@@ -1432,7 +1433,7 @@ html.in-app .sells {
 }
 
 html.in-app .app-only {
-  display: inline;
+  display: revert;
 }
 
 /* Prose pages: About, Help, Support, Privacy, Terms, the 404. */
@@ -1580,7 +1581,8 @@ html.in-app .app-only {
 }
 
 .help-steps b,
-.help-topic p > b {
+.help-topic p > b,
+.help-note > b {
   font-weight: 600;
   color: var(--ink);
 }

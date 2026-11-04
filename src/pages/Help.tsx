@@ -194,6 +194,11 @@ export function Help() {
     <article className="prose help">
       <h1>Help</h1>
       <p className="lede">How to do the common things in StageRoll.</p>
+      {/* Only where the app opened this page: words, never a link (a link would stay in
+          the app's sheet, `in-app` with it), and never a word about plans (styles.css). */}
+      <p className="help-note app-only">
+        To see all of Help, open <b>stageroll.co/help</b> in your browser.
+      </p>
 
       <nav className="help-topics" aria-label="Topics">
         {groups.map((group) => (
