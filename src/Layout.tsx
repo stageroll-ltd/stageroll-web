@@ -11,10 +11,11 @@ export const company = {
 }
 
 // The header nav, also the footer's first column. Support is the contact page.
-const nav = [
+// `sells` is hidden when the app opened the page (styles.css, `.sells`).
+const nav: { href: string; label: string; sells?: boolean }[] = [
   { href: '/', label: 'Home' },
   { href: '/product/', label: 'Product' },
-  { href: '/pricing/', label: 'Pricing' },
+  { href: '/pricing/', label: 'Pricing', sells: true },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'Support' },
 ]
@@ -82,14 +83,23 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
         </a>
         <nav id="site-nav" aria-label="Site" className={menu ? 'open' : undefined}>
           {nav.map((item) => (
-            <a key={item.href} href={item.href} aria-current={here(item.href, current)}>
+            <a
+              key={item.href}
+              href={item.href}
+              className={item.sells ? 'sells' : undefined}
+              aria-current={here(item.href, current)}
+            >
               {item.label}
             </a>
           ))}
         </nav>
         <div className="nav-right">
           {account && (
-            <a className="nav-account" href={account.href} aria-current={account.href === current ? 'page' : undefined}>
+            <a
+              className="nav-account sells"
+              href={account.href}
+              aria-current={account.href === current ? 'page' : undefined}
+            >
               {account.label}
             </a>
           )}
@@ -120,10 +130,11 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
             <div>
               <p>StageRoll</p>
               {nav.map((item) => (
-                <a key={item.href} href={item.href}>
+                <a key={item.href} href={item.href} className={item.sells ? 'sells' : undefined}>
                   {item.label}
                 </a>
               ))}
+              <a href="/help/">Help</a>
             </div>
             <div>
               <p>Legal</p>

@@ -14,6 +14,9 @@ export function Contact() {
         <a href={`mailto:${company.email}`}>{company.email}</a>
       </p>
       <p className="quiet">We reply within a few working days.</p>
+      <p>
+        Many questions are answered on the <a href="/help/">help page</a>.
+      </p>
 
       <h2>Post</h2>
       <p>

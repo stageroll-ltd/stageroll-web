@@ -9,6 +9,7 @@ import { Pricing } from './pages/Pricing'
 import { Privacy } from './pages/Privacy'
 import { Product } from './pages/Product'
 import { Feature } from './pages/Feature'
+import { Help } from './pages/Help'
 import { featurePages } from './pages/features'
 import { Terms } from './pages/Terms'
 
@@ -70,6 +71,13 @@ export const routes: Route[] = [
       'StageRoll Ltd is an independent software company registered in England and Wales, making production management software for the costume, props, hair, makeup and sets departments on productions of any size.',
     nav: 'About',
     Page: About,
+  },
+  {
+    path: '/help/',
+    title: 'Help — StageRoll',
+    description:
+      'Answers to common questions about StageRoll: joining a production, upgrading it, who can see it, scripts, passwords, lost devices, restoring a production and deleting your account.',
+    Page: Help,
   },
   {
     path: '/contact/',

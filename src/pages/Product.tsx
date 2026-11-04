@@ -90,7 +90,7 @@ export function Product() {
             <h2 id="next-title">Ready for your next production.</h2>
             <p className="lede">Plans are per production, and every crew account is free.</p>
             <div className="acts">
-              <a className="pill dark" href="/pricing/">
+              <a className="pill dark sells" href="/pricing/">
                 See pricing
               </a>
               <a className="pill" href="/contact/">

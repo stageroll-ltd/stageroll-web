@@ -108,7 +108,11 @@ export function Terms() {
       <h2>Plans and payment</h2>
       <p>
         Every crew account is free. Plans are per production: the free plan, and paid plans as shown
-        on our <a href="/pricing/">pricing page</a> when you buy, plus VAT where it applies.
+        on our{' '}
+        <a className="sells" href="/pricing/">
+          pricing page
+        </a>
+        <span className="app-only">pricing page</span> when you buy, plus VAT where it applies.
       </p>
       <p>
         Starter and Pro are billed monthly in advance by card, and renew each month until they are

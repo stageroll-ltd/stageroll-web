@@ -3,7 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script>document.documentElement.classList.add("js")</script>
+    <script>
+      // `in-app` when the app opened this tab (?from=app): every way to buy is hidden
+      // for as long as the tab stays open, across its links (`.sells`, src/styles.css).
+      (function (d, app) {
+        d.classList.add("js")
+        try {
+          if (app) sessionStorage.setItem("from", "app")
+          if (sessionStorage.getItem("from") === "app") d.classList.add("in-app")
+        } catch (e) {
+          if (app) d.classList.add("in-app")
+        }
+      })(document.documentElement, /[?&]from=app(&|$)/.test(location.search))
+    </script>
     <title>StageRoll — Production management, done right</title>
     <meta name="description" content="Continuity management for productions of any size, from research and physical inventory through to wrap." />
     <link rel="canonical" href="https://stageroll.co/" />
