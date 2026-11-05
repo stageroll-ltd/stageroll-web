@@ -8,6 +8,7 @@ import {
   checkPassword,
   choosePassword,
   CODE_LENGTH,
+  RESEND_SECONDS,
   CONTACT,
   EMAIL_MAX,
   endIfDue,
@@ -106,7 +107,7 @@ function chooseNotice(kind: Exclude<ChooseOutcome['kind'], 'passed'>): string {
 type Step =
   | { at: 'reading' }
   | { at: 'email'; address: string }
-  | { at: 'code'; address: string }
+  | { at: 'code'; address: string; wait?: number }
   | { at: 'password' }
   | { at: 'forgot' }
   | { at: 'leaving' }
@@ -195,13 +196,14 @@ export default function SignInFlow() {
           initial={step.address}
           notice={notice}
           say={setNotice}
-          onSent={(address) => go({ at: 'code', address })}
+          onSent={(address, wait) => go({ at: 'code', address, wait })}
         />
       )
     case 'code':
       return (
         <CodeStep
           address={step.address}
+          wait={step.wait}
           notice={notice}
           say={setNotice}
           onHeld={() => go({ at: 'password' })}
@@ -268,7 +270,7 @@ function EmailStep({
   initial: string
   notice: string | null
   say: (text: string | null) => void
-  onSent: (address: string) => void
+  onSent: (address: string, wait?: number) => void
 }) {
   const [email, setEmail] = useState(initial)
   const [sending, setSending] = useState(false)
@@ -286,7 +288,7 @@ function EmailStep({
     if (outcome.kind === 'cancelled') return
     if (outcome.kind !== 'sent') return say(requestNotice(outcome))
     // The address the code went to: lowercased, and the code step checks against the same.
-    onSent(outcome.address)
+    onSent(outcome.address, outcome.wait)
   }
 
   const open = async (provider: Provider) => {
@@ -375,6 +377,7 @@ function EmailStep({
 
 function CodeStep({
   address,
+  wait,
   notice,
   say,
   onHeld,
@@ -382,6 +385,8 @@ function CodeStep({
   onBack,
 }: {
   address: string
+  /** Seconds until another code may be sent, when Auth said so; a fresh code's full wait otherwise. */
+  wait?: number
   notice: string | null
   say: (text: string | null) => void
   onHeld: () => void
@@ -390,7 +395,40 @@ function CodeStep({
 }) {
   const [code, setCode] = useState('')
   const [checking, setChecking] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [resent, setResent] = useState(false)
+  const captcha = useCaptcha(TURNSTILE_SITE_KEY)
   const field = useRef<HTMLInputElement>(null)
+  // As a time, not a tally of ticks: a tab in the background has its timers slowed.
+  const [againAt, setAgainAt] = useState(() => Date.now() + (wait || RESEND_SECONDS) * 1000)
+  const [now, setNow] = useState(() => Date.now())
+  const left = Math.max(0, Math.ceil((againAt - now) / 1000))
+  const counting = left > 0
+
+  useEffect(() => {
+    if (!counting) return
+    const tick = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(tick)
+  }, [counting])
+
+  /** A new code, without going back for it: it replaces the one out, so what was typed goes too. */
+  const sendAgain = async () => {
+    say(null)
+    setSending(true)
+    const outcome = await requestCode(address, captcha.token)
+    setSending(false)
+    if (outcome.kind === 'cancelled') return
+    if (outcome.kind !== 'sent') return say(requestNotice(outcome))
+    const at = Date.now()
+    setNow(at)
+    setAgainAt(at + (outcome.wait ?? RESEND_SECONDS) * 1000)
+    // Auth may still say wait, a code having gone out elsewhere: then nothing was sent.
+    if (outcome.wait === undefined) {
+      setResent(true)
+      setCode('')
+      requestAnimationFrame(() => field.current?.focus())
+    }
+  }
 
   const verify = async (entered: string) => {
     if (checking) return
@@ -408,7 +446,7 @@ function CodeStep({
     setCode('')
     say(
       outcome.kind === 'wrong-code'
-        ? 'That code isn’t right. Try again, or go back for a new one.'
+        ? 'That code isn’t right. Try again, or send a new one.'
         : outcome.kind === 'rate-limited'
           ? 'Too many attempts. Wait a few minutes.'
           : outcome.kind === 'blocked'
@@ -460,7 +498,22 @@ function CodeStep({
         />
         <div className="acct-wait-slot">{checking && <span className="acct-spin" aria-label="Checking" />}</div>
         <Notice text={notice} />
+        {captcha.box}
       </form>
+      <p className="acct-foot">
+        <button
+          type="button"
+          className="acct-link"
+          onClick={() => void sendAgain()}
+          disabled={counting || checking || sending}
+        >
+          {!counting
+            ? 'Send a new code'
+            : resent
+              ? `New code sent. Send another in ${left}s`
+              : `Send a new code in ${left}s`}
+        </button>
+      </p>
       <p className="acct-foot">
         <button type="button" className="acct-link" onClick={onBack} disabled={checking}>
           Use a different email

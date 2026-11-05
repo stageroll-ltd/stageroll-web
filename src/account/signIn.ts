@@ -18,8 +18,11 @@ import type { CaptchaAnswer } from './Turnstile'
 // reaches nothing; only the password function lets it through. The pages see
 // outcomes, never Supabase's errors.
 
-/** Eight digits, alive ten minutes (the app's `src/auth/code.ts`). */
-export const CODE_LENGTH = 8
+/** Six digits, alive ten minutes (the app's `src/auth/code.ts`). */
+export const CODE_LENGTH = 6
+
+/** One code per address per minute: how long the code step counts down from (the app's `RESEND_SECONDS`). */
+export const RESEND_SECONDS = 60
 
 /** The shortest password the server takes (`_shared/password.ts` › `PASSWORD_MIN`). */
 export const PASSWORD_MIN = 10
@@ -36,6 +39,17 @@ const looksLikeCode = (value: string) => new RegExp(`^\\d{${CODE_LENGTH}}$`).tes
 const offline = (error: AuthError) => isAuthRetryableFetchError(error) && !error.status
 
 const refusedSignUp = (error: AuthError) => /\bsignup_refused\b/.test(error.message)
+
+/**
+ * Auth's one code per address per minute, as the seconds it says are left;
+ * null for any other refusal. By its words: its hourly mail limit has the
+ * same code, and no code is out for that one.
+ */
+function secondsTillAnother(error: AuthError): number | null {
+  if (error.status !== 429 || error.code !== 'over_email_send_rate_limit') return null
+  const said = /request this after (\d+) seconds?/.exec(error.message)
+  return said ? Number(said[1]) : null
+}
 
 // ── Where this browser stands ───────────────────────────────────────────
 
@@ -118,7 +132,8 @@ export async function endIfDue(): Promise<Ended | null> {
 // ── Email: the code ─────────────────────────────────────────────────────
 
 export type RequestOutcome =
-  | { kind: 'sent'; address: string }
+  /** `wait` only when this request mailed nothing: the seconds until Auth will send another. */
+  | { kind: 'sent'; address: string; wait?: number }
   | { kind: 'invalid-address' }
   | { kind: 'rate-limited' }
   | { kind: 'blocked' }
@@ -143,6 +158,11 @@ export async function requestCode(email: string, captcha: () => Promise<CaptchaA
     options: { shouldCreateUser: true, captchaToken: answer.kind === 'token' ? answer.token : undefined },
   })
   if (!error) return { kind: 'sent', address }
+  // Asked again inside the minute: no new mail, and the code already out still
+  // works, so on to the code step, which counts down to another (the app's
+  // `secondsTillAnother`, `src/auth/auth.ts`).
+  const wait = secondsTillAnother(error)
+  if (wait !== null) return { kind: 'sent', address, wait }
   if (offline(error)) return { kind: 'offline' }
   if (error.status === 429) return { kind: 'rate-limited' }
   if (error.code === 'user_banned') return { kind: 'blocked' }
