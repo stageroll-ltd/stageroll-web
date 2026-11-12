@@ -1422,7 +1422,9 @@ html.still .hero-stage > * {
  * marked `.sells` and goes: Pricing in the nav and footer, the account
  * link, a page's own link to Pricing. `.app-only` shows only there: a
  * sentence's words beside a link that went, Help's line about the website.
- * Nothing `.app-only` mentions a plan, a price or buying.
+ * Nothing `.app-only` links to a plan, a price or buying. One thing names
+ * them in words: Help's Upgrade topic, the app's own Upgrade sentence
+ * (user call, 2026-11-12, a risk taken on purpose with App Review).
  */
 html.in-app .sells {
   display: none !important;

@@ -192,9 +192,12 @@ export default function PlanPage() {
       }
       const paid = confirm.plan;
       const plan = planLabel(paid);
-      if (first.production.tier === paid) {
+      // The confirm moved the plan itself, so one more read usually has it.
+      const now = await readPlan(back.id, session.user.id);
+      if (now.kind === "read" && now.production.tier === paid) {
         setSettling(null);
-        return setNotice(`${nameOf(first.production)} is on ${plan}.`);
+        setRead(now);
+        return setNotice(`${nameOf(now.production)} is on ${plan}.`);
       }
       setSettling(`Payment received. Moving to ${plan}.`);
       const landed = await settle(
@@ -290,6 +293,11 @@ export default function PlanPage() {
     setBusy(null);
     if (answer.kind === "signed-out") return toSignIn();
     setNotice(sayMove(answer, production));
+    // "Same" can be news: a checkout already paid was found and taken.
+    if (answer.kind === "same") {
+      const now = await readPlan(production.id, userId);
+      if (now.kind === "read") setRead(now);
+    }
   };
 
   const enterprise = production.tier === "enterprise";

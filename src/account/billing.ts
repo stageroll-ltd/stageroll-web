@@ -6,10 +6,11 @@ import { supabase } from './client'
 // stageroll-native's: `20261102120000_billing.sql` (what is kept, and who
 // reads it) and the `billing-checkout` and `billing-portal` Edge Functions
 // (`supabase/functions/_shared/billing.ts`, where each move goes). The plan
-// itself moves only when Stripe tells `billing-webhook`, so after Stripe the
-// page waits for the production to say so (`settle`). Back from Checkout the
-// page asks what the session it came back with came to (`confirmCheckout`)
-// before it says a word about a payment: the address is anyone's to write.
+// itself moves only on Stripe's word: the webhook's, or, back from Checkout,
+// the server's own check of the session the page came back with
+// (`confirmCheckout`), which moves the plan as the webhook would and is all
+// the page says of a payment: the address is anyone's to write. After the
+// portal the page waits for the webhook (`settle`).
 
 export type Tier = 'free' | 'starter' | 'pro' | 'enterprise'
 export type Plan = 'free' | 'starter' | 'pro'

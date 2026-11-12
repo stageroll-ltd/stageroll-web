@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { extname, join } from 'node:path'
 
@@ -43,12 +44,59 @@ function pagesInDev(): Plugin {
   }
 }
 
+// The built pages' Content-Security-Policy, as a <meta>: GitHub Pages sends
+// no headers of ours, and the account pages keep a session in this browser
+// that can open a production's billing, so a script from anywhere else must
+// not run here. Scripts are the site's own files, the shell's one inline
+// script (by its hash, worked out from the built page so an edit to it
+// never needs a second edit here) and Cloudflare's Turnstile; the page
+// talks only to itself and the Supabase project. Styles keep
+// 'unsafe-inline': React writes style attributes into the prerendered
+// pages. A <meta> cannot say frame-ancestors; that needs a host that sends
+// headers. Build only: the dev server's own inline scripts and socket
+// would need holes that the live page should not have.
+function contentSecurityPolicy(supabaseUrl: string): Plugin {
+  return {
+    name: 'stageroll:csp',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html) {
+        const hashes = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(
+          ([, body]) => `'sha256-${createHash('sha256').update(body).digest('base64')}'`,
+        )
+        const api = supabaseUrl ? new URL(supabaseUrl) : null
+        const policy = [
+          `default-src 'self'`,
+          `script-src 'self' ${hashes.join(' ')} https://challenges.cloudflare.com`,
+          `style-src 'self' 'unsafe-inline'`,
+          `img-src 'self' data: blob:${api ? ` ${api.origin}` : ''}`,
+          `font-src 'self' data:`,
+          `connect-src 'self'${api ? ` ${api.origin} wss://${api.host}` : ''}`,
+          `frame-src https://challenges.cloudflare.com`,
+          `object-src 'none'`,
+          `base-uri 'self'`,
+          `form-action 'self'`,
+        ].join('; ')
+        return html.replace(
+          '<meta name="viewport"',
+          `<meta http-equiv="Content-Security-Policy" content="${policy}" />\n    <meta name="viewport"`,
+        )
+      },
+    },
+  }
+}
+
 // Served at the domain's root (public/CNAME), so absolute asset paths: the
 // pages live in folders (/about/, /privacy/) and relative paths would
 // resolve against each folder instead of the root.
 export default defineConfig(({ mode, isSsrBuild }) => ({
   base: '/',
-  plugins: [react(), pagesInDev()],
+  plugins: [
+    react(),
+    pagesInDev(),
+    contentSecurityPolicy(loadEnv(mode, process.cwd(), 'VITE_').VITE_SUPABASE_URL ?? ''),
+  ],
   // A build without the account pages (VITE_ACCOUNT_PAGES not 'on': the
   // deploy; .env.development turns them on for `yarn dev`) gets
   // src/account/pages.off.ts in pages.ts's place, so nothing under account/

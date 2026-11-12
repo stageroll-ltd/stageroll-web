@@ -10,10 +10,15 @@ import { company } from '../Layout'
  * stand at the top, grouped, as links to each.
  *
  * The app opens this page from its Help row (with ?from=app), and there
- * it sells nothing: Upgrade is `sells`, its link at the top too, so the
- * app's sheet never shows it (styles.css). It says how a plan moves on THIS
- * build: on the account pages where they are on, by writing to us where
- * they are not (`account/pages.ts`).
+ * the web's Upgrade topic is `sells`, its link at the top too, so the app's
+ * sheet never shows its links to Pricing and the account pages
+ * (styles.css). It says how a plan moves on THIS build: on the account
+ * pages where they are on, by writing to us where they are not
+ * (`account/pages.ts`). In the app's sheet a second Upgrade topic stands
+ * in its place (`appOnly`): the same words the app's own Upgrade button
+ * says, and no link (user call, 2026-11-12, a risk taken on purpose with
+ * App Review; stageroll-native `src/plans/upgrade.ts`). If the review
+ * refuses the button, this topic goes with it.
  *
  * Every step was checked against stageroll-native when it was written
  * (2026-11-04): the picture at the top of Home opens the account sheet,
@@ -31,7 +36,13 @@ type Topic = {
   answer?: ReactNode
   note?: ReactNode
   sells?: boolean
+  /** Shown only where the app opened the page (`.app-only`). */
+  appOnly?: boolean
 }
+
+/** A topic's class beside the list's or the section's own: gone in the app, or there alone. */
+const where = (topic: Topic, base = ''): string | undefined =>
+  [base, topic.sells ? 'sells' : '', topic.appOnly ? 'app-only' : ''].filter(Boolean).join(' ') || undefined
 
 const mail = <a href={`mailto:${company.email}`}>{company.email}</a>
 
@@ -85,6 +96,25 @@ const groups: { title: string; topics: Topic[] }[] = [
         note: accountPages
           ? <>For Enterprise, email {mail}. A plan isn&rsquo;t changed in the app.</>
           : 'We set it up, and the app shows the new plan. A plan isn’t changed in the app.',
+      },
+      {
+        /* The app's sheet: words only, the app's own (`plans/upgrade.ts`). */
+        id: 'upgrade-from-app',
+        title: 'Upgrade a production',
+        appOnly: true,
+        intro: (
+          <>
+            <b>You upgrade a production, not your account.</b> Each production has its own plan, and
+            only its owner changes it. A bigger plan brings your whole crew in, with room for more
+            items, photos and script readings.
+          </>
+        ),
+        answer: (
+          <>
+            Upgrading is currently disabled through the app. Sign in to <b>stageroll.co</b> on a
+            computer to unlock your studio&rsquo;s potential.
+          </>
+        ),
       },
     ],
   },
@@ -195,7 +225,7 @@ export function Help() {
       <h1>Help</h1>
       <p className="lede">How to do the common things in StageRoll.</p>
       {/* Only where the app opened this page: words, never a link (a link would stay in
-          the app's sheet, `in-app` with it), and never a word about plans (styles.css). */}
+          the app's sheet, `in-app` with it). */}
       <p className="help-note app-only">
         To see all of Help, open <b>stageroll.co/help</b> in your browser.
       </p>
@@ -206,7 +236,7 @@ export function Help() {
             <p>{group.title}</p>
             <ul>
               {group.topics.map((topic) => (
-                <li key={topic.id} className={topic.sells ? 'sells' : undefined}>
+                <li key={topic.id} className={where(topic)}>
                   <a href={`#${topic.id}`}>{topic.title}</a>
                 </li>
               ))}
@@ -220,7 +250,7 @@ export function Help() {
           <section
             key={topic.id}
             id={topic.id}
-            className={topic.sells ? 'help-topic sells' : 'help-topic'}
+            className={where(topic, 'help-topic')}
             aria-labelledby={`${topic.id}-title`}
           >
             <h2 id={`${topic.id}-title`}>{topic.title}</h2>
