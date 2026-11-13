@@ -33,7 +33,7 @@ export function Product() {
           <h1>Everything your department runs on.</h1>
           <p className="lede">
             Built with continuity and inventory as equals, and the script, research, schedule and paperwork around
-            them, in one production every department shares.
+            them, in one film or TV production every department shares.
           </p>
           <ul className="prod-depts" aria-label="Departments">
             {departments.map((d) => (

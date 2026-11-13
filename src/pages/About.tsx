@@ -7,7 +7,7 @@ export function About() {
       <p className="lede">
         StageRoll Ltd is an independent software company registered in England and Wales. We make
         StageRoll, production management software for the costume, props, hair, makeup and sets
-        departments on productions of any size.
+        departments on film and TV productions of any size.
       </p>
 
       <h2>Why it exists</h2>

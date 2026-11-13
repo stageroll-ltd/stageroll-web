@@ -105,11 +105,12 @@ const gallery: { screen: string; caption: string }[] = [
 const privacy: { icon: IconName; heading: string; text: string }[] = [
   { icon: 'phone', heading: 'Read on your device.', text: 'The script file is never uploaded, only the scene and character metadata you choose to submit.' },
   { icon: 'lock', heading: 'Locked to you.', text: 'A PIN and Face ID, with screen protection for productions that need it.' },
-  { icon: 'eyeoff', heading: 'No ads, no tracking.', text: 'Your production is private to your team.' },
+  { icon: 'eyeoff', heading: 'No ads, no selling.', text: 'Your work is never sold, used for advertising or used to train AI.' },
 ]
 
 // The departments in a row of large type, the chosen one in ink and the rest
-// faded, with its line beneath.
+// faded, with its line beneath. All five lines are in the page, the others
+// hidden, because a search engine reads the HTML and never presses a button.
 const departments: { name: string; line: string }[] = [
   { name: 'Costume', line: 'Changes, fittings and continuity for every character.' },
   { name: 'Props', line: 'Every piece, where it’s used and where it lives.' },
@@ -163,12 +164,19 @@ function Phone({
   active = 0,
   className = 'phone',
   from,
+  eager = false,
 }: {
   shots: string[]
   active?: number
   className?: string
   /** For the second phone: the index of the step its first screen belongs to. */
   from?: number
+  /**
+   * The hero's phone: its first screen is on screen at load, the page's
+   * largest picture, so it loads first. Every other screen loads as it nears
+   * the screen.
+   */
+  eager?: boolean
 }) {
   return (
     <div className={className} data-from={from} role="img" aria-label="The StageRoll app on a phone">
@@ -177,7 +185,11 @@ function Phone({
           const src = captured[label]
           return (
             <div key={i} className={`scr${src ? ' shot' : ''}${i === active ? ' on' : ''}`}>
-              {src ? <img src={src} alt="" loading={i === 0 ? 'eager' : 'lazy'} /> : `${label} screenshot`}
+              {src ? (
+                <img src={src} alt="" {...(eager && i === 0 ? { fetchPriority: 'high' as const } : { loading: 'lazy' as const })} />
+              ) : (
+                `${label} screenshot`
+              )}
             </div>
           )
         })}
@@ -202,11 +214,11 @@ export function Home() {
           <div className="glow" aria-hidden="true" />
           <div className="hero-copy">
             <h1>
-              <span className="load-line">Production management,</span>
+              <span className="load-line">Production management,</span>{' '}
               <span className="load-line">done right.</span>
             </h1>
             <div className="load-copy">
-              <p>Continuity management for productions of any size, from research and physical inventory through to wrap.</p>
+              <p>StageRoll keeps continuity for film and TV productions of any size, from research and physical inventory through to wrap.</p>
               <StoreBadges light />
             </div>
           </div>
@@ -223,7 +235,7 @@ export function Home() {
             <div className="hero-card c4">
               <Photo slot="makeup" eager />
             </div>
-            <Phone shots={['Home', ...steps.map((s) => s.screen)]} />
+            <Phone shots={['Home', ...steps.map((s) => s.screen)]} eager />
             {/* The second phone, with the steps' side screens. Only the scroll
                 story shows it (storyMotion.ts, from data-from). */}
             {sideSteps.length > 0 && (
@@ -345,7 +357,11 @@ export function Home() {
                 </li>
               ))}
             </ul>
-            <p className="pick-line">{departments[dept]?.line}</p>
+            {departments.map((d, i) => (
+              <p key={d.name} className="pick-line" hidden={i !== dept}>
+                {d.line}
+              </p>
+            ))}
           </div>
         </div>
       </section>

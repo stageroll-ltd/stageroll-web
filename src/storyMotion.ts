@@ -183,7 +183,7 @@ export function useStoryMotion() {
   useEffect(() => {
     let cancelled = false
     let mm: { revert(): void } | undefined
-    void (async () => {
+    const run = async () => {
       const [{ gsap }, { ScrollTrigger }] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
       if (cancelled) return
       gsap.registerPlugin(ScrollTrigger)
@@ -200,9 +200,21 @@ export function useStoryMotion() {
         features(gsap)
         return () => document.documentElement.classList.remove('pinned', 'in-story')
       })
-    })()
+    }
+    // GSAP downloads only once the story can run: a phone, or reduced motion,
+    // never fetches it. A window that widens later starts it then, once; one
+    // that narrows again is undone by the matchMedia above.
+    const wide = matchMedia(QUERY)
+    const start = () => {
+      if (!wide.matches) return
+      wide.removeEventListener('change', start)
+      void run()
+    }
+    wide.addEventListener('change', start)
+    start()
     return () => {
       cancelled = true
+      wide.removeEventListener('change', start)
       mm?.revert()
     }
   }, [])

@@ -1,7 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
 import { accountPages, signedIn } from './account/pages'
-import { useMotion } from './motion'
 
 export const company = {
   name: 'StageRoll Ltd',
@@ -51,7 +50,6 @@ function useAccountLink(current: string): { href: string; label: string } | null
 }
 
 export function Layout({ current, end, children }: { current: string; end?: ReactNode; children: ReactNode }) {
-  useMotion()
   const account = useAccountLink(current)
   const over = current === '/'
   const [menu, setMenu] = useState(false)

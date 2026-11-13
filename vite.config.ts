@@ -5,7 +5,7 @@ import { extname, join } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 
-import { fill, type Page } from './scripts/head.ts'
+import { fill, sitemap, type Page } from './scripts/head.ts'
 
 type Entry = { render(path: string): string; pages(): Page[] }
 
@@ -13,7 +13,8 @@ type Entry = { render(path: string): string; pages(): Page[] }
 // (scripts/prerender.mjs): the page is whole on its first paint, so the
 // crossfade between pages has something to fade between and the words are
 // there before the script. Paths get the trailing slash GitHub Pages gives
-// them, and an unknown path gets the 404 page.
+// them, an unknown path gets the 404 page, and /sitemap.xml is the one the
+// build writes.
 function pagesInDev(): Plugin {
   return {
     name: 'stageroll:pages-in-dev',
@@ -21,6 +22,16 @@ function pagesInDev(): Plugin {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = new URL(req.url ?? '/', 'http://dev')
+        if (url.pathname === '/sitemap.xml') {
+          try {
+            const { pages } = (await server.ssrLoadModule('/src/entry-server.tsx')) as Entry
+            res.writeHead(200, { 'Content-Type': 'application/xml' })
+            return res.end(sitemap(pages()))
+          } catch (e) {
+            server.ssrFixStacktrace(e as Error)
+            return next(e)
+          }
+        }
         if (!req.headers.accept?.includes('text/html') || extname(url.pathname)) return next()
         if (!url.pathname.endsWith('/')) {
           res.writeHead(301, { Location: `${url.pathname}/${url.search}` })

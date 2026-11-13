@@ -1,7 +1,7 @@
 import { renderToString } from 'react-dom/server'
 
 import { App } from './App'
-import { notFound, routes } from './routes'
+import { notFound, routes, type Route } from './routes'
 
 // Each page as HTML, for scripts/prerender.mjs to write into its own
 // dist/<path>/index.html at build time. The browser then hydrates it
@@ -11,7 +11,14 @@ export function render(path: string): string {
   return renderToString(<App path={path} />)
 }
 
-/** The routes to prerender, without their components. */
-export function pages(): { path: string; title: string; description: string; noindex?: boolean }[] {
-  return [...routes, notFound].map(({ path, title, description, noindex }) => ({ path, title, description, noindex }))
+/** The routes to prerender, without their components: what scripts/head.ts needs. */
+export function pages(): Pick<Route, 'path' | 'title' | 'description' | 'noindex' | 'updated' | 'jsonLd'>[] {
+  return [...routes, notFound].map(({ path, title, description, noindex, updated, jsonLd }) => ({
+    path,
+    title,
+    description,
+    noindex,
+    updated,
+    jsonLd,
+  }))
 }

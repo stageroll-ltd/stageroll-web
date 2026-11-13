@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 
 import { accountRoutes } from './account/pages'
+import { company } from './Layout'
 import { About } from './pages/About'
 import { Contact } from './pages/Contact'
 import { Home, HomeEnd } from './pages/Home'
@@ -23,80 +24,152 @@ export type Route = {
   Page: ComponentType
   /** A band inside the footer's frame, above the footer card: the home page's closing photograph. */
   End?: ComponentType
-  /** Kept out of search results: the account pages. */
+  /** Kept out of search results and the sitemap: the account pages and the 404 page. */
   noindex?: boolean
+  /**
+   * The sitemap's lastmod (YYYY-MM-DD): the day the page's words, title,
+   * description, links or structured data last changed. Bump it in the same
+   * commit as any such change, and never for styling or refactoring alone:
+   * Google uses lastmod only while it stays accurate.
+   */
+  updated?: string
+  /** Structured data for the page, written into its head (scripts/head.ts). */
+  jsonLd?: object[]
 }
 
 export const siteName = 'StageRoll'
 export const siteUrl = 'https://stageroll.co'
 
+// Who runs the site, for search engines: on the home page, where Google reads
+// the site's name (WebSite) and the company behind it (Organization). Its
+// name is the site's name, StageRoll; the registered name is legalName.
+// sameAs lists only profiles the company holds: add the App Store and Google
+// Play listings, and any company page, the day each exists.
+const website = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      name: siteName,
+      alternateName: 'stageroll.co',
+      url: `${siteUrl}/`,
+      publisher: { '@id': `${siteUrl}/#organization` },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: siteName,
+      alternateName: 'stageroll.co',
+      legalName: company.name,
+      url: `${siteUrl}/`,
+      logo: `${siteUrl}/brand/wordmark.svg`,
+      email: company.email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: company.address[0],
+        addressLocality: company.address[1],
+        postalCode: company.address[2],
+        addressCountry: 'GB',
+      },
+      sameAs: [
+        `https://find-and-update.company-information.service.gov.uk/company/${company.number}`,
+        'https://github.com/stageroll-ltd',
+      ],
+    },
+  ],
+}
+
 export const routes: Route[] = [
   {
     path: '/',
-    title: 'StageRoll — Production management, done right',
+    title: 'StageRoll — Continuity and inventory app for film and TV',
     description:
-      'Continuity management for productions of any size, from research and physical inventory through to wrap.',
+      'StageRoll keeps continuity and inventory for costume, props, hair, makeup and sets on film and TV productions. Built for iPhone, iPad and Android.',
     Page: Home,
     End: HomeEnd,
+    updated: '2026-11-13',
+    jsonLd: [website],
   },
   {
     path: '/product/',
-    title: 'Product — StageRoll',
+    title: 'Features for costume, props, hair, makeup and sets — StageRoll',
     description:
-      'Everything StageRoll does, area by area: script analysis, scenes, continuity, research, inventory, scanning, the schedule, reports, team and privacy, for costume, props, hair, makeup and sets.',
+      'Everything StageRoll does for film and TV departments: script analysis, scenes, continuity, research, inventory, QR codes, the schedule, reports and team.',
     nav: 'Product',
     Page: Product,
+    updated: '2026-11-13',
   },
   // The feature pages, one per area of the overview (pages/features.ts).
   ...featurePages.map(
     (page): Route => ({
       path: `/product/${page.slug}/`,
-      title: `${page.title} — StageRoll`,
+      title: `${page.metaTitle ?? page.title} — StageRoll`,
       description: page.description,
       Page: () => <Feature page={page} />,
+      updated: page.updated,
+      // The trail the page shows above its heading: Product, then the page.
+      jsonLd: [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Product', item: `${siteUrl}/product/` },
+            { '@type': 'ListItem', position: 2, name: page.title },
+          ],
+        },
+      ],
     }),
   ),
   {
     path: '/pricing/',
-    title: 'Pricing — StageRoll',
+    title: 'Pricing per production, crew accounts free — StageRoll',
     description:
-      'StageRoll is priced per production: the production pays, and every crew account is free. Free, Starter, Pro and Enterprise plans, with every department included.',
+      'StageRoll is priced per production, not per person: Free, Starter, Pro and Enterprise plans, every department included. Crew accounts are always free.',
     nav: 'Pricing',
     Page: Pricing,
+    updated: '2026-11-13',
   },
   {
     path: '/about/',
-    title: 'About — StageRoll',
+    title: 'About StageRoll — software for film and TV departments',
     description:
-      'StageRoll Ltd is an independent software company registered in England and Wales, making production management software for the costume, props, hair, makeup and sets departments on productions of any size.',
+      'StageRoll Ltd is an independent software company registered in England and Wales, making continuity and inventory software for film and TV departments.',
     nav: 'About',
     Page: About,
+    updated: '2026-11-13',
   },
   {
     path: '/help/',
-    title: 'Help — StageRoll',
+    title: 'StageRoll help — teams, plans, passwords and scripts',
     description:
-      'Answers to common questions about StageRoll: joining a production, upgrading it, who can see it, scripts, passwords, lost devices, restoring a production and deleting your account.',
+      'How to join or upgrade a production, change or reset your password, sign out a lost device, restore a deleted production and delete your StageRoll account.',
     Page: Help,
+    updated: '2026-11-13',
   },
   {
     path: '/contact/',
-    title: 'Contact — StageRoll',
+    title: 'Contact StageRoll — email, post and company details',
     description: 'How to reach StageRoll Ltd: email, postal address and company details.',
     nav: 'Contact',
     Page: Contact,
+    updated: '2026-11-13',
   },
   {
     path: '/privacy/',
     title: 'Privacy policy — StageRoll',
     description: 'How StageRoll Ltd collects, uses and protects personal data in the StageRoll app and on this website.',
     Page: Privacy,
+    // The policy's own "Last updated" date (Privacy.tsx): keep the two in step.
+    updated: '2026-10-30',
   },
   {
     path: '/terms/',
     title: 'Terms of service — StageRoll',
     description: 'The terms on which StageRoll Ltd provides the StageRoll app.',
     Page: Terms,
+    // The terms' own "Last updated" date (Terms.tsx): keep the two in step.
+    updated: '2026-10-30',
   },
   // The account pages (account/pages.ts), in a build that has them; the
   // header links to them (Layout.tsx). Elsewhere this adds nothing and the
@@ -109,6 +182,8 @@ export const notFound: Route = {
   title: 'Page not found — StageRoll',
   description: 'That page does not exist.',
   Page: NotFound,
+  // GitHub Pages answers /404.html itself with a 200, so it says noindex.
+  noindex: true,
 }
 
 /** '/about' and '/about/' are the same page; '/index.html' is the home page. */

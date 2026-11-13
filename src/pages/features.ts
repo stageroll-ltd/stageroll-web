@@ -12,8 +12,12 @@ export type FeaturePage = {
   /** Its card on the product overview: an icon and one line. */
   icon: IconName
   summary: string
+  /** The page's <title>, before ' — StageRoll', when it should say more than `title`: the words people search for. */
+  metaTitle?: string
   /** The page's meta description. */
   description: string
+  /** The sitemap's lastmod: see `updated` in routes.tsx. */
+  updated: string
   lede: string
   steps: [lead: string, text: string][]
   features: [lead: string, text: string, icon: IconName][]
@@ -27,8 +31,10 @@ export const featurePages: FeaturePage[] = [
     title: 'Script analysis',
     icon: 'doc',
     summary: 'Your script, read into scenes and cast in seconds.',
+    metaTitle: 'Script analysis for PDF and Final Draft scripts',
     description:
-      'How StageRoll reads a script: PDF and Final Draft, read on your device, the scenes and cast it finds, your review, and how new drafts land.',
+      'Import a PDF or Final Draft script and StageRoll finds every scene, speaking character and crowd, read on your device. New drafts match scene by scene, so the work stays attached.',
+    updated: '2026-11-13',
     lede: 'StageRoll reads your script and builds the production’s scene list and cast from it. Every department then breaks down against the same scenes and characters.',
     steps: [
       [
@@ -68,8 +74,10 @@ export const featurePages: FeaturePage[] = [
     title: 'Scenes',
     icon: 'clapper',
     summary: 'A page for every scene, through your department.',
+    metaTitle: 'Scene breakdowns for every department',
     description:
-      'How scenes work in StageRoll: a page for every scene through your department, the cast in it, its status, the running order and search.',
+      'A page for every scene: its cast, each character’s change, style, look and props, your department’s photos and notes, its status and the days it shoots.',
+    updated: '2026-11-13',
     lede: 'Every scene gets its own page, seen through your department, and the scene list keeps the production’s running order.',
     steps: [
       [
@@ -99,8 +107,10 @@ export const featurePages: FeaturePage[] = [
     title: 'Continuity',
     icon: 'camera',
     summary: 'Every change, style, look and prop, on record against the script.',
+    metaTitle: 'Continuity app for costume, hair, makeup and props',
     description:
-      'How continuity works in StageRoll: costume changes, hair styles and makeup looks, the kit in each, props by scene, character pages and the continuity book.',
+      'Keep costume changes, hair styles, makeup looks and props on record against the script, with photos, notes, the kit in each and a continuity book.',
+    updated: '2026-11-13',
     lede: 'Each department keeps its continuity against the script: costume changes, hair styles, makeup looks and props, each tied to the scenes and characters it belongs to.',
     steps: [
       ['Start from a scene', 'Add a change, style or look to a character in the scene, numbered for that character.'],
@@ -125,9 +135,11 @@ export const featurePages: FeaturePage[] = [
     title: 'Research',
     icon: 'pin',
     summary: 'References pinned to the script, and into the inventory.',
+    metaTitle: 'Research and references, pinned to the script',
     description:
-      'How research works in StageRoll: one wall of references, pinned to characters, scenes and sets, signed off, and turned into inventory.',
-    lede: 'Gather the production’s references in one place, pin them to the script, and turn the ones you buy or make into inventory.',
+      'Collect photos, links and notes for every department, pin them to characters, scenes and sets, sign them off, and turn the ones you buy into inventory.',
+    updated: '2026-11-13',
+    lede: 'Gather the production’s references for costume, hair, makeup, props and sets in one place, pin them to the script, and turn the ones you buy or make into inventory.',
     steps: [
       ['Add a reference', 'Take a photo, choose several from your library, paste a link to get its title and picture, or write a note.'],
       ['Pin it', 'Pin it to one or more characters, scenes or sets, and it shows up in their research. Anything unpinned sits under General.'],
@@ -152,9 +164,11 @@ export const featurePages: FeaturePage[] = [
     title: 'Inventory',
     icon: 'box',
     summary: 'Everything the production owns, tied to every scene it’s in.',
+    metaTitle: 'Costume and props inventory, tied to every scene',
     description:
-      'How inventory works in StageRoll: folders and crates, full item records, hire and loans, character closets, where each item is used, and problems flagged.',
-    lede: 'One inventory for the whole production, unified with continuity: everything it owns or hires, filed in folders, packed in crates, and part of every scene and record it’s used in.',
+      'One inventory for every costume, prop and piece of kit: photos, sizes, costs, hire returns, crates and a QR code each, linked to every scene it is in.',
+    updated: '2026-11-13',
+    lede: 'One inventory for the whole production, unified with continuity: every costume, prop, wig and piece of kit it owns or hires, filed in folders, packed in crates, and part of every scene and record it’s used in.',
     steps: [
       [
         'Add an item',
@@ -184,8 +198,11 @@ export const featurePages: FeaturePage[] = [
     title: 'Codes and scanning',
     icon: 'qr',
     summary: 'A code on every item and crate. Scan it and it opens.',
-    description: 'How codes and scanning work in StageRoll: a short code and QR for every item and crate, scanning to open, and scanning to invite.',
-    lede: 'Every item and crate has its own code, and the phone you carry reads it.',
+    metaTitle: 'QR codes and scanning for costume and props',
+    description:
+      'Every item and crate gets a short code and QR, unique to the production. Scan it with your phone to open it, even in a dark truck with the torch on.',
+    updated: '2026-11-13',
+    lede: 'Every costume, prop and crate has its own code, and the phone you carry reads it.',
     steps: [
       ['Every item gets a code', 'A short code made from the production’s letters, with its QR, as soon as the item or crate is added.'],
       ['Scan it', 'Point the phone at the code and the item or crate opens, even in the dark with the torch.'],
@@ -207,8 +224,10 @@ export const featurePages: FeaturePage[] = [
     title: 'Schedule',
     icon: 'calendar',
     summary: 'The shoot on one calendar, and today on the first screen.',
+    metaTitle: 'Shoot schedule and day sheets for departments',
     description:
-      'How the schedule works in StageRoll: today’s scenes, the shoot calendar, kinds of day, shoot-day numbering, day sheets in shoot order and notes.',
+      'The shoot on one calendar, shoot days numbered like a call sheet, each day’s scenes in shoot order with their status and notes, and today’s scenes first.',
+    updated: '2026-11-13',
     lede: 'The whole shoot on one calendar, every day on its own sheet, and today’s scenes the moment you open the app.',
     steps: [
       [
@@ -232,8 +251,10 @@ export const featurePages: FeaturePage[] = [
     title: 'Reports',
     icon: 'share',
     summary: 'Each department’s paperwork, built the moment you ask.',
+    metaTitle: 'Costume plots, continuity books and props lists',
     description:
-      'How reports work in StageRoll: each department’s reports, the characters and scenes they cover, PDF and spreadsheet, and a record of what was made.',
+      'Department reports built from the production as it stands: costume, hair and makeup plots, continuity books, props by scene and inventories, as PDF or CSV.',
+    updated: '2026-11-13',
     lede: 'Each department has its own reports, built from the production as it stands the moment you ask.',
     steps: [
       ['Pick a report', 'Each department has its own set, ready-made.'],
@@ -246,7 +267,7 @@ export const featurePages: FeaturePage[] = [
     features: [
       ['Costume', 'The costume plot, the continuity book and the inventory.', 'shirt'],
       ['Props', 'Props by scene and the inventory.', 'clapper'],
-      ['Hair and makeup', 'Style and look plots and their continuity books.', 'scissors'],
+      ['Hair and makeup', 'Hair and makeup plots and their continuity books.', 'scissors'],
       ['Spreadsheets', 'Plots, props lists and inventories also export as CSV.', 'table'],
       ['Always current', 'Every report is built when you ask, from the production as it is.', 'refresh'],
       ['A record', 'Which reports were made, by whom and when.', 'history'],
@@ -257,8 +278,10 @@ export const featurePages: FeaturePage[] = [
     title: 'Team',
     icon: 'users',
     summary: 'Owner, coordinators and crew, each in their own department.',
+    metaTitle: 'Team roles and invites, free for crew',
     description:
-      'How teams work in StageRoll: owner, coordinator and crew, inviting by code or email, departments, and one account across productions.',
+      'Owner, coordinators and crew in one production, each in their own department. Invite by code or email. Crew accounts are free and go with you to the next job.',
+    updated: '2026-11-13',
     lede: 'Everyone works in the same production, each through their own department, with three roles that set who can do what.',
     steps: [
       ['Set up the production', 'Whoever creates it is its owner.'],
@@ -285,8 +308,10 @@ export const featurePages: FeaturePage[] = [
     title: 'Privacy and security',
     icon: 'lock',
     summary: 'Scripts stay on your device. Work stays with your team.',
+    metaTitle: 'Script security and privacy for productions',
     description:
-      'How StageRoll keeps a production private: scripts read on your device, sign-in with a code and a password, an app lock, signed-in devices, an encrypted offline copy and members-only access.',
+      'Scripts are read on your device and never uploaded. A code and password to sign in, an app lock, device sign-out and an encrypted offline copy do the rest.',
+    updated: '2026-11-13',
     lede: 'Productions hold unreleased scripts and private work, so StageRoll keeps what it can on your device and shows the rest only to the people on the production.',
     steps: [
       ['Lock the app', 'StageRoll locks when you leave it and opens with your PIN or Face ID. You choose how quickly it locks.'],

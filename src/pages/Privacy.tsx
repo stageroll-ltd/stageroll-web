@@ -10,7 +10,7 @@ export function Privacy() {
   return (
     <article className="prose">
       <h1>Privacy policy</h1>
-      <p className="updated">Last updated 12 October 2026</p>
+      <p className="updated">Last updated 30 October 2026</p>
 
       <p className="lede">
         This policy covers the StageRoll app for iPhone, iPad and Android, and this website,

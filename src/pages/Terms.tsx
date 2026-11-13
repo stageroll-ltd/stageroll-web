@@ -9,7 +9,7 @@ export function Terms() {
   return (
     <article className="prose">
       <h1>Terms of service</h1>
-      <p className="updated">Last updated 13 October 2026</p>
+      <p className="updated">Last updated 30 October 2026</p>
 
       <h2>The service</h2>
       <p>
