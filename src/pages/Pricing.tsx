@@ -10,8 +10,9 @@ type Plan = { name: string; price: string; per: string; who: string; seats: stri
 const plans: Plan[] = [
   { name: 'Free', price: '£0', per: 'Up to three productions per account', who: 'Trying it on your own', seats: 'Just you' },
   { name: 'Starter', price: '£29', per: 'per production a month', who: 'A small indie or a short production', seats: '10 seats' },
-  { name: 'Pro', price: '£299', per: 'per production a month', who: 'Features and series, with the whole crew', seats: 'Unlimited seats' },
-  { name: 'Enterprise', price: 'Custom', per: 'Priced with you, per production', who: 'Studio productions', seats: 'Unlimited seats' },
+  // Pro's price (£299 on #18) is held back while it is tested with productions.
+  { name: 'Pro', price: 'Talk to us', per: 'A monthly price per production', who: 'Features and series, with the whole crew', seats: 'Unlimited seats' },
+  { name: 'Enterprise', price: 'Talk to us', per: 'A custom price for your production', who: 'Studio productions', seats: 'Unlimited seats' },
 ]
 
 /** A cell: words (with a quieter line under them), or true for included and false for not. */
