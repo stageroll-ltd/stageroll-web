@@ -3,6 +3,14 @@ dist
 *.local
 .DS_Store
 
+# NO ENV FILE IS EVER COMMITTED HERE (owner's rule, 2026-11-15), public
+# values or not. The deploy takes its values from this repo's GitHub
+# Actions variables (.github/workflows/deploy.yml); a machine takes them
+# from its own .env, copied from .env.example.
+.env
+.env.*
+!.env.example
+
 # Yarn 4
 .yarn/*
 !.yarn/patches

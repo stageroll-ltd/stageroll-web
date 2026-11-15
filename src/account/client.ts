@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { configured, SESSION_KEY, SUPABASE_ANON_KEY, SUPABASE_URL } from './keys'
 
 if (!configured) {
-  throw new Error('The account pages need VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (.env)')
+  throw new Error('The account pages need VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (.env here, GitHub Actions variables for the deploy)')
 }
 
 /**

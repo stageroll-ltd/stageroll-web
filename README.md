@@ -10,6 +10,19 @@ yarn build      # static build in dist/
 
 Pushing to `main` builds and deploys it to GitHub Pages.
 
+## Env values: never in git
+
+No env file is committed in this repo, public values or not (`.gitignore`).
+
+- **On a machine:** copy `.env.example` to `.env` and fill in the three
+  values. `.env` is ignored.
+- **The live site:** the same three names are GitHub Actions **variables**
+  on this repo (Settings › Secrets and variables › Actions › Variables).
+  The Deploy workflow hands them to the build and stops if one is missing.
+  Change one with `gh variable set NAME --body VALUE`, then re-run Deploy.
+
+`.env.example` says what each value is and which project it points at.
+
 ## Pages the app opens
 
 The app opens `/help/`, `/about/`, `/terms/` and `/privacy/` with

@@ -28,7 +28,26 @@ jobs:
       # Node 26 no longer ships corepack, so it is installed, pinned.
       - run: npm install -g corepack@0.36.0 && corepack enable
       - run: yarn install --immutable
-      - run: yarn build
+      # NO ENV FILE IS IN GIT (owner's rule, 2026-11-15; .gitignore). The
+      # three public values the build bakes into the pages are this repo's
+      # Actions VARIABLES (Settings › Secrets and variables › Actions ›
+      # Variables; `gh variable set NAME --body VALUE`), not secrets:
+      # anything VITE_ is readable in the live page. A missing one stops
+      # the deploy here, rather than shipping a page with no Supabase
+      # origin in its Content-Security-Policy. .env.example says the rest.
+      - name: Build
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
+        run: |
+          for name in VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY VITE_TURNSTILE_SITE_KEY; do
+            if [ -z "$(printenv "$name")" ]; then
+              echo "::error::The Actions variable $name is not set (see .env.example)"
+              exit 1
+            fi
+          done
+          yarn build
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
         with:
           # Turns Pages on (source: GitHub Actions) the first time this runs.

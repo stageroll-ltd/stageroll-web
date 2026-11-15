@@ -9,12 +9,14 @@ export { signedIn } from './keys'
  * The account pages, /sign-in/, /productions/ and the plan page, and the
  * header's way into them: everything of the account the rest of the site
  * reaches. A build has them only with VITE_ACCOUNT_PAGES=on, which
- * .env.development sets for `yarn dev` and nothing sets for the deploy:
+ * `yarn dev` sets itself (package.json) and nothing sets for the deploy:
  * vite.config.ts then serves `pages.off.ts` in this module's place, so none
  * of this is built, not the pages' chunks, not Supabase, not its keys, and
  * the live site answers these paths with the 404 page. When billing goes
- * live the line moves to .env and the deploy has them too. To build them
- * locally: `VITE_ACCOUNT_PAGES=on yarn build`.
+ * live it becomes a GitHub Actions variable beside the other three, set in
+ * the Deploy workflow's build step (no env file is committed here:
+ * .env.example), and the deploy has them too. To build them locally:
+ * `VITE_ACCOUNT_PAGES=on yarn build`.
  */
 export const accountPages = true
 

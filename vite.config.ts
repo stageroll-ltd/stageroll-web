@@ -109,7 +109,7 @@ export default defineConfig(({ mode, isSsrBuild }) => ({
     contentSecurityPolicy(loadEnv(mode, process.cwd(), 'VITE_').VITE_SUPABASE_URL ?? ''),
   ],
   // A build without the account pages (VITE_ACCOUNT_PAGES not 'on': the
-  // deploy; .env.development turns them on for `yarn dev`) gets
+  // deploy; `yarn dev` turns them on itself, package.json) gets
   // src/account/pages.off.ts in pages.ts's place, so nothing under account/
   // is built: not the pages' chunks, not Supabase, not its keys. An alias,
   // not a flag in the code: tree-shaking left the chunks and the keys behind.
