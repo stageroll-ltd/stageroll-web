@@ -466,131 +466,449 @@ html:not(.js) .acct-spin {
   transform: rotate(45deg);
 }
 
-/* A production's plan: each plan, what it holds, its price and its action. */
-.acct-plans li {
-  align-items: center;
+/* A production's plan, as an account page: one narrow column on white,
+   small type, boxes with a hairline edge. The plan it is on, the plan above
+   with its button, then what it has used. */
+.acct-plan .acct-col {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 720px);
+  justify-content: center;
+  align-items: start;
+  gap: 32px 64px;
+  max-width: 1024px;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
-.acct-plan-what {
+.acct-main {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 20px;
   min-width: 0;
 }
 
-.acct-plan-holds {
-  font-size: 14px;
-  line-height: 1.45;
+.acct-plan h1 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* The production, in a pane of its own on the left: its name large, then
+   how much is in it. It stays in view as the page scrolls. */
+.acct-side {
+  position: sticky;
+  top: 32px;
+}
+
+.acct-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 28px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mute);
+  text-decoration: none;
+  transition: color 0.16s ease-in;
+}
+
+.acct-back:hover {
+  color: var(--ink);
+}
+
+.acct-back:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.acct-back .acct-chevron {
+  width: 6px;
+  height: 6px;
+  margin: 0 0 0 2px;
+  transform: rotate(-135deg);
+}
+
+.acct-side p {
+  margin: 0;
+}
+
+.acct-side-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.acct-side .acct-side-name {
+  margin-top: 6px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.acct-side .acct-side-type {
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--ink2);
+}
+
+.acct-figures {
+  margin: 24px 0 0;
+  border-top: 1px solid var(--hair);
+}
+
+.acct-figures div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  /* The number arrives after the page: the row is its height already. */
+  min-height: 21px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.acct-figures dt {
+  color: var(--ink2);
+}
+
+.acct-figures dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.acct-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 0;
+  font-size: 13px;
+}
+
+.acct-dates dt {
+  color: var(--mute);
+}
+
+.acct-dates dd {
+  margin: 1px 0 0;
+  color: var(--ink);
+}
+
+.acct-box {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  list-style: none;
+}
+
+.acct-box.bad {
+  border-color: #b3261e;
+}
+
+/* A box's head: what it is and a line about it, its actions at the end. */
+.acct-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding: 18px 20px;
+}
+
+.acct-row h2 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin: 0 0 3px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.acct-row p {
+  margin: 0;
   color: var(--mute);
   text-wrap: pretty;
 }
 
-.acct-plan-end {
+.acct-row p a {
+  color: var(--ink);
+  text-underline-offset: 0.2em;
+}
+
+.acct-row-acts {
   display: flex;
   flex: none;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
-.acct-plan-price {
-  font-size: 15px;
+.acct-chip {
+  padding: 1px 7px;
+  border: 1px solid rgba(11, 16, 27, 0.22);
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 400;
   color: var(--ink2);
   white-space: nowrap;
 }
 
-.acct-choose,
-.acct-billing {
-  justify-content: center;
-  border: 0;
-  font: inherit;
+.acct-chip.strong {
+  border-color: var(--ink);
   font-weight: 500;
-  cursor: pointer;
+  color: var(--ink);
 }
 
-.acct-choose {
-  min-width: 86px;
-  height: 36px;
-  padding: 0 16px;
-  font-size: 14px;
+.acct-chip.bad {
+  border-color: #b3261e;
+  background: #b3261e;
+  font-weight: 500;
+  color: #fff;
 }
 
-.acct-billing {
-  min-width: 150px;
+/* What the plan above holds: ticks, two across. */
+.acct-holds {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 24px;
+  margin: 0;
+  padding: 2px 20px 20px;
+  list-style: none;
+  font-size: 13px;
+  color: var(--ink2);
+}
+
+.acct-holds li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.acct-tick {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.acct-plan-head {
+  margin: 16px 0 -6px;
   font-size: 15px;
+  font-weight: 600;
 }
 
-.acct-choose:disabled,
-.acct-billing:disabled {
+/* What it has used: a row per kind, its bar between the name and the number. */
+.acct-meters li {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 130px;
+  align-items: center;
+  gap: 8px 20px;
+  padding: 12px 20px;
+}
+
+.acct-meters li + li {
+  border-top: 1px solid rgba(11, 16, 27, 0.07);
+}
+
+.acct-meter-used {
+  color: var(--mute);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.acct-meter-used b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.acct-meter-bar {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(11, 16, 27, 0.08);
+  overflow: hidden;
+}
+
+.acct-meter-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+/* The page's buttons: squared and small. */
+.acct-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 32px;
+  min-width: 104px;
+  padding: 0 12px;
+  border: 1px solid rgba(11, 16, 27, 0.18);
+  border-radius: 7px;
+  background: var(--card);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.16s ease-in,
+    border-color 0.16s ease-in;
+}
+
+.acct-btn:hover {
+  border-color: rgba(11, 16, 27, 0.36);
+}
+
+.acct-btn.ink {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+.acct-btn.ink:hover {
+  border-color: #1c2333;
+  background: #1c2333;
+}
+
+.acct-btn:disabled,
+.acct-text:disabled {
   cursor: default;
-  transform: none;
 }
 
-.acct-choose:disabled:not([aria-busy='true']),
-.acct-billing:disabled:not([aria-busy='true']) {
+.acct-btn:disabled:not([aria-busy='true']),
+.acct-text:disabled {
   opacity: 0.4;
 }
 
-.acct-choose:focus-visible,
-.acct-billing:focus-visible {
+.acct-btn .acct-spin {
+  width: 13px;
+  height: 13px;
+}
+
+/* An action said as words: Compare plans, Cancel plan. */
+.acct-text {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.acct-text:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.acct-plan-note .acct-text {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.acct-btn:focus-visible,
+.acct-text:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 3px;
 }
 
-.acct-plan-notice,
-.acct-plan-settling {
-  margin: 28px 0 0;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: var(--paper);
-  font-size: 15px;
-  line-height: 1.45;
-  color: var(--ink);
-  text-wrap: pretty;
-}
-
-.acct-plan-settling {
-  display: flex;
+/* What is happening or just happened, in the standing line's place: the
+   row keeps its height, so nothing under it moves. */
+.acct-status {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  color: var(--ink2);
+  gap: 8px;
+  font-weight: 500;
+  color: var(--ink);
 }
 
-.acct-plan-settling .acct-spin {
+.acct-status .acct-spin {
   flex: none;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
 }
 
 .acct-plan-note {
-  margin: 14px 0 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--ink2);
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--mute);
   text-wrap: pretty;
 }
 
 .acct-plan-note a {
-  color: var(--ink2);
+  color: var(--ink);
   text-underline-offset: 0.2em;
 }
 
-.acct-plan-note a:hover {
-  color: var(--ink);
-}
+@media (max-width: 900px) {
+  .acct-plan .acct-col {
+    grid-template-columns: minmax(0, 720px);
+  }
 
-.acct-plan-note-first {
-  margin: 0 0 16px;
+  .acct-side {
+    position: static;
+  }
+
+  .acct-back {
+    margin-bottom: 20px;
+  }
+
+  .acct-figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+
+  .acct-dates {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+  }
 }
 
 @media (max-width: 600px) {
-  .acct-plans li {
+  .acct-row {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
   }
 
-  .acct-plan-end {
+  .acct-row-acts {
     justify-content: space-between;
+  }
+
+  .acct-holds {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .acct-meters li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .acct-meter-bar {
+    grid-row: 2;
+    grid-column: 1 / -1;
   }
 }
 

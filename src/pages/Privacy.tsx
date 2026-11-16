@@ -10,7 +10,7 @@ export function Privacy() {
   return (
     <article className="prose">
       <h1>Privacy policy</h1>
-      <p className="updated">Last updated 30 October 2026</p>
+      <p className="updated">Last updated 13 November 2026</p>
 
       <p className="lede">
         This policy covers the StageRoll app for iPhone, iPad and Android, and this website,
@@ -67,7 +67,9 @@ export function Privacy() {
       <p>
         <strong>Your devices.</strong> For each device you sign in on: its model, its platform, the
         IP address and app version it connects with, and when it signed in and was last active. You
-        can see your devices in the app and sign any of them out.
+        can see your devices in the app and sign any of them out. If you turn on notifications, we
+        also keep the address your phone gives us for sending them to that device. It is removed
+        when you sign out.
       </p>
       <p>
         <strong>What your team puts in.</strong> Scenes and characters; the schedule and its notes;
@@ -153,7 +155,8 @@ export function Privacy() {
       <p>
         Our providers handle data on our instructions, to run StageRoll: Supabase, for our database,
         sign-in and file storage, running on Amazon Web Services with traffic passing through
-        Cloudflare; our email delivery provider, for sign-in codes and account alerts; our payment provider, for card
+        Cloudflare; our email delivery provider, for sign-in codes and account alerts; Expo, which
+        passes our notifications to Apple to deliver to your phone; our payment provider, for card
         payments; our diagnostics and analytics providers, for error reports and usage information;
         and Microsoft, for our own email. Businesses can ask us for our data processing agreement
         and the full list of our providers.
