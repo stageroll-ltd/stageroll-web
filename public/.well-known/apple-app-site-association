@@ -1,5 +1,5 @@
 {
   "webcredentials": {
-    "apps": ["Z5TV4CY45T.com.stageroll.app"]
+    "apps": ["Z5TV4CY45T.com.stageroll.app", "Z5TV4CY45T.com.stageroll.app.staging", "Z5TV4CY45T.com.stageroll.app.dev"]
   }
 }
