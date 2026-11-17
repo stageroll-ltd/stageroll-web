@@ -1,6 +1,7 @@
 /* One sheet. Light, the app's paper and ink, system type. */
 @import './product.css';
 @import './account.css';
+@import './home.css';
 
 :root {
   --paper: #f0f1f4;
@@ -147,6 +148,119 @@ a:focus-visible {
 .nav nav a:hover,
 .nav nav a[aria-current] {
   color: var(--ink);
+}
+
+/* On a wide screen each header link is a pill that tints under the pointer,
+   and Product's stays tinted while its panel is open, so it is plain which
+   link the panel belongs to. The pills' padding is taken out of the gap, so
+   the words sit where they did. */
+@media (min-width: 901px) {
+  .nav nav {
+    gap: 4px;
+    align-items: center;
+  }
+
+  .nav nav > a,
+  .nav-item > a {
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+
+  .nav nav > a:hover,
+  .nav-item:hover > a,
+  .nav-item:focus-within > a {
+    background: rgba(11, 16, 27, 0.06);
+    color: var(--ink);
+  }
+
+  .nav.over:not(.scrolled) nav > a:hover,
+  .nav.over:not(.scrolled) .nav-item:hover > a,
+  .nav.over:not(.scrolled) .nav-item:focus-within > a {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+  }
+}
+
+/* Product's panel: its pages in a white card just under the link, opened by
+   hovering or focusing it. The wrapper's top padding bridges the gap so the
+   pointer can travel from the link to the card. Closed, it is
+   `visibility: hidden`, so its links are out of the tab order. On a phone
+   it never shows: the link goes to the overview (the media query below). */
+.nav-item {
+  position: relative;
+  display: flex;
+}
+
+.nav-panel {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  translate: -35% 0;
+  padding-top: 8px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.16s var(--ease), visibility 0s linear 0.16s;
+}
+
+.nav-item:hover .nav-panel,
+.nav-item:focus-within .nav-panel {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.nav-panel-card {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 28px;
+  padding: 16px 14px 14px;
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow: 0 24px 60px -24px rgba(11, 16, 27, 0.4), 0 0 0 1px var(--hair);
+  text-align: left;
+}
+
+.nav-col p {
+  margin: 0 10px 6px;
+  font-size: 12.5px;
+  color: var(--mute);
+}
+
+.nav-feats {
+  display: grid;
+  grid-template-rows: repeat(5, auto);
+  grid-auto-flow: column;
+  column-gap: 12px;
+}
+
+.nav-panel a {
+  white-space: nowrap;
+}
+
+.nav nav .nav-panel a,
+.nav.over nav .nav-panel a {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 10px;
+  color: var(--ink);
+}
+
+.nav nav .nav-panel a:hover,
+.nav nav .nav-panel a:focus-visible {
+  background: var(--paper);
+}
+
+.nav-panel a b {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.nav-panel a span {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--mute);
 }
 
 .nav-right {
@@ -1300,18 +1414,19 @@ html.js .steps li.on {
   color: var(--mute);
 }
 
-/* Moving between pages: a short crossfade, in browsers that do it. */
+/* Moving between pages, in browsers that do it: the old page fades away,
+   there is a beat, then the new one comes up. Slow enough to be seen. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
   }
 
   ::view-transition-old(root) {
-    animation: 0.18s ease-in both fade-out;
+    animation: 0.2s ease-in both fade-out;
   }
 
   ::view-transition-new(root) {
-    animation: 0.24s cubic-bezier(0.16, 1, 0.3, 1) both fade-in;
+    animation: 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both fade-in;
   }
 }
 
@@ -1664,6 +1779,14 @@ html.in-app .app-only {
 
   .nav nav.open {
     display: flex;
+  }
+
+  .nav-item {
+    display: contents;
+  }
+
+  .nav-panel {
+    display: none;
   }
 
   .nav nav a,

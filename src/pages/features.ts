@@ -19,10 +19,15 @@ export type FeaturePage = {
   /** The sitemap's lastmod: see `updated` in routes.tsx. */
   updated: string
   lede: string
-  steps: [lead: string, text: string][]
+  /** How it works, as numbered steps. A department page told as a story (departments.ts) has none. */
+  steps?: [lead: string, text: string][]
   features: [lead: string, text: string, icon: IconName][]
   /** A further page to read, linked above the way back to the overview. */
   more?: { href: string; label: string }
+  /** Other pages on the same ground, listed under the features. */
+  related?: { href: string; label: string }[]
+  /** Says the Free plan exists, with a link to pricing. Hidden when the app opened the page (`.sells`). */
+  plan?: boolean
 }
 
 export const featurePages: FeaturePage[] = [
@@ -31,11 +36,11 @@ export const featurePages: FeaturePage[] = [
     title: 'Script analysis',
     icon: 'doc',
     summary: 'Your script, read into scenes and cast in seconds.',
-    metaTitle: 'Script analysis for PDF and Final Draft scripts',
+    metaTitle: 'Script breakdown from PDF and Final Draft scripts',
     description:
-      'Import a PDF or Final Draft script and StageRoll finds every scene, speaking character and crowd, read on your device. New drafts match scene by scene, so the work stays attached.',
-    updated: '2026-11-13',
-    lede: 'StageRoll reads your script and builds the production’s scene list and cast from it. Every department then breaks down against the same scenes and characters.',
+      'Start the script breakdown from a PDF or Final Draft script: StageRoll finds every scene, speaking character and crowd, read on your device. New drafts match scene by scene.',
+    updated: '2026-11-17',
+    lede: 'StageRoll reads your script and starts the script breakdown for you, building the production’s scene list and cast from it. Every department then breaks down against the same scenes and characters.',
     steps: [
       [
         'Import the script',
@@ -107,11 +112,11 @@ export const featurePages: FeaturePage[] = [
     title: 'Continuity',
     icon: 'camera',
     summary: 'Every change, style, look and prop, on record against the script.',
-    metaTitle: 'Continuity app for costume, hair, makeup and props',
+    metaTitle: 'Film and TV continuity app for costume, hair, makeup and props',
     description:
-      'Keep costume changes, hair styles, makeup looks and props on record against the script, with photos, notes, the kit in each and a continuity book.',
-    updated: '2026-11-13',
-    lede: 'Each department keeps its continuity against the script: costume changes, hair styles, makeup looks and props, each tied to the scenes and characters it belongs to.',
+      'Continuity for film and TV departments: costume changes, hair styles, makeup looks and props on record against the script, with photos, notes and a continuity book.',
+    updated: '2026-11-17',
+    lede: 'Continuity for film and TV, kept by each department against the script: costume changes, hair styles, makeup looks and props, each tied to the scenes and characters it belongs to.',
     steps: [
       ['Start from a scene', 'Add a change, style or look to a character in the scene, numbered for that character.'],
       ['Build the kit', 'Add the items a change is made of, or the pieces in a style or look, from the inventory.'],
@@ -129,6 +134,14 @@ export const featurePages: FeaturePage[] = [
       ['Character pages', 'Every photo of the character, a description, their records, scenes and personal props.', 'user'],
       ['The continuity book', 'Every photo in the production in script order, opening on your department’s, with who added each one and when.', 'camera'],
     ],
+    related: [
+      { href: '/departments/costume/', label: 'StageRoll for costume and wardrobe' },
+      { href: '/departments/hair/', label: 'StageRoll for hair' },
+      { href: '/departments/makeup/', label: 'StageRoll for makeup' },
+      { href: '/departments/props/', label: 'StageRoll for props' },
+      { href: '/departments/sets/', label: 'StageRoll for sets and set dressing' },
+    ],
+    plan: true,
   },
   {
     slug: 'research',
@@ -167,7 +180,7 @@ export const featurePages: FeaturePage[] = [
     metaTitle: 'Costume and props inventory, tied to every scene',
     description:
       'One inventory for every costume, prop and piece of kit: photos, sizes, costs, hire returns, crates and a QR code each, linked to every scene it is in.',
-    updated: '2026-11-13',
+    updated: '2026-11-17',
     lede: 'One inventory for the whole production, unified with continuity: every costume, prop, wig and piece of kit it owns or hires, filed in folders, packed in crates, and part of every scene and record it’s used in.',
     steps: [
       [
@@ -192,6 +205,12 @@ export const featurePages: FeaturePage[] = [
       ['Status and flags', 'Anything damaged, lost or needing repair is flagged, so problems are easy to spot.', 'flag'],
       ['Valued', 'Unit and replacement costs feed the inventory report’s valuation.', 'pound'],
     ],
+    related: [
+      { href: '/departments/costume/', label: 'StageRoll for costume and wardrobe' },
+      { href: '/departments/props/', label: 'StageRoll for props' },
+      { href: '/departments/sets/', label: 'StageRoll for sets and set dressing' },
+    ],
+    plan: true,
   },
   {
     slug: 'scanning',
@@ -224,11 +243,11 @@ export const featurePages: FeaturePage[] = [
     title: 'Schedule',
     icon: 'calendar',
     summary: 'The shoot on one calendar, and today on the first screen.',
-    metaTitle: 'Shoot schedule and day sheets for departments',
+    metaTitle: 'Shooting schedule and day sheets for departments',
     description:
-      'The shoot on one calendar, shoot days numbered like a call sheet, each day’s scenes in shoot order with their status and notes, and today’s scenes first.',
-    updated: '2026-11-13',
-    lede: 'The whole shoot on one calendar, every day on its own sheet, and today’s scenes the moment you open the app.',
+      'The shooting schedule on one calendar, shoot days numbered like a call sheet, each day’s scenes in shoot order with their status and notes, and today’s scenes first.',
+    updated: '2026-11-17',
+    lede: 'The whole shooting schedule on one calendar, every day on its own sheet, and today’s scenes the moment you open the app.',
     steps: [
       [
         'Lay out the shoot',
@@ -254,20 +273,33 @@ export const featurePages: FeaturePage[] = [
     metaTitle: 'Costume plots, continuity books and props lists',
     description:
       'Department reports built from the production as it stands: costume, hair and makeup plots, continuity books, props by scene and inventories, as PDF or CSV.',
-    updated: '2026-11-13',
-    lede: 'Each department has its own reports, built from the production as it stands the moment you ask.',
+    updated: '2026-11-17',
+    lede: 'Each department has its own reports, built from the production as it stands the moment you ask: costume plots, hair and makeup plots, continuity books, props lists and inventories.',
     steps: [
       ['Pick a report', 'Each department has its own set, ready-made.'],
       [
         'Choose what it covers',
-        'The characters and scenes you choose, by shoot day or episode.',
+        'The characters and scenes you choose, by shoot day or episode. All the cast, or only principals or background.',
       ],
+      [
+        'Set up the page',
+        'Portrait or landscape, how much fits on a page and how large the text is. Each report remembers what you chose.',
+      ],
+      ['Check it', 'Look through the pages before anything is sent.'],
       ['Send it', 'Share it straight from your phone, or download it in a browser. StageRoll keeps no copy.'],
     ],
     features: [
-      ['Costume', 'The costume plot, the continuity book and the inventory.', 'shirt'],
-      ['Props', 'Props by scene and the inventory.', 'clapper'],
-      ['Hair and makeup', 'Hair and makeup plots and their continuity books.', 'scissors'],
+      ['Costume', 'The costume plot, the continuity book and the costume inventory.', 'shirt'],
+      ['Props', 'Props by scene and the props inventory.', 'clapper'],
+      ['Hair and makeup', 'Hair and makeup plots, their continuity books and their inventories.', 'scissors'],
+      ['Sets', 'The set inventory: all the dressing and crates, with condition and cost.', 'pin'],
+      [
+        'Continuity books',
+        'Every photo in scene order or shoot order, with or without notes, at the photo size you pick. Add a cover page, or start each character on a new page.',
+        'camera',
+      ],
+      ['Your columns', 'Inventories and props lists print the columns you tick, with or without a photo of each item.', 'list'],
+      ['Inventories your way', 'Grouped by folder, by each character’s wardrobe, or as one list.', 'folder'],
       ['Spreadsheets', 'Plots, props lists and inventories also export as CSV.', 'table'],
       ['Always current', 'Every report is built when you ask, from the production as it is.', 'refresh'],
       ['A record', 'Which reports were made, by whom and when.', 'history'],

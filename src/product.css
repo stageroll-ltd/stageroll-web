@@ -61,9 +61,16 @@
 }
 
 .prod-depts li {
-  padding: 18px 18px 20px;
   border-radius: 20px;
   background: var(--paper);
+}
+
+/* The whole card is the link to the department's page. */
+.prod-depts a {
+  display: block;
+  padding: 18px 18px 20px;
+  color: inherit;
+  text-decoration: none;
 }
 
 .prod-depts b {
@@ -513,8 +520,11 @@
   }
 
   .prod-depts li {
-    padding: 14px 14px 16px;
     border-radius: 16px;
+  }
+
+  .prod-depts a {
+    padding: 14px 14px 16px;
   }
 
   .prod-depts span {
@@ -615,5 +625,251 @@
 
   .prod-plans li:nth-child(n + 3) {
     margin-top: 16px;
+  }
+}
+
+/* A department page told as a landing page (pages/Department.tsx): bands
+   down the page, each its own shape. Plain on purpose: the pictures and the
+   finer design follow the home page's. */
+.dept-crumb {
+  margin: 0 0 28px;
+  font-size: 15px;
+  color: var(--ink2);
+}
+
+.dept-crumb a {
+  color: inherit;
+}
+
+.dept-band {
+  padding: 88px 0;
+  border-top: 1px solid var(--hair);
+}
+
+.dept-band.tint {
+  border-top: 0;
+  background: var(--paper);
+}
+
+.dept-band > .wrap {
+  max-width: 1180px;
+}
+
+.dept p {
+  text-wrap: pretty;
+}
+
+.dept-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+  margin-top: 40px;
+}
+
+.dept-two p,
+.dept-moment p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink2);
+}
+
+.dept-head {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 48px;
+}
+
+.dept-head h2 {
+  margin: 0;
+}
+
+.dept-facts,
+.dept-areas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 40px 48px;
+}
+
+.dept-facts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dept-areas {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dept-facts.cards {
+  gap: 16px;
+}
+
+.dept-facts.cards li {
+  padding: 26px;
+  border-radius: 24px;
+  background: var(--paper);
+}
+
+.dept h3 {
+  margin: 0 0 8px;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.dept h3 a,
+.dept-more a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dept h3 svg,
+.dept-more svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dept li p,
+.dept dd {
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.5;
+  color: var(--ink2);
+}
+
+.dept-moment {
+  max-width: 44em;
+}
+
+.dept-moment p + p {
+  margin-top: 16px;
+}
+
+.dept-more {
+  margin: 32px 0 0;
+  font-weight: 500;
+}
+
+.dept-faq {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 48px;
+}
+
+.dept-faq dl {
+  margin: 0;
+}
+
+.dept-faq dl > div {
+  padding: 20px 0;
+  border-top: 1px solid var(--hair);
+}
+
+.dept-faq dl > div:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.dept-faq dt {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* A department page in the home page's look (Department.tsx, `framed`): the
+   home page's column, rails, opening and buttons (home.css). What is here
+   fits this page's bands to that column: their words start where the
+   opening's do, and their rules are the column's own colour. */
+.dept.hm .hm-hero-in {
+  min-height: 0;
+  padding-block: 104px 96px;
+}
+
+.dept.hm .hm-kicker {
+  color: var(--ink2);
+}
+
+.dept.hm .hm-kicker a {
+  color: inherit;
+}
+
+.dept.hm .hm-lead {
+  max-width: 21em;
+  font-size: clamp(27px, 1.5vw + 20px, 42px);
+}
+
+.dept.hm .dept-band {
+  position: relative;
+  border-top-color: var(--hm-line);
+}
+
+.dept-in {
+  padding-inline: clamp(0px, 8.4vw, 120px);
+}
+
+.dept.hm h2 {
+  font-size: clamp(28px, 2.2vw + 10px, 40px);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.dept.hm .dept-facts.cards li {
+  border: 1px solid var(--hm-line);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+.dept.hm .dept-band.tint {
+  border-block: 1px solid var(--hm-line);
+}
+
+.dept.hm .dept-band.tint + .dept-band {
+  border-top: 0;
+}
+
+.dept-close {
+  border-top: 1px solid var(--hm-line);
+}
+
+.dept-close .hm-acts {
+  justify-content: center;
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .dept-band {
+    padding: 56px 0;
+  }
+
+  .dept-two,
+  .dept-head,
+  .dept-facts,
+  .dept-areas,
+  .dept-faq {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .dept-head {
+    margin-bottom: 32px;
+  }
+
+  .dept.hm .hm-hero-in {
+    padding-block: 56px 64px;
+  }
+
+  .dept-in {
+    padding-inline: 0;
   }
 }

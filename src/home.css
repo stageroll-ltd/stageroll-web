@@ -1,0 +1,1398 @@
+/* The home page (pages/Home.tsx): a framed column. The page lives in a
+   column in the middle of the screen, 1264px at its widest (the width
+   stripe.com uses), with two hairline rails at the column's edges running
+   its whole length, the header and footer included.
+   White ground, ink type, one family of colour (the app's sunset). Every
+   class here starts `hm-`, so nothing collides with the other pages. */
+:root {
+  --hm-col: 1264px;
+  /* The column as laid out: never closer than 40px to the window's sides. */
+  --hm-colw: min(var(--hm-col), 100% - 80px);
+  --hm-line: #e3e5ec;
+  /* The second voice of a two-tone heading. */
+  --hm-rose: #b03463;
+  /* The app's sunset home background, deep to soft. */
+  --hm-deep: #93204a;
+  --hm-mid: #c42a60;
+  --hm-top: #e2366e;
+  --hm-glow: #ff8f45;
+  --hm-soft: #ffd0c8;
+}
+
+/* The announcement, above the header on the home page only (Layout.tsx). It
+   scrolls away; the header stays. */
+.announce {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  min-height: 40px;
+  padding: 8px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px 14px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.announce a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  text-decoration: none;
+}
+
+.announce a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.announce svg,
+.hm-btn svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.announce svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* The header on the home page: a hairline under it, and on a wide screen
+   its content inside the column, the links beside the wordmark. A phone
+   keeps the shared header and its menu (styles.css). */
+.nav.framed {
+  box-shadow: 0 1px 0 var(--hm-line);
+}
+
+.nav.framed .nav-account {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #d5d8e0;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
+
+.nav.framed .nav-account:hover {
+  border-color: rgba(11, 16, 27, 0.4);
+}
+
+@media (min-width: 901px) {
+  .nav.framed {
+    justify-content: flex-start;
+    padding-inline: calc((100% - var(--hm-colw)) / 2 + 16px);
+  }
+
+  .nav.framed nav {
+    position: relative;
+    left: auto;
+    translate: none;
+    margin-left: 32px;
+  }
+
+  /* Product's panel opens under the links, which now stand at the left: it
+     hangs from their left edge, not their middle, so it stays on screen. */
+  .nav.framed .nav-panel {
+    left: -60px;
+    translate: none;
+  }
+
+  .nav.framed .nav-right {
+    margin-left: auto;
+  }
+}
+
+/* The footer on the home page keeps to the column, inside the rails. */
+.foot.framed .foot-top,
+.foot.framed .foot-small {
+  max-width: calc(var(--hm-col) - 32px);
+}
+
+/* The rails. Fixed, so one element draws them down the whole page; the
+   header draws its own pair over its glass, at the same place. A phone has
+   none. */
+.hm-rails {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .hm-rails,
+  .nav.framed::before {
+    content: '';
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: var(--hm-colw);
+    translate: -50% 0;
+    border-inline: 1px solid var(--hm-line);
+    pointer-events: none;
+  }
+
+  .hm-rails {
+    position: fixed;
+    z-index: 1;
+  }
+
+  .nav.framed::before {
+    position: absolute;
+  }
+}
+
+/* The column, and the small inset that keeps cards off the rails. */
+.hm-col {
+  width: calc(100% - 40px);
+  margin-inline: auto;
+}
+
+@media (min-width: 901px) {
+  .hm-col {
+    width: var(--hm-colw);
+  }
+
+  .hm-inset {
+    padding-inline: 16px;
+  }
+}
+
+/* How large the cards, the pictures in them and the banner are drawn: they
+   grow with the column, in steps. */
+.hm {
+  --k: 1;
+}
+
+@media (min-width: 901px) {
+  .hm {
+    --k: 0.85;
+  }
+}
+
+@media (min-width: 1041px) {
+  .hm {
+    --k: 1;
+  }
+}
+
+@media (min-width: 1181px) {
+  .hm {
+    --k: 1.1;
+  }
+}
+
+@media (min-width: 1344px) {
+  .hm {
+    --k: 1.2;
+  }
+}
+
+.hm-sec {
+  padding-block: 96px;
+}
+
+/* Straight after a section that already left its own space below. */
+.hm-sec.flush {
+  padding-top: 0;
+}
+
+/* Buttons: square-cornered, ink or outlined. */
+.hm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 20px;
+  border: 1px solid #d5d8e0;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.16s ease-in, border-color 0.16s ease-in, transform 0.16s ease-in;
+}
+
+.hm-btn:hover {
+  border-color: rgba(11, 16, 27, 0.4);
+  transition-duration: 0.2s;
+  transition-timing-function: var(--ease-out);
+}
+
+.hm-btn:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+.hm-btn.dark {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.hm-btn.dark:hover {
+  background: #1c2333;
+  border-color: #1c2333;
+}
+
+/* On an ink panel. */
+.hm-btn.onink {
+  border-color: var(--card);
+}
+
+.hm-btn.ghost {
+  height: 40px;
+  padding: 0 16px;
+  background: none;
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 14px;
+}
+
+.hm-btn.ghost:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.hm-btn svg {
+  transition: transform 0.2s var(--ease-out);
+}
+
+.hm-btn:hover svg {
+  transform: translateX(2px);
+}
+
+/* A two-tone heading: the heading in ink, then a sentence that runs on from
+   it at the same size, in the second colour. Each keeps its own weight. */
+.hm-two {
+  max-width: 26em;
+  font-size: clamp(24px, 1.2vw + 17px, 30px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.hm-two > h1,
+.hm-two > h2,
+.hm-two > p {
+  display: inline;
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.hm-two > h1,
+.hm-two > h2 {
+  font-weight: 600;
+}
+
+.hm-two > p {
+  color: var(--hm-rose);
+}
+
+/* The sunset bands, laid flat: the foot of the page, and the hero where the
+   screen is too narrow for the ribbon. */
+.hm-bands {
+  background: linear-gradient(
+    180deg,
+    var(--hm-soft) 0,
+    var(--hm-soft) 7%,
+    var(--hm-glow) 7%,
+    var(--hm-glow) 21%,
+    var(--hm-top) 21%,
+    var(--hm-top) 41%,
+    var(--hm-mid) 41%,
+    var(--hm-mid) 67%,
+    var(--hm-deep) 67%
+  );
+}
+
+/* Hero */
+.hm-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hm-hero-in {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* As tall as the window gives room for: 576px on a laptop, up to 832px on
+     a large screen, the words in the middle of it. */
+  min-height: clamp(576px, 47vh + 205px, 832px);
+  padding: 56px clamp(0px, 8.4vw, 120px);
+}
+
+.hm-kicker {
+  margin: 0 0 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.hm-lead {
+  max-width: 19.2em;
+  font-size: clamp(28px, 1.9vw + 21px, 48px);
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+}
+
+.hm-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+/* The hero's lines (heroLines.ts): a ribbon of fine lines behind the words,
+   the full width of the page and cut off at the strip. They are made in
+   the browser, which shows them (`on`) once they are and fades their
+   colour in as the ribbon opens; a phone has none. */
+.hm-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+.hm-lines {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .hm-lines {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke-width: 1.2;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .hm-lines.on {
+    visibility: visible;
+  }
+}
+
+/* The departments, where a business site puts its customers' logos. */
+.hm-strip {
+  position: relative;
+  border-block: 1px solid var(--hm-line);
+}
+
+.hm-strip ul {
+  list-style: none;
+  min-height: 66px;
+  margin-block: 0;
+  padding: 12px clamp(0px, 8.4vw, 120px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 24px;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* What joins up in one production (JoinBands in Home.tsx): five bands in
+   the sunset colours, one for each thing, that run in from the left apart
+   and close into one block, with a bracket down its end and "One
+   production" beside that. The bands are thick lines in a drawing 1232 by
+   430; the words are a list laid over it. The band still to come is an
+   outline, and last. On a phone there is no drawing: the list is a
+   stack of bars. */
+.hm-join {
+  position: relative;
+  margin-top: 40px;
+}
+
+/* Each band and its row carry their colour as --tone (Home.tsx). Every
+   class here is the page's own (hm-): a plain name such as "glow" already
+   means something else on the site (styles.css). */
+.hm-join svg {
+  display: none;
+}
+
+.hm-join ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.hm-join li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 12px;
+  min-height: 56px;
+  padding: 10px 16px;
+  background: var(--tone);
+  color: #fff;
+}
+
+.hm-join li.hm-ink {
+  color: var(--ink);
+}
+
+.hm-join li.hm-soon {
+  border: 1.5px dashed var(--hm-deep);
+}
+
+.hm-join strong {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.hm-join li span {
+  font-size: 14px;
+}
+
+.hm-join em {
+  padding: 3px 10px;
+  border: 1px solid #b4b8c4;
+  border-radius: 999px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.hm-join-one {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .hm-join {
+    margin-top: 56px;
+    aspect-ratio: 1232 / 430;
+  }
+
+  .hm-join svg {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
+
+  /* A touch wider than its 62 so no seam shows where two bands meet. */
+  .hm-join .hm-band {
+    stroke: var(--tone);
+    stroke-width: 62.6;
+    stroke-dasharray: 1;
+  }
+
+  .hm-join .hm-slot {
+    fill: #fff;
+    stroke: var(--hm-deep);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 6;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .hm-join ul {
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  /* Each name sits on its band where the band runs level, on the left. */
+  .hm-join li {
+    position: absolute;
+    left: 0;
+    top: calc(var(--i) * 92 / 430 * 100%);
+    height: calc(62 / 430 * 100%);
+    min-height: 0;
+    flex-wrap: nowrap;
+    padding: 0 0 0 clamp(14px, 1.9%, 24px);
+    background: none;
+    white-space: nowrap;
+  }
+
+  .hm-join li.hm-soon {
+    border: 0;
+  }
+
+  .hm-join strong {
+    font-size: clamp(15px, 1.4vw, 20px);
+  }
+
+  /* Below this there is no room on the level part of a band for both. */
+  .hm-join li span {
+    display: none;
+  }
+
+  /* A bracket as tall as all five bands closes the block, and its words
+     sit beside it: they name the whole block, not one band of it. */
+  .hm-join .hm-brace {
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-dasharray: 1;
+  }
+
+  .hm-join-one {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: calc(1026 / 1232 * 100%);
+    right: 0;
+    top: calc(60 / 430 * 100%);
+    height: calc(310 / 430 * 100%);
+    margin: 0;
+    font-size: clamp(16px, 1.55vw, 22px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+}
+
+@media (min-width: 1181px) {
+  .hm-join li span {
+    display: inline;
+    font-size: clamp(12px, 1.05vw, 15px);
+  }
+}
+
+/* Arriving, the first time the drawing is on screen (`hm-in`): each band is
+   drawn from left to right, one after another, its name with it, and the
+   outline last. Once they are all there the bracket grows from its middle
+   out to both ends, and then its words appear. A band's length counts as
+   1, and each half of the bracket's, so a dash of 1 is the whole of it.
+   Only where a script will set `hm-in`, and not with motion reduced:
+   otherwise the finished drawing is simply there. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .hm-join .hm-band,
+  .hm-join .hm-brace {
+    stroke-dashoffset: 1;
+  }
+
+  .hm-join .hm-slot,
+  .hm-join li,
+  .hm-join-one {
+    opacity: 0;
+  }
+
+  .hm-join.hm-in .hm-band {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.9s cubic-bezier(0.6, 0, 0.2, 1) calc(var(--i) * 0.18s);
+  }
+
+  .hm-join.hm-in .hm-slot,
+  .hm-join.hm-in li {
+    opacity: 1;
+    transition: opacity 0.5s ease-out calc(var(--i) * 0.18s + 0.15s);
+  }
+
+  /* The last band is across 1.45s in. */
+  .hm-join.hm-in .hm-brace {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.3, 0, 0.2, 1) 1.5s;
+  }
+
+  .hm-join.hm-in .hm-join-one {
+    opacity: 1;
+    transition: opacity 0.4s ease-out 2.1s;
+  }
+}
+
+/* What it does: six ruled cards, the app inside each, on solid diagonal
+   bands in one colour family apiece. */
+.hm-cards {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 48px;
+}
+
+.hm-card {
+  --from: 55%;
+  position: relative;
+  grid-column: span 2;
+  height: calc(380px * var(--k));
+  overflow: hidden;
+  border: 1px solid var(--hm-line);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  background: linear-gradient(
+    160deg,
+    var(--card) 0,
+    var(--card) var(--from),
+    var(--s0) var(--from),
+    var(--s0) calc(var(--from) + 5%),
+    var(--s1) calc(var(--from) + 5%),
+    var(--s1) calc(var(--from) + 17%),
+    var(--s2) calc(var(--from) + 17%),
+    var(--s2) calc(var(--from) + 33%),
+    var(--s3) calc(var(--from) + 33%)
+  );
+  transition: border-color 0.2s var(--ease-out);
+}
+
+.hm-card:hover {
+  border-color: rgba(11, 16, 27, 0.32);
+}
+
+.hm-card.top {
+  height: calc(400px * var(--k));
+}
+
+.hm-card.wide {
+  --from: 58%;
+  grid-column: span 4;
+}
+
+.hm-card.full {
+  --from: 50%;
+  grid-column: 1 / -1;
+  height: calc(340px * var(--k));
+}
+
+.hm-card.sunset {
+  --s0: var(--hm-soft);
+  --s1: var(--hm-glow);
+  --s2: var(--hm-top);
+  --s3: var(--hm-deep);
+}
+
+.hm-card.iris {
+  --s0: #a35cf5;
+  --s1: #a35cf5;
+  --s2: #5b4be8;
+  --s3: #35299e;
+}
+
+.hm-card.lagoon {
+  --s0: #22c7b0;
+  --s1: #22c7b0;
+  --s2: #0b7f86;
+  --s3: #07565b;
+}
+
+.hm-card.forest {
+  --s0: #3cb26a;
+  --s1: #3cb26a;
+  --s2: #11673f;
+  --s3: #0a4529;
+}
+
+.hm-card.midnight {
+  --s0: #3a5ccc;
+  --s1: #3a5ccc;
+  --s2: #16245e;
+  --s3: #0f1a45;
+}
+
+.hm-card.coral {
+  --s0: #ff8a3d;
+  --s1: #ff8a3d;
+  --s2: #ee4b37;
+  --s3: #a8301d;
+}
+
+.hm-card h3 {
+  margin: 0;
+  padding: 22px 58px 0 24px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 24px;
+}
+
+.hm-card p {
+  max-width: 400px;
+  margin: 4px 0 0;
+  padding: 0 58px 0 24px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink2);
+}
+
+.hm-go {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--hm-line);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--hm-rose);
+}
+
+.hm-go svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s var(--ease-out);
+}
+
+.hm-card:hover .hm-go svg {
+  transform: translate(1px, -1px);
+}
+
+/* A phone with one screenshot, cut off by the card's foot. Sized by --w. */
+.hm-phone {
+  --w: calc(170px * var(--k));
+  position: absolute;
+  top: calc(124px * var(--k));
+  left: 50%;
+  width: var(--w);
+  margin-left: calc(var(--w) / -2);
+  aspect-ratio: 220 / 459;
+  padding: calc(var(--w) * 0.037);
+  border-radius: calc(var(--w) * 0.18);
+  background: var(--ink);
+  box-shadow: 0 30px 60px -24px rgba(11, 16, 27, 0.6);
+}
+
+.hm-phone img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: calc(var(--w) * 0.143);
+}
+
+.hm-card.top .hm-phone {
+  --w: calc(180px * var(--k));
+}
+
+.hm-card.wide .hm-phone {
+  --w: calc(190px * var(--k));
+  top: calc(100px * var(--k));
+  left: auto;
+  right: calc(44px * var(--k));
+  margin-left: 0;
+}
+
+.hm-card.full .hm-phone {
+  --w: calc(190px * var(--k));
+  top: calc(56px * var(--k));
+  left: auto;
+  right: calc(298px * var(--k));
+  margin-left: 0;
+}
+
+.hm-card.full .hm-phone + .hm-phone {
+  top: calc(96px * var(--k));
+  right: calc(78px * var(--k));
+}
+
+/* Pieces of the app drawn in the page: a card or a printed label. They are
+   pictures, so the words in them are hidden from a screen reader. */
+.hm-ui {
+  position: absolute;
+  scale: var(--k);
+  transform-origin: 0 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow: 0 0 0 1px rgba(11, 16, 27, 0.06), 0 30px 60px -24px rgba(11, 16, 27, 0.45);
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.hm-ui b {
+  font-weight: 600;
+}
+
+.hm-ui small {
+  display: block;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ink2);
+}
+
+.hm-ui-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-top: 1px solid var(--hair);
+}
+
+.hm-ui-row > :last-child {
+  margin-left: auto;
+}
+
+.hm-ui-head {
+  display: block;
+  padding: 16px 20px 13px;
+}
+
+.hm-ui-head b {
+  display: block;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.hm-ui-head b.big {
+  font-size: 24px;
+  line-height: 30px;
+}
+
+.hm-ui svg {
+  flex: none;
+  fill: none;
+  stroke: var(--ink2);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hm-ui svg.ok {
+  stroke: #12793a;
+}
+
+.hm-ui-pill {
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: #ff751f;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.hm-script {
+  left: calc(44px * var(--k));
+  top: calc(168px * var(--k));
+  width: 300px;
+}
+
+.hm-day {
+  left: calc(24px * var(--k));
+  top: calc(150px * var(--k));
+  width: 250px;
+}
+
+.hm-label {
+  left: 50%;
+  /* Grown and turned about its middle, which stands 252px down at full size. */
+  top: calc(252px * var(--k) - 74px);
+  transform-origin: 50% 50%;
+  width: 268px;
+  margin-left: -134px;
+  border-radius: 10px;
+  rotate: -5deg;
+}
+
+.hm-label-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  padding: 0 14px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.hm-label-band img {
+  display: block;
+  width: auto;
+  height: 11px;
+}
+
+.hm-label-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+}
+
+.hm-label-body > span:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.hm-label-body small {
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.hm-label-body b {
+  display: block;
+  margin-top: 2px;
+  font-size: 18px;
+  line-height: 23px;
+}
+
+.hm-label-code {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: 0.04em;
+}
+
+.hm-label-code svg {
+  display: block;
+  stroke: none;
+  fill: #000;
+}
+
+/* The banner: an ink panel with a photograph at its right. */
+.hm-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(440px * var(--k));
+  min-height: calc(320px * var(--k));
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.hm-banner-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 52px 40px 54px;
+}
+
+.hm-banner h2 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 40px;
+}
+
+.hm-banner p {
+  max-width: 440px;
+  margin: 12px 0 32px;
+  font-size: 17px;
+  line-height: 26px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.hm-banner .hm-btn {
+  margin-top: auto;
+}
+
+.hm-banner-photo {
+  position: relative;
+}
+
+.hm-banner-photo .photo {
+  position: absolute;
+  inset: 0;
+}
+
+.hm-banner-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 120px;
+  background: linear-gradient(90deg, var(--ink), rgba(11, 16, 27, 0));
+}
+
+/* The three steps, set as a row of large figures on a paper band. */
+.hm-steps {
+  margin-top: 80px;
+  padding-block: 64px;
+  border-block: 1px solid var(--hm-line);
+  background: var(--paper);
+}
+
+.hm-steps ol {
+  list-style: none;
+  margin-block: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  counter-reset: step;
+}
+
+.hm-steps li {
+  padding: 0 28px;
+  border-left: 1px solid #d5d8e0;
+  counter-increment: step;
+}
+
+.hm-steps li::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 48px;
+}
+
+.hm-steps h3 {
+  margin: 20px 0 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 24px;
+}
+
+.hm-steps p {
+  margin: 6px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--ink2);
+}
+
+@media (min-width: 901px) {
+  /* The rail stands in for the first step's line. */
+  .hm-steps li:first-child {
+    border-left: 0;
+  }
+}
+
+/* Private by default: an ink panel, three ruled columns. */
+.hm-private {
+  padding: 44px 40px 46px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.hm-private-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hm-private h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 36px;
+}
+
+.hm-trio {
+  list-style: none;
+  margin: 56px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.hm-trio li {
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hm-trio h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 24px;
+}
+
+.hm-trio p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+/* The departments, as ruled rows with a photograph each. */
+.hm-rows {
+  list-style: none;
+  margin: 48px 0 0;
+  padding: 0;
+  border-bottom: 1px solid var(--hm-line);
+}
+
+.hm-row {
+  display: grid;
+  grid-template-columns: 132px 188px minmax(0, 1fr) 14px;
+  align-items: center;
+  gap: 32px;
+  min-height: 112px;
+  padding: 15px 24px 15px 16px;
+  border-top: 1px solid var(--hm-line);
+  color: inherit;
+  text-decoration: none;
+}
+
+a.hm-row:hover {
+  background: var(--paper);
+}
+
+.hm-row .photo {
+  width: 132px;
+  height: 80px;
+  border-radius: 6px;
+}
+
+.hm-row h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 30px;
+}
+
+.hm-row p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--ink2);
+}
+
+.hm-row > svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--hm-rose);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Pricing, in one line. */
+.hm-price {
+  border-block: 1px solid var(--hm-line);
+}
+
+.hm-price > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 24px;
+  min-height: 134px;
+  padding-block: 28px;
+}
+
+.hm-price .hm-two {
+  font-size: clamp(22px, 1vw + 15px, 26px);
+}
+
+/* The close: the words, the way in, and the sunset bands as a horizon. */
+.hm-close {
+  position: relative;
+  text-align: center;
+}
+
+.hm-close > .hm-col {
+  padding-block: 96px 100px;
+}
+
+.hm-close h2 {
+  margin: 0;
+  font-size: clamp(34px, 3.4vw + 10px, 52px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.hm-close p {
+  margin: 14px 0 30px;
+  font-size: 17px;
+  color: var(--ink2);
+}
+
+.hm-close .stores {
+  justify-content: center;
+}
+
+.hm-close > .hm-bands {
+  position: relative;
+  z-index: 2;
+  height: 140px;
+}
+
+/* Narrower than the column and its rails: the same page, without them. */
+@media (max-width: 900px) {
+  .hm-sec {
+    padding-block: 64px;
+  }
+
+  .hm-hero-in {
+    min-height: 0;
+    padding: 56px 0 64px;
+  }
+
+  .hm-strip ul {
+    padding-inline: 0;
+  }
+
+  .hm-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hm-card,
+  .hm-card.top {
+    grid-column: auto;
+    height: 380px;
+  }
+
+  .hm-card.wide,
+  .hm-card.full {
+    grid-column: 1 / -1;
+  }
+
+  /* Room for the drawn shoot day and one phone, not two. */
+  .hm-card.full .hm-phone {
+    right: 78px;
+  }
+
+  .hm-card.full .hm-phone + .hm-phone {
+    display: none;
+  }
+
+  .hm-banner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hm-banner-photo {
+    order: -1;
+    height: 220px;
+  }
+
+  .hm-banner-photo::after {
+    display: none;
+  }
+
+  .hm-steps {
+    margin-top: 64px;
+    padding-block: 48px;
+  }
+
+  .hm-steps ol,
+  .hm-trio {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hm-steps ol {
+    gap: 32px;
+  }
+
+  .hm-steps li {
+    padding: 0 0 0 20px;
+  }
+
+  .hm-trio {
+    margin-top: 40px;
+    gap: 28px;
+  }
+
+  .hm-row {
+    grid-template-columns: 96px minmax(0, 1fr) 14px;
+    gap: 4px 20px;
+    padding-inline: 0;
+  }
+
+  .hm-row .photo {
+    grid-row: span 2;
+    width: 96px;
+    height: 72px;
+  }
+
+  .hm-row > svg {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+
+  .hm-row h3 {
+    align-self: end;
+  }
+
+  .hm-row p {
+    align-self: start;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .hm-close > .hm-col {
+    padding-block: 72px;
+  }
+
+  .hm-close > .hm-bands {
+    height: 96px;
+  }
+}
+
+/* A phone: one card to a row, and one picture to a card. */
+@media (max-width: 640px) {
+  .hm-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hm-card.wide,
+  .hm-card.full {
+    --from: 55%;
+    height: 380px;
+  }
+
+  .hm-card.wide .hm-phone,
+  .hm-card.full .hm-phone {
+    --w: 170px;
+    top: 124px;
+    left: 50%;
+    right: auto;
+    margin-left: calc(var(--w) / -2);
+  }
+
+  .hm-card.full .hm-phone + .hm-phone,
+  .hm-script,
+  .hm-day {
+    display: none;
+  }
+
+  .hm-private {
+    padding: 32px 24px 34px;
+  }
+
+  .hm-banner-copy {
+    padding: 32px 24px 34px;
+  }
+
+  .hm-banner h2,
+  .hm-private h2 {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-btn:active,
+  .hm-btn:hover svg,
+  .hm-card:hover .hm-go svg {
+    transform: none;
+  }
+}

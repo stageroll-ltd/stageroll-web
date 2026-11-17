@@ -68,3 +68,31 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      # IndexNow (indexnow.org): tells Bing, and the search engines that
+      # share its list, which pages changed, so they are read again within
+      # hours and not at the next crawl. Only the pages whose sitemap date
+      # (`updated` in src/routes.tsx) is today or yesterday are sent: the
+      # protocol asks for changed pages, not the whole site. The key is
+      # public by design: it is the file public/<key>.txt, which proves the
+      # sender runs the site. A failure here never fails the deploy.
+      - name: Tell search engines what changed (IndexNow)
+        continue-on-error: true
+        env:
+          KEY: e0cb587d42c865b7de3fb67a0e38eb16
+        run: |
+          since=$(date -u -d yesterday +%F)
+          urls=$(curl -fsS https://stageroll.co/sitemap.xml \
+            | grep -o '<url><loc>[^<]*</loc><lastmod>[^<]*</lastmod>' \
+            | sed -E 's#<url><loc>([^<]*)</loc><lastmod>([^<]*)</lastmod>#\2 \1#' \
+            | awk -v since="$since" '$1 >= since { print $2 }')
+          if [ -z "$urls" ]; then
+            echo "No page changed since $since; nothing to send."
+            exit 0
+          fi
+          body=$(printf '%s\n' "$urls" | jq -R . | jq -s --arg key "$KEY" \
+            '{host: "stageroll.co", key: $key, keyLocation: ("https://stageroll.co/" + $key + ".txt"), urlList: .}')
+          echo "$body"
+          curl -fsS -o /dev/null -w 'IndexNow answered %{http_code}\n' \
+            -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data "$body"

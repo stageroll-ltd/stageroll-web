@@ -6,12 +6,13 @@ import { featurePages, type FeaturePage } from './features'
 // side, because StageRoll is built with them as equals; every other area
 // follows as a smaller card. Each card goes to its area's page.
 
-const departments: { name: string; line: string }[] = [
-  { name: 'Costume', line: 'Changes and what’s in them' },
-  { name: 'Props', line: 'Who carries what, scene by scene' },
-  { name: 'Hair', line: 'Styles and their pieces' },
-  { name: 'Makeup', line: 'Looks and their pieces' },
-  { name: 'Sets', line: 'Every set and how it’s dressed' },
+// Each department's card goes to its page (departments.ts).
+const departments: { name: string; line: string; href: string }[] = [
+  { name: 'Costume', line: 'Changes and what’s in them', href: '/departments/costume/' },
+  { name: 'Props', line: 'Who carries what, scene by scene', href: '/departments/props/' },
+  { name: 'Hair', line: 'Styles and their pieces', href: '/departments/hair/' },
+  { name: 'Makeup', line: 'Looks and their pieces', href: '/departments/makeup/' },
+  { name: 'Sets', line: 'Every set and how it’s dressed', href: '/departments/sets/' },
 ]
 
 const leading = ['continuity', 'inventory']
@@ -38,8 +39,10 @@ export function Product() {
           <ul className="prod-depts" aria-label="Departments">
             {departments.map((d) => (
               <li key={d.name}>
-                <b>{d.name}</b>
-                <span>{d.line}</span>
+                <a href={d.href}>
+                  <b>{d.name}</b>
+                  <span>{d.line}</span>
+                </a>
               </li>
             ))}
           </ul>

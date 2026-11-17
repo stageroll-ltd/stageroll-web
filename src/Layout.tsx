@@ -1,6 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
 import { accountPages, signedIn } from './account/pages'
+import { Icon } from './components/Icon'
+import { APP_STORE_URL, GOOGLE_PLAY_URL, framed as isFramed } from './links'
+import { departmentPages } from './pages/departments'
+import { featurePages } from './pages/features'
 
 export const company = {
   name: 'StageRoll Ltd',
@@ -20,7 +24,8 @@ const nav: { href: string; label: string; sells?: boolean }[] = [
 ]
 
 // The header sits straight on the page: the logo left, the links centred.
-// On the home page it lies over the hero in white (`over`).
+// The home page is framed (`framed`, home.css): an announcement above the
+// header, and the header's and footer's content kept to the page's column.
 // On a phone the links fold into a menu behind a burger (styles.css).
 // The footer is plain at the bottom of every page: the wordmark, links and
 // small print straight on the page. A route's `end` (the home page's closing
@@ -51,7 +56,9 @@ function useAccountLink(current: string): { href: string; label: string } | null
 
 export function Layout({ current, end, children }: { current: string; end?: ReactNode; children: ReactNode }) {
   const account = useAccountLink(current)
-  const over = current === '/'
+  // The home page, and the pages that have taken its look so far.
+  const home = current === '/'
+  const framed = isFramed(current)
   const [menu, setMenu] = useState(false)
   useEffect(() => {
     if (!menu) return
@@ -70,9 +77,18 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-  const cls = ['nav', over && 'over', scrolled && 'scrolled'].filter(Boolean).join(' ')
+  const cls = ['nav', framed && 'framed', scrolled && 'scrolled'].filter(Boolean).join(' ')
   return (
     <>
+      {home && (
+        <p className="announce">
+          {/* Until a store listing exists (links.ts), the app is on its way. */}
+          {APP_STORE_URL === '#' && GOOGLE_PLAY_URL === '#' ? 'Launching on' : 'Now on'} iPhone, iPad and Android
+          <a href="/product/">
+            See the product <Icon name="chevron" />
+          </a>
+        </p>
+      )}
       <header className={cls}>
         <a className="brand" href="/" aria-label="StageRoll home">
           {/* Both wordmarks, ink and white; CSS shows the one for the ground. */}
@@ -80,16 +96,51 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
           <img className="wordmark wm-white" src="/brand/wordmark-dark.svg" width={92} height={25} alt="" />
         </a>
         <nav id="site-nav" aria-label="Site" className={menu ? 'open' : undefined}>
-          {nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={item.sells ? 'sells' : undefined}
-              aria-current={here(item.href, current)}
-            >
-              {item.label}
-            </a>
-          ))}
+          {nav.map((item) => {
+            const link = (
+              <a
+                key={item.href}
+                href={item.href}
+                className={item.sells ? 'sells' : undefined}
+                aria-current={here(item.href, current)}
+              >
+                {item.label}
+              </a>
+            )
+            // Product opens a panel of its pages on hover or focus, on a
+            // wide screen only (styles.css, `.nav-panel`): the departments
+            // with a line each, then every feature. The link itself still
+            // goes to the overview, which is the way in on a phone.
+            if (item.href !== '/product/') return link
+            return (
+              <span key={item.href} className="nav-item">
+                {link}
+                <div className="nav-panel">
+                  <div className="nav-panel-card">
+                    <div className="nav-col">
+                      <p>Departments</p>
+                      {departmentPages.map((page) => (
+                        <a key={page.slug} href={`/departments/${page.slug}/`}>
+                          <b>{page.title}</b>
+                          <span>{page.summary}</span>
+                        </a>
+                      ))}
+                    </div>
+                    <div className="nav-col">
+                      <p>Features</p>
+                      <div className="nav-feats">
+                        {featurePages.map((page) => (
+                          <a key={page.slug} href={`/product/${page.slug}/`}>
+                            <b>{page.title}</b>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </span>
+            )
+          })}
         </nav>
         <div className="nav-right">
           {account && (
@@ -117,8 +168,8 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
 
       <main>{children}</main>
 
-      {end && <div className="end lit">{end}</div>}
-      <footer className="foot">
+      {end && <div className="end">{end}</div>}
+      <footer className={framed ? 'foot framed' : 'foot'}>
         <div className="foot-top">
           <div>
             <img className="wordmark" src="/brand/wordmark.svg" width={120} height={33} alt="StageRoll" />

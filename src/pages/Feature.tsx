@@ -22,10 +22,14 @@ export function Feature({ page }: { page: FeaturePage }) {
       <h1>{page.title}</h1>
       <p className="lede">{page.lede}</p>
 
-      <h2>How it works</h2>
-      <ol>
-        <List items={page.steps} />
-      </ol>
+      {page.steps && (
+        <>
+          <h2>How it works</h2>
+          <ol>
+            <List items={page.steps} />
+          </ol>
+        </>
+      )}
 
       <h2>Key features</h2>
       <ul className="prod-doc-feats">
@@ -36,6 +40,26 @@ export function Feature({ page }: { page: FeaturePage }) {
           </li>
         ))}
       </ul>
+
+      {page.related && (
+        <>
+          <h2>Related</h2>
+          <ul>
+            {page.related.map((link) => (
+              <li key={link.href}>
+                <a href={link.href}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {page.plan && (
+        <p className="sells">
+          StageRoll has a free plan for working on your own, and crew accounts are always free.{' '}
+          <a href="/pricing/">See pricing</a>
+        </p>
+      )}
 
       {page.more && (
         <p>

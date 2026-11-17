@@ -78,6 +78,8 @@ const table: { group: string; rows: Row[] }[] = [
 const notes = [
   'Crew never pay. Joining someone else’s production doesn’t count towards your free ones.',
   'Every plan includes every department.',
+  // StageRoll Ltd is not VAT-registered (owner, 2026-11-17), so the price shown is the price paid. Change this line the day it registers.
+  'Prices are in pounds, and no VAT is added.',
   'Starter and Pro roll monthly: cancel any time, and the plan ends at the close of the month you’ve paid for.',
   'Enterprise limits and contract length are set with each production.',
   'Photos are made smaller on your phone before they’re uploaded, to about 1 MB each, so the photo counts are a fair guide.',

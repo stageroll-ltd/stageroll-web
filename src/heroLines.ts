@@ -1,0 +1,296 @@
+// The lines in the home page's hero (Home.tsx): a ribbon of fine lines in the
+// sunset colours that comes in at the bottom left, runs under the buttons and
+// climbs away to the top right. It twists as it goes; the twist travels along
+// it while its path swings out and back, one round every minute and a half.
+// When the page loads the ribbon opens: it starts from edge to edge as a
+// single line with no colour, and its lines spread out from that to their
+// full breadth as the colour comes in.
+//
+// The ribbon is fitted to the hero whenever the hero changes size, so the
+// lines never cross a line of text or a button: the climb moves right, the
+// run sinks lower and the ribbon narrows until it is clear. Where nothing
+// fits, and on a phone, the hero has no lines. Reduced motion gets them still.
+
+/** A box to keep clear of, in the hero's own pixels. */
+export type Box = { x0: number; y0: number; x1: number; y1: number }
+
+type Pt = readonly [number, number]
+/** A cubic curve: where it starts, its two handles, where it ends. */
+type Curve = readonly [Pt, Pt, Pt, Pt]
+
+/** The ribbon's path swings between two curves; `width` is its widest, flat on. */
+export type Ribbon = { from: Curve; to: Curve; width: number }
+
+const LINES = 24
+/** Points along each line; the path between them is smoothed. */
+const STEPS = 40
+/** One round, in milliseconds: the twist travels the ribbon and the path swings out and back. */
+export const LOOP = 90_000
+/** The twist, in radians, where the ribbon starts and where it ends. */
+const TWIST_FROM = 0.6
+const TWIST_TO = 5.9
+/** How far the ribbon bows across its width, as a share of the width. */
+const BOW = 0.22
+/** The lines come no nearer than this to a word or a button. */
+const CLEAR = 14
+/** How long the ribbon takes to open when the page loads, in milliseconds. */
+const OPENING = 2000
+
+// The sunset, as home.css has it (--hm-deep, --hm-mid, --hm-top, --hm-glow):
+// the first line is the deepest and the last the brightest.
+const SUNSET = [
+  [0x93, 0x20, 0x4a],
+  [0xc4, 0x2a, 0x60],
+  [0xe2, 0x36, 0x6e],
+  [0xff, 0x8f, 0x45],
+] as const
+
+function colour(t: number): string {
+  const at = Math.min(t, 0.9999) * (SUNSET.length - 1)
+  const a = SUNSET[Math.floor(at)] ?? SUNSET[0]
+  const b = SUNSET[Math.floor(at) + 1] ?? a
+  const mix = (i: 0 | 1 | 2) => Math.round(a[i] + (b[i] - a[i]) * (at % 1))
+  return `rgb(${mix(0)} ${mix(1)} ${mix(2)})`
+}
+
+function point([a, b, c, d]: Curve, s: number): Pt {
+  const r = 1 - s
+  const ka = r * r * r
+  const kb = 3 * r * r * s
+  const kc = 3 * r * s * s
+  const kd = s * s * s
+  return [ka * a[0] + kb * b[0] + kc * c[0] + kd * d[0], ka * a[1] + kb * b[1] + kc * c[1] + kd * d[1]]
+}
+
+/** The unit normal to the curve at `s`: the way across the ribbon. */
+function across([a, b, c, d]: Curve, s: number): Pt {
+  const r = 1 - s
+  const ka = 3 * r * r
+  const kb = 6 * r * s
+  const kc = 3 * s * s
+  const dx = ka * (b[0] - a[0]) + kb * (c[0] - b[0]) + kc * (d[0] - c[0])
+  const dy = ka * (b[1] - a[1]) + kb * (c[1] - b[1]) + kc * (d[1] - c[1])
+  const n = Math.hypot(dx, dy) || 1
+  return [-dy / n, dx / n]
+}
+
+function between(p: Curve, q: Curve, e: number): Curve {
+  const mix = (a: Pt, b: Pt): Pt => [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e]
+  return [mix(p[0], q[0]), mix(p[1], q[1]), mix(p[2], q[2]), mix(p[3], q[3])]
+}
+
+/** The ribbon is narrower at its ends than in the middle. */
+const breadth = (width: number, s: number) => width * (0.6 + 0.4 * Math.sin(Math.PI * s))
+
+/**
+ * The ribbon for a hero `w` by `h`. At `push` 0 it is the shape as designed: in
+ * at the bottom left, along the foot, then a long diagonal to the top right.
+ * As `push` goes to 1 the climb moves to the right edge and swings less,
+ * making room for wider words. `drop` sinks the run along the foot.
+ */
+function ribbon(w: number, h: number, push: number, drop: number, width: number): Ribbon {
+  const x1 = (0.5 + 0.36 * push) * w
+  const y1 = h + 46 + 14 * push + drop
+  const x2 = (0.619 + 0.351 * push) * w
+  const y2 = (0.549 + 0.171 * push) * h
+  const swing = 1 - 0.6 * push
+  return {
+    width,
+    from: [
+      [-90, h + 8 + drop],
+      [x1, y1],
+      [x2, y2],
+      [w + 90, -0.03 * h],
+    ],
+    to: [
+      [-90, h - 2 + drop],
+      [x1 + 0.048 * w * swing, y1 + 25 * swing],
+      [x2 + 0.042 * w * swing, y2 - 0.101 * h * swing],
+      [w + 90, (-0.03 + 0.16 * swing) * h],
+    ],
+  }
+}
+
+/**
+ * Whether the ribbon keeps out of every box, wherever it is in its round:
+ * the whole band it can sweep is checked, not one moment of it.
+ */
+function clears(r: Ribbon, boxes: Box[]): boolean {
+  for (let j = 0; j <= 8; j++) {
+    const curve = between(r.from, r.to, j / 8)
+    for (let k = 0; k <= 96; k++) {
+      const s = k / 96
+      const [x, y] = point(curve, s)
+      const [nx, ny] = across(curve, s)
+      const reach = breadth(r.width, s) / 2 + 0.17 * BOW * r.width
+      for (let m = -4; m <= 4; m++) {
+        const px = x + (nx * reach * m) / 4
+        const py = y + (ny * reach * m) / 4
+        if (boxes.some((b) => px > b.x0 && px < b.x1 && py > b.y0 && py < b.y1)) return false
+      }
+    }
+  }
+  return true
+}
+
+/**
+ * The ribbon that fits a hero `w` by `h` with these words in it: as near the
+ * designed shape as keeps clear of them, or null where none does.
+ */
+export function fit(w: number, h: number, words: Box[]): Ribbon | null {
+  const boxes = words.map((b) => ({ x0: b.x0 - CLEAR, y0: b.y0 - CLEAR, x1: b.x1 + CLEAR, y1: b.y1 + CLEAR }))
+  const width = Math.min(250, Math.max(150, w / 8))
+  for (const scale of [1, 0.85, 0.7]) {
+    for (const drop of [0, 16, 32, 48]) {
+      for (let push = 0; push <= 1; push += 0.125) {
+        const r = ribbon(w, h, push, drop, width * scale)
+        if (clears(r, boxes)) return r
+      }
+    }
+  }
+  return null
+}
+
+const round = (v: number) => Math.round(v * 10) / 10
+
+/**
+ * The ribbon's lines `ms` into its round, each as a path's `d`. `open` is how
+ * far the ribbon has opened: at 0 every line lies along its middle, at 1 they
+ * are spread to its full breadth.
+ */
+export function paths(r: Ribbon, ms: number, open = 1): string[] {
+  const turn = (ms % LOOP) / LOOP
+  const curve = between(r.from, r.to, (1 - Math.cos(2 * Math.PI * turn)) / 2)
+  const phase = -4 * Math.PI * turn
+  const out: string[] = Array.from({ length: LINES }, () => '')
+  // Each line is drawn through the middles of its points, with the points as
+  // handles, so it bends smoothly however few there are.
+  let before: number[] = []
+  for (let k = 0; k <= STEPS; k++) {
+    const s = k / STEPS
+    const [x, y] = point(curve, s)
+    const [nx, ny] = across(curve, s)
+    const angle = TWIST_FROM + (TWIST_TO - TWIST_FROM) * s + phase
+    const flat = open * breadth(r.width, s) * Math.cos(angle)
+    const bow = open * BOW * r.width * Math.sin(angle * 0.5 + 1)
+    const here: number[] = []
+    for (let i = 0; i < LINES; i++) {
+      const t = i / (LINES - 1) - 0.5
+      const d = t * flat + (t * t - 0.08) * bow
+      const px = x + nx * d
+      const py = y + ny * d
+      here.push(px, py)
+      if (k === 0) {
+        out[i] = `M${round(px)} ${round(py)}`
+      } else {
+        const bx = before[i * 2] ?? px
+        const by = before[i * 2 + 1] ?? py
+        const end = k === STEPS ? `${round(px)} ${round(py)}` : `${round((bx + px) / 2)} ${round((by + py) / 2)}`
+        out[i] += k === 1 ? `L${end}` : `Q${round(bx)} ${round(by)} ${end}`
+      }
+    }
+    before = here
+  }
+  return out
+}
+
+/** Every line of text and every link inside `stage`, as boxes measured from `origin`'s corner. */
+function wordsIn(stage: Element, origin: DOMRect): Box[] {
+  const rects: DOMRect[] = []
+  const range = document.createRange()
+  const walker = document.createTreeWalker(stage, NodeFilter.SHOW_TEXT)
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (!node.nodeValue?.trim()) continue
+    range.selectNodeContents(node)
+    rects.push(...range.getClientRects())
+  }
+  for (const link of stage.querySelectorAll('a')) rects.push(link.getBoundingClientRect())
+  return rects
+    .filter((r) => r.width > 0 && r.height > 0)
+    .map((r) => ({ x0: r.left - origin.left, y0: r.top - origin.top, x1: r.right - origin.left, y1: r.bottom - origin.top }))
+}
+
+/** Slow to start, slow to settle. */
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (2 - 2 * t) ** 3 / 2)
+
+/**
+ * Draws the lines into `svg`, which fills the hero behind its words, and keeps
+ * them moving while the hero is on screen. Returns what stops it.
+ */
+export function runHeroLines(svg: SVGSVGElement): () => void {
+  const stage = svg.parentElement
+  if (!stage) return () => {}
+  const wide = window.matchMedia('(min-width: 901px)')
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+  const lines = Array.from({ length: LINES }, (_, i) => {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+    line.setAttribute('stroke', colour(i / (LINES - 1)))
+    return line
+  })
+  svg.append(...lines)
+
+  let shape: Ribbon | null = null
+  let onScreen = true
+  let frame = 0
+  /** How far into its round the ribbon is; it only counts while the lines move. */
+  let clock = 0
+  let last = 0
+  /** How long the ribbon has been opening; with motion reduced it is open from the start. */
+  let opened = calm.matches ? OPENING : 0
+
+  // While the ribbon opens its colour comes in with it: closed, the lines
+  // lie on top of one another and would be one heavy stroke at full colour.
+  const draw = () => {
+    if (!shape) return
+    const t = opened / OPENING
+    const d = paths(shape, clock, ease(t))
+    lines.forEach((line, i) => line.setAttribute('d', d[i] ?? ''))
+    svg.style.opacity = t < 1 ? String(Math.round(t * t * (3 - 2 * t) * 1000) / 1000) : ''
+  }
+
+  // While the ribbon opens it is redrawn every frame; after that thirty
+  // frames a second is plenty for a movement this slow.
+  const tick = (now: number) => {
+    frame = 0
+    const step = Math.min(now - last, 100)
+    if (opened < OPENING || step >= 32) {
+      clock += step
+      opened = Math.min(OPENING, opened + step)
+      last = now
+      draw()
+    }
+    run()
+  }
+
+  const run = () => {
+    if (frame === 0 && shape && onScreen && !calm.matches) frame = requestAnimationFrame(tick)
+  }
+
+  const measure = () => {
+    const box = svg.getBoundingClientRect()
+    shape = wide.matches && box.width > 0 ? fit(box.width, box.height, wordsIn(stage, box)) : null
+    svg.classList.toggle('on', shape !== null)
+    draw()
+    run()
+  }
+
+  const resized = new ResizeObserver(measure)
+  resized.observe(stage)
+  const seen = new IntersectionObserver((entries) => {
+    onScreen = entries.at(-1)?.isIntersecting ?? true
+    run()
+  })
+  seen.observe(svg)
+  calm.addEventListener('change', run)
+
+  return () => {
+    resized.disconnect()
+    seen.disconnect()
+    calm.removeEventListener('change', run)
+    cancelAnimationFrame(frame)
+    svg.classList.remove('on')
+    svg.style.opacity = ''
+    for (const line of lines) line.remove()
+  }
+}
