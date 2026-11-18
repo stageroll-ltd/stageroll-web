@@ -343,7 +343,7 @@ export const featurePages: FeaturePage[] = [
     metaTitle: 'Script security and privacy for productions',
     description:
       'Scripts are read on your device and never uploaded. A code and password to sign in, an app lock, device sign-out and an encrypted offline copy do the rest.',
-    updated: '2026-11-13',
+    updated: '2026-11-18',
     lede: 'Productions hold unreleased scripts and private work, so StageRoll keeps what it can on your device and shows the rest only to the people on the production.',
     steps: [
       ['Lock the app', 'StageRoll locks when you leave it and opens with your PIN or Face ID. You choose how quickly it locks.'],

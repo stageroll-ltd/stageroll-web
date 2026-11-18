@@ -1,17 +1,17 @@
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 
 import { Icon } from '../components/Icon'
-import { Photo } from '../components/Photo'
 import { StoreBadges } from '../components/StoreBadges'
 import { runHeroLines } from '../heroLines'
-import type { PhotoKey } from '../photos'
 import { departmentPages } from './departments'
 import { featurePages } from './features'
 
 // The home page: a framed column (home.css). The page's words sit in a
-// column, 1264px at its widest, with a rail at each edge; down it go the hero, what the app
-// does as six cards, how a department works in three steps, privacy, the
-// five departments, pricing in a line and the close (HomeEnd, below).
+// column, 1264px at its widest, with a rail at each edge; down it go the hero, the
+// facts, what joins up in one production (the bands), then the product as a
+// whole: continuity and inventory as equals, the areas round them, what it
+// is all built on, privacy, a row of doors to the departments, pricing in a
+// line and the close (HomeEnd, below).
 
 /** A feature's own page under /product/ (pages/features.ts), or the overview if it has none. */
 const featureHref = (slug: string) => (featurePages.some((page) => page.slug === slug) ? `/product/${slug}/` : '/product/')
@@ -20,53 +20,37 @@ const featureHref = (slug: string) => (featurePages.some((page) => page.slug ===
 const departmentHref = (slug: string) =>
   departmentPages.some((page) => page.slug === slug) ? `/departments/${slug}/` : undefined
 
-// The departments: a name in the hero's strip, then a row each further down,
-// with its line. All five lines are in the page, for a search engine as much
-// as a reader.
-const departments: { name: string; slug: string; photo: PhotoKey; line: string }[] = [
-  { name: 'Costume', slug: 'costume', photo: 'costume', line: 'Changes, fittings and continuity for every character.' },
-  { name: 'Props', slug: 'props', photo: 'props', line: 'Every piece, where it’s used and where it lives.' },
-  { name: 'Hair', slug: 'hair', photo: 'hair', line: 'Styles and references, scene by scene.' },
-  { name: 'Makeup', slug: 'makeup', photo: 'makeup', line: 'Looks, continuity photos and notes, ready for every call.' },
-  { name: 'Set', slug: 'sets', photo: 'set', line: 'Dressing and continuity for every set, scene by scene.' },
-]
-
-// The workflow, in the order a department works.
-const steps: { heading: string; text: string }[] = [
-  {
-    heading: 'Analyse the script.',
-    text: 'Every scene, every character, who’s in which. Pulled from the script in seconds, and the file itself never leaves your device.',
-  },
-  {
-    heading: 'Break it down.',
-    text: 'References pinned to every character and scene, and the inventory behind them, photographed and ready to pack.',
-  },
-  {
-    heading: 'Run the day.',
-    text: 'Coordinate shoot days, see what every scene needs, and capture continuity on set.',
-  },
+// The departments: a name in the hero's strip, and a door each further down.
+const departments: { name: string; slug: string }[] = [
+  { name: 'Costume', slug: 'costume' },
+  { name: 'Props', slug: 'props' },
+  { name: 'Hair', slug: 'hair' },
+  { name: 'Makeup', slug: 'makeup' },
+  { name: 'Set', slug: 'sets' },
 ]
 
 const privacy: { heading: string; text: string }[] = [
-  { heading: 'Read on your device.', text: 'The script file is never uploaded, only the scene and character metadata you choose to submit.' },
+  // The facts row above has already said the script stays on the device, so
+  // the two things not yet said come first.
   { heading: 'Locked to you.', text: 'A PIN and Face ID, with screen protection for productions that need it.' },
   { heading: 'No ads, no selling.', text: 'Your work is never sold, used for advertising or used to train AI.' },
+  { heading: 'Read on your device.', text: 'The script file is never uploaded.' },
 ]
 
-type Screen = 'today' | 'script' | 'character' | 'scene' | 'shootday' | 'team'
+type Screen = 'change' | 'inventory-list' | 'research-board' | 'calendar'
 
-/** A phone with one of the app's screenshots (public/screens/), cut off by its card's foot. */
-function Shot({ screen }: { screen: Screen }) {
+/** A phone with one of the app's screenshots (public/screens/), cut off by the foot of its picture. */
+function Phone({ screen }: { screen: Screen }) {
   return (
-    <span className="hm-phone" aria-hidden="true">
+    <span className="hm-shot" aria-hidden="true">
       <img src={`/screens/${screen}.webp`} alt="" width={600} height={1304} loading="lazy" decoding="async" />
     </span>
   )
 }
 
-// Three pieces of the app drawn in the page, not screenshots: the card that
-// says a script has been read, a shoot day, and a printed label. Pictures, so
-// a screen reader is not read their sample words.
+// Pieces of the app drawn in the page, not screenshots: the card that says a
+// script has been read, and a shoot day. Pictures, so a screen reader is not
+// read their sample words.
 function ScriptFound() {
   return (
     <span className="hm-ui hm-script" aria-hidden="true">
@@ -109,90 +93,91 @@ function ShootDay() {
   )
 }
 
-// The code on the drawn label: a picture of a QR code, not one that scans.
-const labelCode =
-  'M0 0h7v7h-7z M1 1h5v5h-5z M2 2h3v3h-3z M14 0h7v7h-7z M15 1h5v5h-5z M16 2h3v3h-3z M0 14h7v7h-7z M1 15h5v5h-5z M2 16h3v3h-3z M8 0h1v1h-1z M10 0h1v1h-1z M11 1h1v1h-1z M9 2h1v1h-1z M12 2h1v1h-1z M8 3h1v1h-1z M10 4h1v1h-1z M12 4h1v1h-1z M9 5h1v1h-1z M11 6h1v1h-1z M8 6h1v1h-1z M0 8h1v1h-1z M2 8h1v1h-1z M3 9h1v1h-1z M5 8h1v1h-1z M1 10h1v1h-1z M4 10h1v1h-1z M6 11h1v1h-1z M0 12h1v1h-1z M3 12h1v1h-1z M5 12h1v1h-1z M8 8h1v1h-1z M9 9h1v1h-1z M11 8h1v1h-1z M12 10h1v1h-1z M10 11h1v1h-1z M8 12h1v1h-1z M13 9h1v1h-1z M14 8h1v1h-1z M16 8h1v1h-1z M18 9h1v1h-1z M20 8h1v1h-1z M15 10h1v1h-1z M17 11h1v1h-1z M19 12h1v1h-1z M14 12h1v1h-1z M20 11h1v1h-1z M8 14h1v1h-1z M10 15h1v1h-1z M9 16h1v1h-1z M12 14h1v1h-1z M11 17h1v1h-1z M8 18h1v1h-1z M13 19h1v1h-1z M10 20h1v1h-1z M12 20h1v1h-1z M15 14h1v1h-1z M17 15h1v1h-1z M19 14h1v1h-1z M16 17h1v1h-1z M18 18h1v1h-1z M20 16h1v1h-1z M14 19h1v1h-1z M16 20h1v1h-1z M20 20h1v1h-1z M18 16h1v1h-1z'
+// The two halves of the product, as equals: a name, one line, three short
+// tags and the way to its page (features.ts). The pictures are in Home, below.
+const pillars = {
+  continuity: {
+    name: 'Continuity',
+    line: 'Every change, style, look and prop, kept against its scene.',
+    tags: ['By scene and character', 'Photos with the notes', 'Each department’s view'],
+    link: 'How continuity works',
+  },
+  inventory: {
+    name: 'Inventory',
+    line: 'Everything the production owns, and where it is right now.',
+    tags: ['Items and crates', 'A code on every piece', 'Tied to its scenes'],
+    link: 'How inventory works',
+  },
+}
 
-function PrintedLabel() {
+function PillarHead({ slug }: { slug: keyof typeof pillars }) {
+  const { name, line, tags, link } = pillars[slug]
   return (
-    <span className="hm-ui hm-label" aria-hidden="true">
-      <span className="hm-label-band">
-        <span>Provenance</span>
-        <img src="/brand/wordmark-dark.svg" alt="" width={41} height={11} loading="lazy" />
-      </span>
-      <span className="hm-label-body">
-        <span>
-          <small>Props</small>
-          <b>Gold watch</b>
-        </span>
-        <span className="hm-label-code">
-          <svg viewBox="0 0 21 21" width="78" height="78" shapeRendering="crispEdges" fillRule="evenodd">
-            <path d={labelCode} />
-          </svg>
-          SR7KM40042
-        </span>
-      </span>
-    </span>
+    <div className="hm-pillar-head">
+      <div>
+        <h3>{name}</h3>
+        <a href={featureHref(slug)}>
+          {link} <Icon name="chevron" />
+        </a>
+      </div>
+      <p>{line}</p>
+      <ul>
+        {tags.map((tag) => (
+          <li key={tag}>{tag}</li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
-// What StageRoll does, as six cards: each a heading, one line, its feature
-// page and the app inside it. `look` is the card's place in the grid and its
-// colour family (home.css).
-const cards: { heading: string; text: string; slug: string; look: string; art: ReactNode }[] = [
-  {
-    heading: 'Script analysis, simplified.',
-    text: 'Scenes, characters and who’s in each, laid out in script order.',
-    slug: 'script',
-    look: 'wide top sunset',
-    art: (
-      <>
-        <ScriptFound />
-        <Shot screen="script" />
-      </>
-    ),
-  },
-  {
-    heading: 'Continuity, tracked.',
-    text: 'Recorded against every scene and character in your script.',
-    slug: 'continuity',
-    look: 'top iris',
-    art: <Shot screen="character" />,
-  },
-  {
-    heading: 'From reference to wrap box.',
-    text: 'Pin research references to characters, scenes and sets.',
-    slug: 'research',
-    look: 'lagoon',
-    art: <Shot screen="scene" />,
-  },
-  {
-    heading: 'Physical meets digital.',
-    text: 'Every item and crate wears its own QR label.',
-    slug: 'scanning',
-    look: 'forest',
-    art: <PrintedLabel />,
-  },
-  {
-    heading: 'Always there for the whole team.',
-    text: 'Scan a crew member’s code to invite them, with their role.',
-    slug: 'team',
-    look: 'midnight',
-    art: <Shot screen="team" />,
-  },
-  {
-    heading: 'Run the day.',
-    text: 'Coordinate shoot days, see what every scene needs, and capture continuity on set.',
-    slug: 'schedule',
-    look: 'full coral',
-    art: (
-      <>
-        <ShootDay />
-        <Shot screen="shootday" />
-        <Shot screen="today" />
-      </>
-    ),
-  },
+// Who is on a production, drawn: the owner, a coordinator for each
+// department, and their crew.
+function TeamTree() {
+  const crew = (cx: number, tone: string) => (
+    <>
+      {[-38, 0, 38].map((dx) => (
+        <g key={dx}>
+          <path className="line" d={`M${cx} 120V142H${cx + dx}V160`} />
+          <circle cx={cx + dx} cy={174} r={14} fill={`var(--hm-${tone})`} />
+        </g>
+      ))}
+      <text className="quiet" x={cx} y={212}>
+        Crew
+      </text>
+    </>
+  )
+  const coordinator = (cx: number, department: string, tone: string) => (
+    <>
+      <rect x={cx - 54} y={78} width={108} height={42} rx={21} fill={`var(--hm-${tone})`} />
+      <text className="on" x={cx} y={96}>
+        Coordinator
+      </text>
+      <text className="on small" x={cx} y={110.5}>
+        {department}
+      </text>
+    </>
+  )
+  return (
+    <svg className="hm-tree" viewBox="0 0 248 226" aria-hidden="true">
+      <path className="line" d="M124 33V56H62V78M124 56H186V78" />
+      {crew(62, 'top')}
+      {crew(186, 'glow')}
+      <rect x={82} y={3} width={84} height={30} rx={15} fill="var(--ink)" />
+      <text className="on" x={124} y={22.5}>
+        Owner
+      </text>
+      {coordinator(62, 'Costume', 'deep')}
+      {coordinator(186, 'Props', 'mid')}
+    </svg>
+  )
+}
+
+// What it is all built on, and the pages for each (features.ts).
+const base: [label: string, slug: string][] = [
+  ['Script breakdown', 'script'],
+  ['Scenes', 'scenes'],
+  ['Schedule', 'schedule'],
+  ['Codes and scanning', 'scanning'],
 ]
 
 // The hero's strip: what StageRoll does, then the departments it is for.
@@ -227,24 +212,30 @@ function HomeGlance() {
 // What joins up in one production, as bands that close into one block
 // (JoinBands, below), deepest colour first. Budgeting is not built yet: its
 // band is an outline, and it comes last.
-const joins: { name: string; line?: string; tone?: 'deep' | 'mid' | 'top' | 'ember' | 'glow' }[] = [
-  { name: 'Research', line: 'References for every look and set', tone: 'deep' },
-  { name: 'Inventory', line: 'Every piece, and where it is', tone: 'mid' },
-  { name: 'Continuity', line: 'Photos and notes, scene by scene', tone: 'top' },
-  { name: 'Collaboration', line: 'Your whole team in one production', tone: 'ember' },
-  { name: 'Reporting', line: 'Breakdowns of scenes, cast and crew', tone: 'glow' },
+// `slug` is the band's page under /product/ (features.ts): its name is the way there.
+const joins: { name: string; line?: string; slug?: string; tone?: 'deep' | 'mid' | 'top' | 'ember' | 'glow' }[] = [
+  { name: 'Research', line: 'References for every look and set', slug: 'research', tone: 'deep' },
+  { name: 'Inventory', line: 'Every piece, and where it is', slug: 'inventory', tone: 'mid' },
+  { name: 'Continuity', line: 'Photos and notes, scene by scene', slug: 'continuity', tone: 'top' },
+  { name: 'Collaboration', line: 'Your whole team in one production', slug: 'team', tone: 'ember' },
+  { name: 'Reporting', line: 'Breakdowns of scenes, cast and crew', slug: 'reports', tone: 'glow' },
   { name: 'Budgeting' },
 ]
 
 // The drawing is 1232 wide: each band is 62 tall, 30 apart on the left and
 // touching on the right, so its height and the block's place in it follow
 // from how many bands there are (home.css works out the same from --n).
-// The bands close up between 440 and 770 across and end at 980; a bracket
-// down the block's end ties them all to its words.
+// The bands close up between 440 and 770 across and end at joinEnd; a
+// bracket down the block's end ties them all to its words, which take the
+// rest of the width on two lines (home.css).
+const joinEnd = 1046
 const joinHeight = joins.length * 92 - 30
 const blockTop = 15 * (joins.length - 1)
 const bandApart = (i: number) => i * 92 + 31
 const bandJoined = (i: number) => blockTop + i * 62 + 31
+
+/** How much taller, above and below, the band under the pointer grows on its level part (home.css squeezes it by the same). */
+const LIFT = 7
 
 /** A band's turn to arrive (the delays in home.css) and its colour, one of the sunset's. */
 const turn = (i: number, tone?: string) => ({ '--i': i, ...(tone && { '--tone': `var(--hm-${tone})` }) }) as CSSProperties
@@ -256,31 +247,61 @@ const turn = (i: number, tone?: string) => ({ '--i': i, ...(tone && { '--tone': 
 // then the bracket grows from its middle and its words appear
 // (home.css, once `hm-in` is set); until then, and with motion reduced or no
 // script, the finished drawing is simply there.
+// Each name is the way to its page. Once the bands have arrived (`hm-done`),
+// the one under the pointer keeps its colour while the others fall back
+// (`data-hot`); its level part on the left grows a little taller, easing back
+// into the band before the curve, and its name moves a step in (home.css).
 function JoinBands() {
   const box = useRef<HTMLDivElement>(null)
+  const [hot, setHot] = useState<number | null>(null)
   useEffect(() => {
     const el = box.current
     if (!el) return
+    let settled = 0
     const seen = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return
         el.classList.add('hm-in')
+        // The arrival takes about two and a half seconds; the pointer waits for it.
+        settled = window.setTimeout(() => el.classList.add('hm-done'), 2600)
         seen.disconnect()
       },
       { threshold: 0.35 },
     )
     seen.observe(el)
-    return () => seen.disconnect()
+    return () => {
+      seen.disconnect()
+      window.clearTimeout(settled)
+    }
   }, [])
+  const over = (i: number) => () => {
+    if (box.current?.classList.contains('hm-done')) setHot(i)
+  }
+  const out = () => setHot(null)
   return (
-    <div ref={box} className="hm-join" style={{ '--n': joins.length } as CSSProperties}>
+    // The classes `hm-in` and `hm-done` are set on the element itself, so what
+    // React changes here is an attribute of its own, never the class.
+    <div ref={box} className="hm-join" data-hot={hot ?? undefined} style={{ '--n': joins.length } as CSSProperties} onPointerLeave={out}>
       <svg viewBox={`0 0 1232 ${joinHeight}`} aria-hidden="true">
+        {/* Each band is a group of two: the band itself, a thick line along its middle so it can be drawn
+            from left to right; and its level part again, a little taller, easing back to the band's own
+            height before the curve begins. At rest that copy is squeezed to the band's height and lies
+            unseen inside it (home.css). They fade as one, so the copy never shows through. */}
         {joins.map(({ name, tone }, i) => {
           if (!tone) return null
           const a = bandApart(i)
           const j = bandJoined(i)
-          // A thick line along the band's middle, so it can be drawn from left to right.
-          return <path key={name} className="hm-band" style={turn(i, tone)} pathLength={1} d={`M-2 ${a}H440C605 ${a} 605 ${j} 770 ${j}H980`} />
+          const top = a - 31.3
+          const foot = a + 31.3
+          return (
+            <g key={name} className={hot === i ? 'hm-row hm-on' : 'hm-row'} style={turn(i, tone)}>
+              <path className="hm-band" pathLength={1} d={`M-2 ${a}H440C605 ${a} 605 ${j} 770 ${j}H${joinEnd}`} onPointerEnter={over(i)} />
+              <path
+                className="hm-lift"
+                d={`M-2 ${top - LIFT}H300C385 ${top - LIFT} 385 ${top} 470 ${top}V${foot}C385 ${foot} 385 ${foot + LIFT} 300 ${foot + LIFT}H-2Z`}
+              />
+            </g>
+          )
         })}
         {joins.map(({ name, tone }, i) => {
           if (tone) return null
@@ -292,20 +313,35 @@ function JoinBands() {
               key={name}
               className="hm-slot"
               style={turn(i)}
-              d={`M1 ${a - 31}H440C605 ${a - 31} 605 ${j - 31} 770 ${j - 31}H979V${j + 31}H770C605 ${j + 31} 605 ${a + 31} 440 ${a + 31}H1Z`}
+              d={`M1 ${a - 31}H440C605 ${a - 31} 605 ${j - 31} 770 ${j - 31}H${joinEnd - 1}V${j + 31}H770C605 ${j + 31} 605 ${a + 31} 440 ${a + 31}H1Z`}
             />
           )
         })}
         {/* The bracket down the block's end, in two halves from its middle, so it can grow out to both ends. */}
-        <path className="hm-brace" pathLength={1} d={`M1008 ${joinHeight / 2}V${blockTop + 1}H996`} />
-        <path className="hm-brace" pathLength={1} d={`M1008 ${joinHeight / 2}V${blockTop + joins.length * 62 - 1}H996`} />
+        <path className="hm-brace" pathLength={1} d={`M${joinEnd + 28} ${joinHeight / 2}V${blockTop + 1}H${joinEnd + 16}`} />
+        <path className="hm-brace" pathLength={1} d={`M${joinEnd + 28} ${joinHeight / 2}V${blockTop + joins.length * 62 - 1}H${joinEnd + 16}`} />
       </svg>
       <ul>
-        {joins.map(({ name, line, tone }, i) => (
+        {joins.map(({ name, line, slug, tone }, i) => (
           // White words on every band; ink on the outline, which has no colour behind it.
-          <li key={name} className={tone ? undefined : 'hm-ink hm-soon'} style={turn(i, tone)}>
-            <strong>{name}</strong>
-            {line ? <span>{line}</span> : <em>Coming soon</em>}
+          <li
+            key={name}
+            className={[!tone && 'hm-ink hm-soon', hot === i && 'hm-on'].filter(Boolean).join(' ') || undefined}
+            style={turn(i, tone)}
+            onPointerEnter={tone ? over(i) : undefined}
+          >
+            {slug ? (
+              <a className="hm-join-go" href={featureHref(slug)}>
+                <strong>{name}</strong>
+                <span>{line}</span>
+                <Icon name="chevron" />
+              </a>
+            ) : (
+              <>
+                <strong>{name}</strong>
+                <em>Coming soon</em>
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -373,58 +409,105 @@ export function Home() {
 
       <section className="hm-sec" aria-labelledby="hm-does">
         <div className="hm-col hm-inset">
-          <div className="hm-two">
+          <div className="hm-two hm-two-wide">
             <h2 id="hm-does">One production for costume, props, hair, makeup and set.</h2>{' '}
             <p>Script analysis, continuity, research, inventory and labels in one place.</p>
           </div>
           <JoinBands />
-          <div className="hm-cards">
-            {cards.map((card) => (
-              <a key={card.slug} className={`hm-card ${card.look}`} href={featureHref(card.slug)}>
-                <h3>{card.heading}</h3>
-                <p>{card.text}</p>
-                <span className="hm-go" aria-hidden="true">
-                  <svg viewBox="0 0 12 12">
-                    <path d="M3 9 9 3M4.5 3H9v4.5" />
-                  </svg>
+          {/* Continuity and inventory, side by side as equals. */}
+          <div className="hm-pair">
+            <article className="hm-pillar sun">
+              <PillarHead slug="continuity" />
+              <div className="hm-pillar-art">
+                <img className="hm-sheet" src="/screens/page-book.webp" alt="" width={760} height={805} loading="lazy" decoding="async" />
+                <Phone screen="change" />
+              </div>
+            </article>
+            <article className="hm-pillar inv">
+              <PillarHead slug="inventory" />
+              <div className="hm-pillar-art">
+                <Phone screen="inventory-list" />
+                <img className="hm-item" src="/screens/item-card.webp" alt="" width={720} height={347} loading="lazy" decoding="async" />
+                <span className="hm-due" aria-hidden="true">
+                  <span>
+                    Acquired <b>Rented</b>
+                  </span>
+                  <span>
+                    Return due <b>15 January</b>
+                  </span>
                 </span>
-                {card.art}
-              </a>
-            ))}
+              </div>
+            </article>
+          </div>
+
+          {/* The areas round them: a tile each, and one still to come. */}
+          <div className="hm-around">
+            <a className="hm-tile" href={featureHref('research')}>
+              <h3>
+                Research <Icon name="chevron" />
+              </h3>
+              <p>Pin references to characters, scenes and sets.</p>
+              <span className="hm-tile-art">
+                <Phone screen="research-board" />
+              </span>
+            </a>
+            <a className="hm-tile" href={featureHref('team')}>
+              <h3>
+                Collaboration <Icon name="chevron" />
+              </h3>
+              <p>Owner, coordinators and crew, each in their own department.</p>
+              <span className="hm-tile-art">
+                <TeamTree />
+              </span>
+            </a>
+            <a className="hm-tile" href={featureHref('reports')}>
+              <h3>
+                Reporting <Icon name="chevron" />
+              </h3>
+              <p>Each department’s paperwork, built when you ask.</p>
+              <span className="hm-tile-art">
+                <img className="hm-sheet" src="/screens/page-report.webp" alt="" width={900} height={632} loading="lazy" decoding="async" />
+              </span>
+            </a>
+            <div className="hm-tile soon">
+              <h3>Budgeting</h3>
+              <span className="hm-soon-tag">Coming soon</span>
+              <p>Production and department budgets.</p>
+              <span className="hm-tile-art hm-bars" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <i />
+                <i />
+              </span>
+            </div>
+          </div>
+
+          {/* What every record hangs off: the script and the shooting schedule. */}
+          <div className="hm-base">
+            <div className="hm-base-copy">
+              <h3>Built on your script and your shooting schedule.</h3>
+              <p>Every record hangs off a scene, so a new draft updates everything that depends on it.</p>
+              <ul>
+                {base.map(([label, slug]) => (
+                  <li key={slug}>
+                    <a href={featureHref(slug)}>
+                      {label} <Icon name="chevron" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="hm-base-art">
+              <ScriptFound />
+              <ShootDay />
+              <Phone screen="calendar" />
+            </div>
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="hm-how">
-        <div className="hm-col hm-inset">
-          <div className="hm-banner">
-            <div className="hm-banner-copy">
-              <h2 id="hm-how">Modern by design.</h2>
-              <p>Take photos, scan labels and check the day’s scenes from the phone or tablet already in your pocket.</p>
-              <a className="hm-btn onink" href="/product/">
-                See everything StageRoll does <Icon name="chevron" />
-              </a>
-            </div>
-            <div className="hm-banner-photo">
-              <Photo slot="set" />
-            </div>
-          </div>
-        </div>
-        {/* The three steps as a row of large figures; the numbers are the
-            list's own (home.css). */}
-        <div className="hm-steps">
-          <ol className="hm-col">
-            {steps.map((s) => (
-              <li key={s.heading}>
-                <h3>{s.heading}</h3>
-                <p>{s.text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="hm-sec" aria-labelledby="hm-private">
+      <section className="hm-sec flush" aria-labelledby="hm-private">
         <div className="hm-col hm-inset">
           <div className="hm-private">
             <div className="hm-private-head">
@@ -445,33 +528,21 @@ export function Home() {
         </div>
       </section>
 
-      <section className="hm-sec flush" aria-labelledby="hm-depts">
-        <div className="hm-col">
-          <div className="hm-two hm-inset">
-            <h2 id="hm-depts">Made for your department.</h2>{' '}
-            <p>Everyone works in their own department’s view, and changes reach the whole team straight away.</p>
-          </div>
-          <ul className="hm-rows">
+      {/* The departments: one row of doors. */}
+      <section className="hm-doors" aria-labelledby="hm-depts">
+        <div className="hm-col hm-inset">
+          <h2 id="hm-depts">See it for your department</h2>
+          <ul>
             {departments.map((d) => {
               const href = departmentHref(d.slug)
-              const row = (
-                <>
-                  <Photo slot={d.photo} />
-                  <h3>{d.name}</h3>
-                  <p>{d.line}</p>
-                  {href && <Icon name="chevron" />}
-                </>
-              )
               return (
-                <li key={d.name}>
-                  {href ? (
-                    <a className="hm-row" href={href}>
-                      {row}
+                href && (
+                  <li key={d.name}>
+                    <a className="hm-btn" href={href}>
+                      {d.name} <Icon name="chevron" />
                     </a>
-                  ) : (
-                    <div className="hm-row">{row}</div>
-                  )}
-                </li>
+                  </li>
+                )
               )
             })}
           </ul>
@@ -482,7 +553,7 @@ export function Home() {
       <section className="hm-price sells" aria-label="Pricing">
         <div className="hm-col hm-inset">
           <div className="hm-two">
-            <h2>Free to start.</h2> <p>Every department on every plan.</p>
+            <h2>Priced per production.</h2> <p>Crew never pay.</p>
           </div>
           <a className="hm-btn dark" href="/pricing/">
             See pricing <Icon name="chevron" />

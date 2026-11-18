@@ -177,7 +177,24 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
             <img className="wordmark" src="/brand/wordmark.svg" width={120} height={33} alt="StageRoll" />
             <p>Production management, done right.</p>
           </div>
+          {/* The footer is the site's index: every feature and department page, by name. */}
           <nav aria-label="Footer">
+            <div>
+              <p>Product</p>
+              {featurePages.map((page) => (
+                <a key={page.slug} href={`/product/${page.slug}/`}>
+                  {page.title}
+                </a>
+              ))}
+            </div>
+            <div>
+              <p>Departments</p>
+              {departmentPages.map((page) => (
+                <a key={page.slug} href={`/departments/${page.slug}/`}>
+                  {page.title}
+                </a>
+              ))}
+            </div>
             <div>
               <p>StageRoll</p>
               {nav.map((item) => (

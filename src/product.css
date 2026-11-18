@@ -1072,3 +1072,246 @@
     padding-bottom: 72px;
   }
 }
+
+/* The privacy and security page (pages/Security.tsx): a centred opening
+   over a line drawing, then ruled bands in the page's column: the approach
+   in two columns, the principles beside a drawing, and every safeguard as
+   a ruled cell. */
+.sec-hero {
+  padding: 72px 0 96px;
+  text-align: center;
+}
+
+.sec-hero h1 {
+  margin: 0 0 18px;
+  font-size: clamp(36px, 2.6vw + 22px, 60px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.sec-hero .lede {
+  max-width: 34em;
+  margin-inline: auto;
+}
+
+.sec-hero .hm-kicker {
+  margin-bottom: 16px;
+}
+
+/* The drawings: fine lines, the sunset's colours and ink. */
+.sec-rings,
+.sec-kept {
+  display: block;
+  fill: none;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sec-rings {
+  width: min(320px, 70%);
+  height: auto;
+  margin: 0 auto 40px;
+}
+
+.sec-kept {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  justify-self: center;
+}
+
+.sec svg .deep {
+  stroke: var(--hm-deep);
+}
+
+.sec svg .mid {
+  stroke: var(--hm-mid);
+}
+
+.sec svg .top {
+  stroke: var(--hm-top);
+}
+
+.sec svg .glow {
+  stroke: var(--hm-glow);
+}
+
+.sec svg .ink {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.sec svg .dash {
+  stroke-dasharray: 3 6;
+}
+
+.sec-band {
+  padding: 88px 0;
+  border-top: 1px solid var(--hm-line);
+}
+
+.sec-band h2 {
+  margin: 0 0 48px;
+}
+
+.sec p {
+  text-wrap: pretty;
+}
+
+.sec-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+}
+
+.sec-two p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink2);
+}
+
+.sec-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.sec-principles,
+.sec-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sec-principles li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  column-gap: 14px;
+  padding: 18px 0;
+  border-top: 1px solid var(--hm-line);
+}
+
+.sec-principles li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.sec-principles svg,
+.sec-grid svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sec-principles svg {
+  grid-row: span 2;
+  margin-top: 2px;
+}
+
+.sec h3 {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.sec li p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink2);
+}
+
+/* The safeguards: four ruled cells to a row, from rail to rail. */
+.sec-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-block: 1px solid var(--hm-line);
+}
+
+.sec-grid li {
+  padding: 28px 24px 30px;
+  border-left: 1px solid var(--hm-line);
+}
+
+.sec-grid li:nth-child(4n + 1) {
+  border-left: 0;
+}
+
+.sec-grid li:nth-child(n + 5) {
+  border-top: 1px solid var(--hm-line);
+}
+
+.sec-grid svg {
+  display: block;
+  margin-bottom: 18px;
+}
+
+.sec-more {
+  margin-top: 40px;
+}
+
+@media (max-width: 1100px) {
+  .sec-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sec-grid li:nth-child(4n + 1) {
+    border-left: 1px solid var(--hm-line);
+  }
+
+  .sec-grid li:nth-child(2n + 1) {
+    border-left: 0;
+  }
+
+  .sec-grid li:nth-child(n + 3) {
+    border-top: 1px solid var(--hm-line);
+  }
+}
+
+@media (max-width: 900px) {
+  .sec-hero {
+    padding: 48px 0 64px;
+  }
+
+  .sec-band {
+    padding: 56px 0;
+  }
+
+  .sec-band h2 {
+    margin-bottom: 32px;
+  }
+
+  .sec-two,
+  .sec-split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .sec-kept {
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sec-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sec-grid li {
+    padding: 22px 0 24px;
+    border-left: 0;
+  }
+
+  .sec-grid li + li {
+    border-top: 1px solid var(--hm-line);
+  }
+}

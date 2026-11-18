@@ -14,6 +14,7 @@ import { Help } from './pages/Help'
 import { Department } from './pages/Department'
 import { departmentPages } from './pages/departments'
 import { featurePages, type FeaturePage } from './pages/features'
+import { Security } from './pages/Security'
 import { Terms } from './pages/Terms'
 
 export type Route = {
@@ -115,7 +116,7 @@ export const routes: Route[] = [
       'StageRoll keeps continuity and inventory for costume, props, hair, makeup and sets on film and TV productions. Built for iPhone, iPad and Android.',
     Page: Home,
     End: HomeEnd,
-    updated: '2026-11-17',
+    updated: '2026-11-18',
     jsonLd: [website],
   },
   {
@@ -128,7 +129,11 @@ export const routes: Route[] = [
     updated: '2026-11-17',
   },
   // The feature pages, one per area of the overview (pages/features.ts).
-  ...featurePages.map((page) => docRoute('/product/', page)),
+  ...featurePages.map((page): Route => {
+    const route = docRoute('/product/', page)
+    // Privacy and security has a page of its own shape (pages/Security.tsx).
+    return page.slug === 'privacy' ? { ...route, Page: () => <Security page={page} /> } : route
+  }),
   // The department pages, one per craft (pages/departments.ts), reached
   // from the overview's department cards.
   ...departmentPages.map((page): Route => {

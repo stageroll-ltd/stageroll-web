@@ -1375,7 +1375,8 @@ html.js .steps li.on {
 
 .foot nav {
   display: flex;
-  gap: 72px;
+  flex-wrap: wrap;
+  gap: 32px 56px;
 }
 
 .foot nav p {

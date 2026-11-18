@@ -2,6 +2,9 @@
 // sunset colours that comes in at the bottom left, runs under the buttons and
 // climbs away to the top right. It twists as it goes; the twist travels along
 // it while its path swings out and back, one round every minute and a half.
+// The lines are not evenly spaced: they gather a little towards one side
+// of the ribbon and open on the other, and where they gather drifts slowly
+// across it and along it.
 // When the page loads the ribbon opens: it starts from edge to edge as a
 // single line with no colour, and its lines spread out from that to their
 // full breadth as the colour comes in.
@@ -10,6 +13,8 @@
 // lines never cross a line of text or a button: the climb moves right, the
 // run sinks lower and the ribbon narrows until it is clear. Where nothing
 // fits, and on a phone, the hero has no lines. Reduced motion gets them still.
+// A mouse moving over them pushes the lines near it gently the way it is
+// going; they settle back when it stops.
 
 /** A box to keep clear of, in the hero's own pixels. */
 export type Box = { x0: number; y0: number; x1: number; y1: number }
@@ -33,8 +38,28 @@ const TWIST_TO = 5.9
 const BOW = 0.22
 /** The lines come no nearer than this to a word or a button. */
 const CLEAR = 14
+/** The pointer moves the lines within this many pixels of it. */
+const REACH = 180
+/**
+ * How far the lines under a moving pointer are pushed, in pixels, at most.
+ * Less than CLEAR, so a line pushed towards the words still stops short.
+ */
+const PUSH = 11
+/** The push follows the pointer this far behind, in milliseconds: the softness of it. */
+const PUSH_LAG = 150
+/** A pointer trailing its mark by this many pixels pushes at full strength. */
+const PUSH_FULL = 70
 /** How long the ribbon takes to open when the page loads, in milliseconds. */
 const OPENING = 2000
+/**
+ * How much the lines gather: 0 is evenly spaced; at 0.25 the gaps run from
+ * 0.75 to 1.25 of even. Below 1 the lines can never cross.
+ */
+const GATHER = 0.25
+/** How long the gathering takes to drift once across the ribbon, in milliseconds. */
+const GATHER_LOOP = 40_000
+/** How many times the gathering crosses the ribbon between its two ends. */
+const GATHER_ALONG = 1.3
 
 // The sunset, as home.css has it (--hm-deep, --hm-mid, --hm-top, --hm-glow):
 // the first line is the deepest and the last the brightest.
@@ -153,12 +178,16 @@ export function fit(w: number, h: number, words: Box[]): Ribbon | null {
 
 const round = (v: number) => Math.round(v * 10) / 10
 
+/** Where the pointer's push is centred, and the push there, in pixels each way. */
+export type Poke = { x: number; y: number; dx: number; dy: number }
+
 /**
  * The ribbon's lines `ms` into its round, each as a path's `d`. `open` is how
  * far the ribbon has opened: at 0 every line lies along its middle, at 1 they
- * are spread to its full breadth.
+ * are spread to its full breadth. With a `poke`, the lines near it are moved
+ * the way it pushes, all together, most at its centre and fading out round it.
  */
-export function paths(r: Ribbon, ms: number, open = 1): string[] {
+export function paths(r: Ribbon, ms: number, open = 1, poke?: Poke): string[] {
   const turn = (ms % LOOP) / LOOP
   const curve = between(r.from, r.to, (1 - Math.cos(2 * Math.PI * turn)) / 2)
   const phase = -4 * Math.PI * turn
@@ -173,12 +202,26 @@ export function paths(r: Ribbon, ms: number, open = 1): string[] {
     const angle = TWIST_FROM + (TWIST_TO - TWIST_FROM) * s + phase
     const flat = open * breadth(r.width, s) * Math.cos(angle)
     const bow = open * BOW * r.width * Math.sin(angle * 0.5 + 1)
+    // Where the lines gather, here and now. Each line's place across the
+    // ribbon is nudged by a wave one ribbon wide; the two edge lines stay
+    // put, so the ribbon is no wider than the fit allowed for.
+    const gather = 2 * Math.PI * (ms / GATHER_LOOP + GATHER_ALONG * s)
+    const edge = Math.sin(gather)
     const here: number[] = []
     for (let i = 0; i < LINES; i++) {
-      const t = i / (LINES - 1) - 0.5
+      const even = i / (LINES - 1)
+      const t = even - 0.5 + (GATHER / (2 * Math.PI)) * (Math.sin(2 * Math.PI * even + gather) - edge)
       const d = t * flat + (t * t - 0.08) * bow
-      const px = x + nx * d
-      const py = y + ny * d
+      let px = x + nx * d
+      let py = y + ny * d
+      if (poke && (poke.dx !== 0 || poke.dy !== 0)) {
+        const far = Math.hypot(px - poke.x, py - poke.y) / REACH
+        if (far < 1) {
+          const near = (1 - far * far) ** 2
+          px += poke.dx * near
+          py += poke.dy * near
+        }
+      }
       here.push(px, py)
       if (k === 0) {
         out[i] = `M${round(px)} ${round(py)}`
@@ -239,12 +282,19 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
   /** How long the ribbon has been opening; with motion reduced it is open from the start. */
   let opened = calm.matches ? OPENING : 0
 
+  // The pointer, for a mouse over the hero. A mark follows the mouse a little
+  // behind it, and the lines round the mark are pushed the way the mouse is
+  // heading, harder the faster it goes. When the mouse stops the mark catches
+  // up and the lines settle back, so nothing jumps and nothing stays bent.
+  const poke: Poke = { x: 0, y: 0, dx: 0, dy: 0 }
+  let aim: { x: number; y: number } | null = null
+
   // While the ribbon opens its colour comes in with it: closed, the lines
   // lie on top of one another and would be one heavy stroke at full colour.
   const draw = () => {
     if (!shape) return
     const t = opened / OPENING
-    const d = paths(shape, clock, ease(t))
+    const d = paths(shape, clock, ease(t), poke)
     lines.forEach((line, i) => line.setAttribute('d', d[i] ?? ''))
     svg.style.opacity = t < 1 ? String(Math.round(t * t * (3 - 2 * t) * 1000) / 1000) : ''
   }
@@ -254,10 +304,30 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
   const tick = (now: number) => {
     frame = 0
     const step = Math.min(now - last, 100)
-    if (opened < OPENING || step >= 32) {
+    // With the pointer at work the lines are redrawn every frame as well.
+    // (a mouse at rest over the hero costs nothing extra).
+    const pushing = poke.dx !== 0 || poke.dy !== 0 || (aim !== null && Math.hypot(aim.x - poke.x, aim.y - poke.y) > 0.3)
+    if (opened < OPENING || step >= 32 || pushing) {
       clock += step
       opened = Math.min(OPENING, opened + step)
       last = now
+      if (aim) {
+        const follow = 1 - Math.exp(-step / PUSH_LAG)
+        poke.x += (aim.x - poke.x) * follow
+        poke.y += (aim.y - poke.y) * follow
+        // What is left between the mark and the mouse is the push.
+        const gapX = aim.x - poke.x
+        const gapY = aim.y - poke.y
+        const gap = Math.hypot(gapX, gapY)
+        const size = gap < 0.3 ? 0 : (PUSH * Math.min(1, gap / PUSH_FULL)) / gap
+        poke.dx = gapX * size
+        poke.dy = gapY * size
+      } else {
+        // The mouse has gone: what push is left dies away.
+        const fade = Math.exp(-step / PUSH_LAG)
+        poke.dx = Math.abs(poke.dx) < 0.05 ? 0 : poke.dx * fade
+        poke.dy = Math.abs(poke.dy) < 0.05 ? 0 : poke.dy * fade
+      }
       draw()
     }
     run()
@@ -275,6 +345,20 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
     run()
   }
 
+  const moved = (e: PointerEvent) => {
+    if (e.pointerType !== 'mouse') return
+    const box = svg.getBoundingClientRect()
+    const at = { x: e.clientX - box.left, y: e.clientY - box.top }
+    // Arriving, the mark starts where the mouse is, not where it last was.
+    if (!aim) Object.assign(poke, at)
+    aim = at
+  }
+  const left = () => {
+    aim = null
+  }
+  stage.addEventListener('pointermove', moved)
+  stage.addEventListener('pointerleave', left)
+
   const resized = new ResizeObserver(measure)
   resized.observe(stage)
   const seen = new IntersectionObserver((entries) => {
@@ -288,6 +372,8 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
     resized.disconnect()
     seen.disconnect()
     calm.removeEventListener('change', run)
+    stage.removeEventListener('pointermove', moved)
+    stage.removeEventListener('pointerleave', left)
     cancelAnimationFrame(frame)
     svg.classList.remove('on')
     svg.style.opacity = ''
