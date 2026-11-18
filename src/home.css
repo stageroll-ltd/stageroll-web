@@ -133,37 +133,13 @@
     border-radius: 2px;
   }
 
-  /* While Product's panel is open the page behind it goes slightly out of
-     focus. A veil over the whole window does it, by blurring what is behind
-     it and nothing else: it lies under the header (20) and its panel, and
-     under the announcement, so those stay sharp. Not painted while closed.
-     Where a browser cannot tell that the panel is open (:has), no blur. */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 19;
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
+  /* The page goes out of focus (the veil, below) while Product's panel is open. */
   body:has(.nav-item:hover, .nav-item:focus-within)::after {
     opacity: 1;
     visibility: visible;
   }
 
-  .announce {
-    z-index: 21;
-  }
-
   @media (prefers-reduced-motion: no-preference) {
-    body::after {
-      transition: opacity 0.2s ease-in, visibility 0s linear 0.2s;
-    }
-
     body:has(.nav-item:hover, .nav-item:focus-within)::after {
       transition: opacity 0.3s ease-out, visibility 0s;
     }
@@ -188,6 +164,89 @@
 
   .nav.framed .nav-right {
     margin-left: auto;
+  }
+}
+
+/* While a menu is open (Product's panel on a wide screen, the links behind
+   the burger on a phone) the page behind it goes slightly out of focus. A
+   veil over the whole window does it, by blurring what is behind it and
+   nothing else: it lies under the header (20) and its menus, and under the
+   announcement, so those stay sharp. Not painted while closed. Where a
+   browser cannot tell that a menu is open (:has), there is no blur. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.announce {
+  z-index: 21;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body::after {
+    transition: opacity 0.2s ease-in, visibility 0s linear 0.2s;
+  }
+}
+
+/* On a phone the menu behind the burger is dressed as Product's panel is:
+   near-square corners, a button's hairline for its edge, the lighter
+   shadow, and it comes down from under the header as the page behind goes
+   out of focus. It is always laid out and simply unseen until opened
+   (styles.css hides it with `display`, which cannot be eased). */
+@media (max-width: 900px) {
+  .nav.framed nav {
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    border-radius: 2px;
+    box-shadow: 0 20px 44px -24px rgba(11, 16, 27, 0.35), 0 0 0 1px var(--hm-edge);
+  }
+
+  .nav.framed nav.open {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .nav.framed nav a {
+    border-radius: 2px;
+  }
+
+  body:has(#site-nav.open)::after {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav.framed nav {
+      clip-path: inset(-2px -48px 100% -48px);
+      translate: 0 -6px;
+      transition:
+        opacity 0.16s ease-in,
+        visibility 0s linear 0.16s,
+        clip-path 0.16s ease-in,
+        translate 0.16s ease-in;
+    }
+
+    .nav.framed nav.open {
+      clip-path: inset(-2px -48px -48px -48px);
+      translate: 0;
+      transition:
+        opacity 0.16s ease-out,
+        visibility 0s,
+        clip-path 0.34s var(--ease-out),
+        translate 0.34s var(--ease-out);
+    }
+
+    body:has(#site-nav.open)::after {
+      transition: opacity 0.3s ease-out, visibility 0s;
+    }
   }
 }
 
