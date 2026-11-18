@@ -1173,6 +1173,10 @@
   }
 }
 
+.sec svg .ember {
+  stroke: var(--hm-ember);
+}
+
 /* A pale line, and a white fill so one shape can stand in front of another. */
 .sec svg .soft {
   stroke: #c9ccd6;
@@ -1493,5 +1497,203 @@
 
   .sec-grid li + li {
     border-top: 1px solid var(--hm-line);
+  }
+}
+
+/* The product overview (pages/Product.tsx), in the same hand: ruled cells
+   from rail to rail, each a link to a feature page with that page's own
+   drawing. Two large cells, then the rest four to a row. */
+.pov .sec-band {
+  padding-bottom: 0;
+}
+
+.pov-lead,
+.pov-rest {
+  list-style: none;
+  margin-block: 0;
+  padding: 0;
+  display: grid;
+  border-block: 1px solid var(--hm-line);
+}
+
+.pov-lead {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pov-rest {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pov-lead > li + li,
+.pov-rest > li {
+  border-left: 1px solid var(--hm-line);
+}
+
+.pov-rest > li:nth-child(4n + 1) {
+  border-left: 0;
+}
+
+.pov-rest > li:nth-child(n + 5) {
+  border-top: 1px solid var(--hm-line);
+}
+
+.pov-lead > li > a,
+.pov-rest > li > a {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.2s var(--ease);
+}
+
+.pov-lead > li > a {
+  padding: 40px 48px 44px;
+}
+
+.pov-rest > li > a {
+  padding: 28px 24px 32px;
+}
+
+.pov-lead > li > a:hover,
+.pov-rest > li > a:hover {
+  background: var(--paper);
+}
+
+/* The page's drawing, at the cell's size and to its left. */
+.pov-lead .sec-rings,
+.pov-rest .sec-rings {
+  margin: 0 0 24px;
+}
+
+.pov-lead .sec-rings {
+  width: min(300px, 80%);
+}
+
+.pov-rest .sec-rings {
+  width: min(190px, 100%);
+}
+
+.pov-lead h3 {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 2.4vw, 38px);
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.pov-rest h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.pov-rest h3 svg,
+.pov-go svg,
+.pov-lead li svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pov .pov-lead p,
+.pov .pov-rest p {
+  margin: 0;
+  color: var(--ink2);
+}
+
+.pov .pov-lead p {
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.pov .pov-rest p {
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.pov-lead a > ul {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+}
+
+.pov-lead a > ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 16px;
+}
+
+.pov-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 26px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.pov .hm-depts {
+  margin-top: 16px;
+}
+
+@media (max-width: 1100px) {
+  .pov-rest {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pov-rest > li:nth-child(n) {
+    border-left: 1px solid var(--hm-line);
+    border-top: 1px solid var(--hm-line);
+  }
+
+  .pov-rest > li:nth-child(2n + 1) {
+    border-left: 0;
+  }
+
+  .pov-rest > li:nth-child(-n + 2) {
+    border-top: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .pov-lead {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pov-lead > li + li {
+    border-left: 0;
+    border-top: 1px solid var(--hm-line);
+  }
+
+  .pov-lead > li > a {
+    padding: 32px 0 36px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pov-rest {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pov-rest > li:nth-child(n) {
+    border-left: 0;
+  }
+
+  .pov-rest > li:nth-child(2) {
+    border-top: 1px solid var(--hm-line);
+  }
+
+  .pov-rest > li > a {
+    padding: 24px 0 28px;
   }
 }

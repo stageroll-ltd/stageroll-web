@@ -1,18 +1,12 @@
 import { company } from '../Layout'
-import { Kept, Rings } from './shows'
+import { Kept } from './shows'
 import { Showcase, type Show } from './Showcase'
 
-// About, told in ruled bands (Showcase.tsx): why StageRoll exists in two
-// columns, how it is built beside a drawing, and the company's details as
-// ruled cells.
+// About, told in ruled bands (Showcase.tsx): a plain opening with no
+// drawing, why StageRoll exists in two columns, how it is built beside a
+// drawing, and the company's details as ruled cells.
 
 const show: Show = {
-  art: (
-    <Rings>
-      {/* A clapperboard, in ink, at the rings' middle. */}
-      <path className="ink" d="M134 96h52v34h-52zM134 96l4-14 50 8-2 6M148 84l4 10M162 86l4 10M176 88l4 10" />
-    </Rings>
-  ),
   bands: [
     {
       kind: 'two',

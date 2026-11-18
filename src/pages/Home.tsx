@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 
+import { DepartmentCells, departments } from '../components/DepartmentCells'
 import { Icon } from '../components/Icon'
 import { StoreBadges } from '../components/StoreBadges'
+import { runBandLines } from '../bandLines'
 import { runHeroLines } from '../heroLines'
-import { departmentPages } from './departments'
+import { homeDrawings } from './drawings'
 import { featurePages } from './features'
 
 // The home page: a framed column (home.css). The page's words sit in a
@@ -16,18 +18,10 @@ import { featurePages } from './features'
 /** A feature's own page under /product/ (pages/features.ts), or the overview if it has none. */
 const featureHref = (slug: string) => (featurePages.some((page) => page.slug === slug) ? `/product/${slug}/` : '/product/')
 
-/** A department's own page (pages/departments.ts), if it has one. */
-const departmentHref = (slug: string) =>
-  departmentPages.some((page) => page.slug === slug) ? `/departments/${slug}/` : undefined
-
-// The departments: a name in the hero's strip, and a door each further down.
-const departments: { name: string; slug: string }[] = [
-  { name: 'Costume', slug: 'costume' },
-  { name: 'Props', slug: 'props' },
-  { name: 'Hair', slug: 'hair' },
-  { name: 'Makeup', slug: 'makeup' },
-  { name: 'Set', slug: 'sets' },
-]
+/** One of the home page's small line drawings (drawings.ts). */
+function Draw({ of, box }: { of: keyof typeof homeDrawings; box: string }) {
+  return <svg className="hm-draw" viewBox={box} aria-hidden="true" dangerouslySetInnerHTML={{ __html: homeDrawings[of] }} />
+}
 
 const privacy: { heading: string; text: string }[] = [
   // The facts row above has already said the script stays on the device, so
@@ -110,6 +104,23 @@ const pillars = {
   },
 }
 
+// Depth under the mouse: where the pointer is over a panel, from -0.5 to 0.5
+// each way, is handed to its styles as --tx and --ty. The panel leans a
+// little towards it and the pictures in it shift by different amounts, the
+// nearest most (home.css). Leaving, it settles level again.
+function lean(e: PointerEvent<HTMLElement>) {
+  if (e.pointerType !== 'mouse') return
+  const el = e.currentTarget
+  const box = el.getBoundingClientRect()
+  el.style.setProperty('--tx', ((e.clientX - box.left) / box.width - 0.5).toFixed(3))
+  el.style.setProperty('--ty', ((e.clientY - box.top) / box.height - 0.5).toFixed(3))
+}
+
+function level(e: PointerEvent<HTMLElement>) {
+  e.currentTarget.style.setProperty('--tx', '0')
+  e.currentTarget.style.setProperty('--ty', '0')
+}
+
 function PillarHead({ slug }: { slug: keyof typeof pillars }) {
   const { name, line, tags, link } = pillars[slug]
   return (
@@ -170,6 +181,14 @@ function TeamTree() {
       {coordinator(186, 'Props', 'mid')}
     </svg>
   )
+}
+
+// The ink band's lines: kin to the hero's, in a different hand, at the
+// band's right (bandLines.ts). Built empty; drawn and moved in the browser.
+function BandLines() {
+  const svg = useRef<SVGSVGElement>(null)
+  useEffect(() => (svg.current ? runBandLines(svg.current) : undefined), [])
+  return <svg ref={svg} className="hm-band-lines" aria-hidden="true" />
 }
 
 // What it is all built on, and the pages for each (features.ts).
@@ -244,7 +263,7 @@ const turn = (i: number, tone?: string) => ({ '--i': i, ...(tone && { '--tone': 
 
 // The bands, one for each thing a production keeps, that run in from the
 // left and close into one block; a bracket as tall as the block names it:
-// "One production". On a phone they are a stack of bars.
+// "Your production". On a phone they are a stack of bars.
 // They arrive one after another the first time the drawing is on screen,
 // then the bracket grows from its middle and its words appear
 // (home.css, once `hm-in` is set); until then, and with motion reduced or no
@@ -253,27 +272,59 @@ const turn = (i: number, tone?: string) => ({ '--i': i, ...(tone && { '--tone': 
 // colour while the others fall back (`data-hot`); its level part on the left
 // grows a little taller, narrowing all the way along the curve to its own
 // height where it joins the block, and its name moves a step in (home.css).
-// That holds while the bands are still arriving too: a band's whole shape
-// answers to the pointer whether or not it is drawn yet.
+// Not while the bands are still arriving: nothing answers the pointer until
+// the last of the arrival, the words "Your production", is in. A pointer
+// already resting on a band at that moment lights it then, without having
+// to leave and come back.
 function JoinBands() {
   const box = useRef<HTMLDivElement>(null)
   const [hot, setHot] = useState<number | null>(null)
+  /** Whether the bands have finished arriving, and which band the pointer is on meanwhile. */
+  const arrived = useRef(false)
+  const under = useRef<number | null>(null)
   useEffect(() => {
     const el = box.current
     if (!el) return
+    let giveUp = 0
+    const last = el.querySelector('.hm-join-one')
+    const finish = () => {
+      if (arrived.current) return
+      arrived.current = true
+      window.clearTimeout(giveUp)
+      if (under.current !== null) setHot(under.current)
+    }
+    // The last thing to arrive is the bracket's words, which fade in.
+    const faded = (e: Event) => {
+      if ((e as TransitionEvent).propertyName === 'opacity') finish()
+    }
+    last?.addEventListener('transitionend', faded)
     const seen = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return
         el.classList.add('hm-in')
         seen.disconnect()
+        // With motion reduced nothing arrives: the drawing is simply there.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) finish()
+        // If the fade's end is somehow missed, the bands still answer in the end.
+        else giveUp = window.setTimeout(finish, 6000)
       },
       { threshold: 0.35 },
     )
     seen.observe(el)
-    return () => seen.disconnect()
+    return () => {
+      seen.disconnect()
+      last?.removeEventListener('transitionend', faded)
+      window.clearTimeout(giveUp)
+    }
   }, [])
-  const over = (i: number) => () => setHot(i)
-  const out = () => setHot(null)
+  const over = (i: number) => () => {
+    under.current = i
+    if (arrived.current) setHot(i)
+  }
+  const out = () => {
+    under.current = null
+    setHot(null)
+  }
   return (
     // The class `hm-in` is set on the element itself, so what React changes
     // here is an attribute of its own, never the class.
@@ -285,7 +336,7 @@ function JoinBands() {
             less along the curve, each edge one curve from the taller height to the band's own at the
             block (where the cut ends), so it never turns back on itself; at rest the copy is thinner
             than the band and lies unseen inside it. And the line once more, unseen, for the pointer:
-            it is all there from the start, so a band answers before it is drawn. They fade as one,
+            it is the band's whole shape, and tells which band the pointer is on. They fade as one,
             so the copy never shows through. */}
         {joins.map(({ name, tone }, i) => {
           if (!tone) return null
@@ -352,7 +403,7 @@ function JoinBands() {
           </li>
         ))}
       </ul>
-      <p className="hm-join-one">One production</p>
+      <p className="hm-join-one">Your production</p>
     </div>
   )
 }
@@ -376,7 +427,7 @@ export function Home() {
         <div className="hm-stage">
           <HeroLines />
           <div className="hm-col hm-hero-in">
-            <p className="hm-kicker">Continuity and inventory for film and TV</p>
+            <p className="hm-kicker">Introducing StageRoll</p>
             {/* One block of type in two voices: the headline, then the sentence
                 that runs on from it at the same size, in the second colour. */}
             <div className="hm-two hm-lead">
@@ -426,14 +477,14 @@ export function Home() {
 
           {/* Continuity and inventory, side by side as equals. */}
           <div className="hm-pair">
-            <article className="hm-pillar sun">
+            <article className="hm-pillar sun" onPointerMove={lean} onPointerLeave={level}>
               <PillarHead slug="continuity" />
               <div className="hm-pillar-art">
                 <img className="hm-sheet" src="/screens/page-book.webp" alt="" width={760} height={805} loading="lazy" decoding="async" />
                 <Phone screen="change" />
               </div>
             </article>
-            <article className="hm-pillar inv">
+            <article className="hm-pillar inv" onPointerMove={lean} onPointerLeave={level}>
               <PillarHead slug="inventory" />
               <div className="hm-pillar-art">
                 <Phone screen="inventory-list" />
@@ -450,7 +501,8 @@ export function Home() {
             </article>
           </div>
 
-          {/* The areas round them: a tile each, and one still to come. */}
+          {/* The areas round them: a tile each, and one still to come. Their own line, and room above it. */}
+          <h3 className="hm-lead-in">And everything around them.</h3>
           <div className="hm-around">
             <a className="hm-tile" href={featureHref('research')}>
               <h3>
@@ -517,9 +569,12 @@ export function Home() {
         </div>
       </section>
 
-      <section className="hm-sec flush" aria-labelledby="hm-private">
+      {/* Private by default: an ink band from edge to edge. Its words keep to the left of the column,
+          and fine lines move at its right (BandLines). */}
+      <section className="hm-dark" aria-labelledby="hm-private">
+        <BandLines />
         <div className="hm-col hm-inset">
-          <div className="hm-private">
+          <div className="hm-dark-in">
             <div className="hm-private-head">
               <h2 id="hm-private">Private by default.</h2>
               <a className="hm-btn ghost" href={featureHref('privacy')}>
@@ -538,36 +593,25 @@ export function Home() {
         </div>
       </section>
 
-      {/* The departments: one row of doors. */}
-      <section className="hm-doors" aria-labelledby="hm-depts">
-        <div className="hm-col hm-inset">
-          <h2 id="hm-depts">See it for your department</h2>
-          <ul>
-            {departments.map((d) => {
-              const href = departmentHref(d.slug)
-              return (
-                href && (
-                  <li key={d.name}>
-                    <a className="hm-btn" href={href}>
-                      {d.name} <Icon name="chevron" />
-                    </a>
-                  </li>
-                )
-              )
-            })}
-          </ul>
-        </div>
-      </section>
+      {/* The departments: a ruled row of cells from rail to rail (components/DepartmentCells.tsx). */}
+      <DepartmentCells />
 
-      {/* A way to buy, so it goes when the app opened the page (`.sells`). */}
-      <section className="hm-price sells" aria-label="Pricing">
+      {/* A way to buy, so it goes when the app opened the page (`.sells`): the words, the way to the
+          pricing page, and the four plans drawn, with no prices. */}
+      <section className="hm-pricing sells" aria-label="Pricing">
         <div className="hm-col hm-inset">
-          <div className="hm-two">
-            <h2>Priced per production.</h2> <p>Crew never pay.</p>
+          <div className="hm-plans">
+            <div>
+              <div className="hm-two">
+                <h2>Priced per production.</h2> <p>Crew never pay.</p>
+              </div>
+              <p>Four plans, from Free to Enterprise, with every department on every one.</p>
+              <a className="hm-btn dark" href="/pricing/">
+                See pricing <Icon name="chevron" />
+              </a>
+            </div>
+            <Draw of="plans" box="0 0 420 150" />
           </div>
-          <a className="hm-btn dark" href="/pricing/">
-            See pricing <Icon name="chevron" />
-          </a>
         </div>
       </section>
     </div>

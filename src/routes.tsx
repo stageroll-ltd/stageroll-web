@@ -127,7 +127,7 @@ export const routes: Route[] = [
       'Everything StageRoll does for film and TV departments: script analysis, scenes, continuity, research, inventory, QR codes, the schedule, reports and team.',
     nav: 'Product',
     Page: Product,
-    updated: '2026-11-17',
+    updated: '2026-11-18',
   },
   // The feature pages, one per area of the overview (pages/features.ts).
   ...featurePages.map((page): Route => {

@@ -24,8 +24,8 @@ export type Band =
   | { kind: 'grid'; heading: string; items: Item[]; cols?: 3 | 4 | 5 }
 
 export type Show = {
-  /** The opening's picture, above the title: a line drawing. */
-  art: ReactNode
+  /** The opening's picture, above the title: a line drawing. A page may have none. */
+  art?: ReactNode
   bands: Band[]
 }
 
@@ -41,6 +41,34 @@ function Items({ items, className }: { items: Item[]; className: string }) {
       ))}
     </ul>
   )
+}
+
+/**
+ * The opening's drawing draws itself when the page loads: each line in turn,
+ * a moment after the one before (product.css, `sec-go`). A line's length
+ * counts as 1 and its turn is --n, both set here so the drawings themselves
+ * stay plain. With no script the drawing is simply there. Returns the ref
+ * for the opening (`.sec-hero`) whose first drawing it is.
+ */
+export function useDrawIn() {
+  const hero = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const svg = hero.current?.querySelector('svg')
+    if (!svg) return
+    svg.querySelectorAll<SVGElement>('path, rect, circle, ellipse').forEach((line, i) => {
+      line.setAttribute('pathLength', '1')
+      line.style.setProperty('--n', String(i))
+    })
+    // Arriving from another page of the site, the page fades in over the one
+    // before it (styles.css, "Moving between pages"), and the drawing would
+    // be part-drawn before it could be seen. So it waits for that to end.
+    // A page opened afresh, or reloaded, has no such fade and starts at once.
+    const [entry] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[]
+    const crossed = 'onpagereveal' in window && entry?.type === 'navigate' && document.referrer.startsWith(location.origin)
+    const start = window.setTimeout(() => svg.classList.add('sec-go'), crossed ? PAGE_FADE : 0)
+    return () => window.clearTimeout(start)
+  }, [])
+  return hero
 }
 
 export function Showcase({
@@ -62,27 +90,7 @@ export function Showcase({
   plan?: boolean
   more?: { href: string; label: string }
 }) {
-  // The opening's drawing draws itself when the page loads: each line in
-  // turn, a moment after the one before (product.css, `sec-go`). A line's
-  // length counts as 1 and its turn is --n, both set here so the drawings
-  // themselves stay plain. With no script the drawing is simply there.
-  const hero = useRef<HTMLElement>(null)
-  useEffect(() => {
-    const svg = hero.current?.querySelector('svg')
-    if (!svg) return
-    svg.querySelectorAll<SVGElement>('path, rect, circle, ellipse').forEach((line, i) => {
-      line.setAttribute('pathLength', '1')
-      line.style.setProperty('--n', String(i))
-    })
-    // Arriving from another page of the site, the page fades in over the one
-    // before it (styles.css, "Moving between pages"), and the drawing would
-    // be part-drawn before it could be seen. So it waits for that to end.
-    // A page opened afresh, or reloaded, has no such fade and starts at once.
-    const [entry] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[]
-    const crossed = 'onpagereveal' in window && entry?.type === 'navigate' && document.referrer.startsWith(location.origin)
-    const start = window.setTimeout(() => svg.classList.add('sec-go'), crossed ? PAGE_FADE : 0)
-    return () => window.clearTimeout(start)
-  }, [])
+  const hero = useDrawIn()
   return (
     <div className="prod hm fr sec">
       <section ref={hero} className="sec-hero">

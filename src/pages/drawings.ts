@@ -25,7 +25,19 @@ export const drawings = {
   // Pages fanned out, the rows of the top one in the sunset's colours.
   reports:
     "<g transform=\"rotate(-9 210 176)\"><rect class=\"ink paper\" x=\"150\" y=\"24\" width=\"120\" height=\"152\" rx=\"5\"/></g><g transform=\"rotate(9 210 176)\"><rect class=\"ink paper\" x=\"150\" y=\"24\" width=\"120\" height=\"152\" rx=\"5\"/></g><rect class=\"ink paper\" x=\"150\" y=\"24\" width=\"120\" height=\"152\" rx=\"5\"/><path class=\"ink\" d=\"M166 46h50M166 58h30M166 76h88\"/><path class=\"glow\" d=\"M166 94h88\"/><path class=\"top\" d=\"M166 110h88\"/><path class=\"mid\" d=\"M166 126h88\"/><path class=\"deep\" d=\"M166 142h88\"/><path class=\"ink\" d=\"M196 76v82M226 76v82\"/>",
+  // The product overview: five lines closing into one block with a bracket at its end, the home page's bands as lines.
+  product:
+    "<path class=\"deep\" d=\"M24 24H150C215 24 215 68 280 68H360\"/><circle class=\"ink paper\" cx=\"24\" cy=\"24\" r=\"4\"/><path class=\"mid\" d=\"M24 62H150C215 62 215 84 280 84H360\"/><circle class=\"ink paper\" cx=\"24\" cy=\"62\" r=\"4\"/><path class=\"top\" d=\"M24 100H150C215 100 215 100 280 100H360\"/><circle class=\"ink paper\" cx=\"24\" cy=\"100\" r=\"4\"/><path class=\"ember\" d=\"M24 138H150C215 138 215 116 280 116H360\"/><circle class=\"ink paper\" cx=\"24\" cy=\"138\" r=\"4\"/><path class=\"glow\" d=\"M24 176H150C215 176 215 132 280 132H360\"/><circle class=\"ink paper\" cx=\"24\" cy=\"176\" r=\"4\"/><path class=\"ink\" d=\"M378 100V62h-8M378 100v38h-8\"/>",
   // The owner, a coordinator for each of two departments, and their crew.
   team:
     "<circle class=\"ink\" cx=\"210\" cy=\"26\" r=\"15\"/><path class=\"ink\" d=\"M210 41v22M210 63H124v20M210 63h86v20\"/><rect class=\"deep\" x=\"76\" y=\"83\" width=\"96\" height=\"32\" rx=\"16\"/><rect class=\"mid\" x=\"248\" y=\"83\" width=\"96\" height=\"32\" rx=\"16\"/><path class=\"ink\" d=\"M124 115v18M124 133H82v18M124 133v18M124 133h42v18M296 115v18M296 133h-42v18M296 133v18M296 133h42v18\"/><circle class=\"top\" cx=\"82\" cy=\"165\" r=\"13\"/><circle class=\"top\" cx=\"124\" cy=\"165\" r=\"13\"/><circle class=\"top\" cx=\"166\" cy=\"165\" r=\"13\"/><circle class=\"glow\" cx=\"254\" cy=\"165\" r=\"13\"/><circle class=\"glow\" cx=\"296\" cy=\"165\" r=\"13\"/><circle class=\"glow\" cx=\"338\" cy=\"165\" r=\"13\"/>",
+}
+
+// The home page's drawing of the four plans, in the same hand (Home.tsx,
+// and the same classes under `.hm-draw` in home.css): 420 by 150, each card
+// with one more of the sunset's lines than the last.
+export const homeDrawings = {
+  // Four plans, a line more on each.
+  plans:
+    "<rect class=\"ink paper\" x=\"18\" y=\"58\" width=\"84\" height=\"68\" rx=\"7\"/><path class=\"glow\" d=\"M30 72h60\"/><text x=\"60\" y=\"118\">Free</text><rect class=\"ink paper\" x=\"118\" y=\"46\" width=\"84\" height=\"80\" rx=\"7\"/><path class=\"glow\" d=\"M130 60h60\"/><path class=\"top\" d=\"M130 68h60\"/><text x=\"160\" y=\"118\">Starter</text><rect class=\"ink paper\" x=\"218\" y=\"34\" width=\"84\" height=\"92\" rx=\"7\"/><path class=\"glow\" d=\"M230 48h60\"/><path class=\"top\" d=\"M230 56h60\"/><path class=\"mid\" d=\"M230 64h60\"/><text x=\"260\" y=\"118\">Pro</text><rect class=\"ink paper\" x=\"318\" y=\"22\" width=\"84\" height=\"104\" rx=\"7\"/><path class=\"glow\" d=\"M330 36h60\"/><path class=\"top\" d=\"M330 44h60\"/><path class=\"mid\" d=\"M330 52h60\"/><path class=\"deep\" d=\"M330 60h60\"/><text x=\"360\" y=\"118\">Enterprise</text>",
 }

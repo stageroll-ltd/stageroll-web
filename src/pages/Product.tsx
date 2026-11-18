@@ -1,36 +1,17 @@
+import { DepartmentCells } from '../components/DepartmentCells'
 import { Icon } from '../components/Icon'
 import { PageClose } from '../components/Page'
 import { featurePages, type FeaturePage } from './features'
+import { useDrawIn } from './Showcase'
+import { Draw, shows } from './shows'
 
 // The product overview, a landing page for the feature pages under /product/
-// (features.ts). Continuity and inventory lead as two large cards, side by
-// side, because StageRoll is built with them as equals; every other area
-// follows as a smaller card. Each card goes to its area's page.
-
-// Each department's card goes to its page (departments.ts).
-const departments: { name: string; line: string; href: string }[] = [
-  {
-    name: 'Costume',
-    line: 'Changes and what’s in them',
-    href: '/departments/costume/',
-  },
-  {
-    name: 'Props',
-    line: 'Who carries what, scene by scene',
-    href: '/departments/props/',
-  },
-  { name: 'Hair', line: 'Styles and their pieces', href: '/departments/hair/' },
-  {
-    name: 'Makeup',
-    line: 'Looks and their pieces',
-    href: '/departments/makeup/',
-  },
-  {
-    name: 'Sets',
-    line: 'Every set and how it’s dressed',
-    href: '/departments/sets/',
-  },
-]
+// (features.ts), in the hand of those pages (product.css, `.sec-` and
+// `.pov-`): a centred opening over a line drawing, then ruled cells from
+// rail to rail, each with its page's own drawing. Continuity and inventory
+// lead as two large cells, side by side, because StageRoll is built with
+// them as equals; every other area follows as a smaller cell. Then the
+// departments, as on the home page.
 
 const leading = ['continuity', 'inventory']
 
@@ -44,41 +25,30 @@ const lead = leading.map(page)
 const rest = featurePages.filter((p) => !leading.includes(p.slug))
 
 export function Product() {
+  const hero = useDrawIn()
   return (
-    <div className="prod hm fr">
-      {/* The opening: the promise on the left, the five departments as a short list on the right. */}
-      <section className="hm-hero fr-split">
-        <div className="hm-col hm-hero-in">
-          <div>
-            <h1>Everything your department runs on.</h1>
-            <p className="lede">
-              Built with continuity and inventory as equals, and the script, research, schedule and paperwork around
-              them, in one film or TV production every department shares.
-            </p>
-          </div>
-          <ul className="fr-depts" aria-label="Departments">
-            {departments.map((d) => (
-              <li key={d.name}>
-                <a href={d.href}>
-                  <span>
-                    <b>{d.name}</b>
-                    {d.line}
-                  </span>
-                  <Icon name="chevron" />
-                </a>
-              </li>
-            ))}
-          </ul>
+    <div className="prod hm fr sec pov">
+      <section ref={hero} className="sec-hero">
+        <div className="hm-col">
+          <Draw of="product" />
+          <h1>Everything your department runs on.</h1>
+          <p className="lede">
+            Built with continuity and inventory as equals, and the script, research, schedule and paperwork around
+            them, in one film or TV production every department shares.
+          </p>
         </div>
       </section>
 
-      <section className="prod-areas" aria-label="What StageRoll does">
-        <div className="hm-col hm-inset">
-          <div className="prod-lead">
-            {lead.map((area) => (
-              <a key={area.slug} className="prod-card big reveal" href={`/product/${area.slug}/`}>
-                <Icon name={area.icon} />
-                <h2>{area.title}</h2>
+      <section className="sec-band" aria-labelledby="pov-lead">
+        <div className="hm-col fr-in">
+          <h2 id="pov-lead">Continuity and inventory, built as equals.</h2>
+        </div>
+        <ul className="hm-col pov-lead">
+          {lead.map((area) => (
+            <li key={area.slug}>
+              <a href={`/product/${area.slug}/`}>
+                {shows[area.slug]?.art}
+                <h3>{area.title}</h3>
                 <p>{area.summary}</p>
                 <ul>
                   {area.features.slice(0, 3).map(([feature]) => (
@@ -88,27 +58,35 @@ export function Product() {
                     </li>
                   ))}
                 </ul>
-                <span className="go">
+                <span className="pov-go">
                   Explore {area.title.toLowerCase()} <Icon name="chevron" />
                 </span>
               </a>
-            ))}
-          </div>
-
-          <div className="prod-grid">
-            {rest.map((area) => (
-              <a key={area.slug} className="prod-card reveal" href={`/product/${area.slug}/`}>
-                <Icon name={area.icon} />
-                <h3>{area.title}</h3>
-                <p>{area.summary}</p>
-                <span className="go" aria-hidden="true">
-                  <Icon name="chevron" />
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
+            </li>
+          ))}
+        </ul>
       </section>
+
+      <section className="sec-band" aria-labelledby="pov-rest">
+        <div className="hm-col fr-in">
+          <h2 id="pov-rest">And everything around them.</h2>
+        </div>
+        <ul className="hm-col pov-rest">
+          {rest.map((area) => (
+            <li key={area.slug}>
+              <a href={`/product/${area.slug}/`}>
+                {shows[area.slug]?.art}
+                <h3>
+                  {area.title} <Icon name="chevron" />
+                </h3>
+                <p>{area.summary}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <DepartmentCells />
 
       <PageClose id="next-title" />
     </div>

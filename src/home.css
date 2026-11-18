@@ -114,6 +114,78 @@
     translate: none;
   }
 
+  /* The header's shapes go with the page's: near square (2px), like the
+     buttons. The links' highlight, Product's panel and the highlight on
+     each page inside it. The panel has a button's hairline for its edge
+     and a lighter shadow than it had. (8px and 6px were tried and turned
+     down for this.) */
+  .nav.framed nav > a,
+  .nav.framed .nav-item > a {
+    border-radius: 2px;
+  }
+
+  .nav.framed .nav-panel-card {
+    border-radius: 2px;
+    box-shadow: 0 20px 44px -24px rgba(11, 16, 27, 0.35), 0 0 0 1px var(--hm-edge);
+  }
+
+  .nav.framed nav .nav-panel a {
+    border-radius: 2px;
+  }
+
+  /* While Product's panel is open the page behind it goes slightly out of
+     focus. A veil over the whole window does it, by blurring what is behind
+     it and nothing else: it lies under the header (20) and its panel, and
+     under the announcement, so those stay sharp. Not painted while closed.
+     Where a browser cannot tell that the panel is open (:has), no blur. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  body:has(.nav-item:hover, .nav-item:focus-within)::after {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .announce {
+    z-index: 21;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    body::after {
+      transition: opacity 0.2s ease-in, visibility 0s linear 0.2s;
+    }
+
+    body:has(.nav-item:hover, .nav-item:focus-within)::after {
+      transition: opacity 0.3s ease-out, visibility 0s;
+    }
+
+    /* The panel comes down from under the link: uncovered from its top
+       edge to its foot, moving down a few pixels as it goes, and rolled
+       back up, quicker, when it closes. The cut leaves room at the sides
+       and foot for the shadow, and above for the hairline. */
+    .nav.framed .nav-panel-card {
+      clip-path: inset(-2px -48px 100% -48px);
+      translate: 0 -6px;
+      transition: clip-path 0.16s ease-in, translate 0.16s ease-in;
+    }
+
+    .nav.framed .nav-item:hover .nav-panel-card,
+    .nav.framed .nav-item:focus-within .nav-panel-card {
+      clip-path: inset(-2px -48px -48px -48px);
+      translate: 0;
+      transition: clip-path 0.34s var(--ease-out), translate 0.34s var(--ease-out);
+    }
+  }
+
   .nav.framed .nav-right {
     margin-left: auto;
   }
@@ -364,6 +436,20 @@
   font-size: clamp(28px, 1.9vw + 21px, 48px);
   line-height: 1.16;
   letter-spacing: -0.03em;
+}
+
+/* On the home page the headline opens with a P, whose ink starts 0.062em
+   into its box (3px at this size) where the small line above it starts
+   1.23px into its own. Pulled back by the difference, the two begin on the
+   same upright, close to the buttons' edge. */
+.hm-stage .hm-lead {
+  margin-left: calc(1.23px - 0.062em);
+}
+
+/* And the small line sits close above it: the headline's own line carries
+   another 11px or so of space over its capitals. */
+.hm-stage .hm-kicker {
+  margin-bottom: 10px;
 }
 
 .hm-acts {
@@ -1677,7 +1763,7 @@ a.hm-row:hover {
 .hm-pair {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 24px;
 }
 
 .hm-pillar {
@@ -1887,12 +1973,57 @@ a.hm-row:hover {
   color: var(--ink);
 }
 
+/* Depth under the mouse (Home.tsx, `lean`): --tx and --ty say where the
+   pointer is over the panel, from -0.5 to 0.5. The panel leans a few
+   degrees towards it, and its pictures slide by different amounts, the
+   nearest furthest, so they seem to sit at different depths. Not with
+   motion reduced. */
+.hm-pillar {
+  --tx: 0;
+  --ty: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hm-pair {
+    perspective: 1400px;
+  }
+
+  .hm-pillar {
+    transform: rotateX(calc(var(--ty) * -3.5deg)) rotateY(calc(var(--tx) * 3.5deg));
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+  }
+
+  .hm-pillar-art > * {
+    transition: translate 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Furthest back: the printed page moves least, and the other way. */
+  .hm-pillar .hm-sheet {
+    translate: calc(var(--tx) * -10px) calc(var(--ty) * -8px);
+  }
+
+  .hm-pillar .hm-shot {
+    translate: calc(var(--tx) * 14px) calc(var(--ty) * 10px);
+  }
+
+  .hm-pillar .hm-item {
+    translate: calc(var(--tx) * 24px) calc(var(--ty) * 16px);
+  }
+
+  /* Nearest: the small card on top moves most. */
+  .hm-pillar .hm-due {
+    translate: calc(var(--tx) * 34px) calc(var(--ty) * 22px);
+  }
+}
+
 /* The four tiles. */
+/* The panels, the tiles and the panel under them are three groups, each
+   with room round it, not one block. */
 .hm-around {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+  gap: 24px;
 }
 
 .hm-tile {
@@ -2049,13 +2180,20 @@ a.hm-row:hover {
 }
 
 /* What it is built on: words on the left, the pieces on the right. */
+/* Not a card inside the column, which would put a second line beside each
+   rail: a band ruled above and below, its rules meeting the rails square. */
 .hm-base {
   display: grid;
   grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
-  margin-top: 16px;
+  margin-top: 104px;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: inset 0 0 0 1px var(--hm-line);
+  border-block: 1px solid var(--hm-line);
+}
+
+@media (min-width: 901px) {
+  .hm-base {
+    margin-inline: -16px;
+  }
 }
 
 .hm-base-copy {
@@ -2233,6 +2371,247 @@ a.hm-row:hover {
   }
 }
 
+/* The home page's small line drawings (drawings.ts), in the hand of the
+   feature pages': fine lines in ink and the sunset's colours. */
+.hm-draw {
+  display: block;
+  fill: none;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hm-draw .ink {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.hm-draw .deep {
+  stroke: var(--hm-deep);
+}
+
+.hm-draw .mid {
+  stroke: var(--hm-mid);
+}
+
+.hm-draw .top {
+  stroke: var(--hm-top);
+}
+
+.hm-draw .glow {
+  stroke: var(--hm-glow);
+}
+
+.hm-draw .paper {
+  fill: var(--card);
+}
+
+.hm-draw text {
+  fill: var(--ink);
+  stroke: none;
+  font-size: 11px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+/* Private by default: an ink band from edge to edge (Home.tsx). It lies
+   over the page's rails and draws a quiet pair of its own in their place.
+   Its words keep to the left of the column; the right is for its lines
+   (bandLines.ts), finer and paler than the hero's. */
+.hm-dark {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  padding: 88px 0 96px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.hm-dark > .hm-col {
+  position: relative;
+}
+
+.hm-dark h2 {
+  margin: 0;
+  font-size: clamp(30px, 2.4vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.hm-band-lines {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .hm-dark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: var(--hm-colw);
+    translate: -50% 0;
+    border-inline: 1px solid rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+  }
+
+  .hm-dark-in {
+    max-width: 62%;
+  }
+
+  /* The column's box in the band; the lines run on past it to the window's edge. */
+  .hm-band-lines {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--hm-colw);
+    height: 100%;
+    translate: -50% 0;
+    overflow: visible;
+    fill: none;
+    stroke-width: 1;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .hm-band-lines.on {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 900px) {
+  .hm-dark {
+    padding: 56px 0 64px;
+  }
+}
+
+/* The departments: a line over a ruled row of five cells, rail to rail.
+   Each cell has one of the sunset's colours (--tone, Home.tsx), in the
+   bands' order, as a rule along its top, so the row's top edge is the
+   bands again, laid flat. Under the pointer the cell takes its colour. */
+.hm-depts {
+  position: relative;
+}
+
+.hm-depts .hm-lead-in {
+  margin: 72px 0 32px;
+}
+
+.hm-depts ul {
+  list-style: none;
+  margin-block: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-bottom: 1px solid var(--hm-line);
+}
+
+.hm-depts li + li {
+  border-left: 1px solid var(--hm-line);
+}
+
+.hm-depts a {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 30px 24px 34px;
+  border-top: 4px solid var(--tone);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.hm-depts a:hover,
+.hm-depts a:focus-visible {
+  background: var(--tone);
+  color: #fff;
+}
+
+.hm-depts h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: clamp(22px, 1.9vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.hm-depts h3 svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s var(--ease-out);
+}
+
+.hm-depts a:hover h3 svg {
+  transform: translateX(3px);
+}
+
+.hm-depts p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--ink2);
+  transition: color 0.25s var(--ease);
+}
+
+.hm-depts a:hover p,
+.hm-depts a:focus-visible p {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Pricing: a paper panel, the words and the way on at its left and the
+   four plans drawn at its right. */
+.hm-pricing {
+  padding: 96px 0;
+}
+
+/* A band, not a card inside the column: its fill runs from rail to rail and
+   its rules meet them square. */
+.hm-plans {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+  padding: 56px;
+  border-block: 1px solid var(--hm-line);
+  background: var(--paper);
+}
+
+@media (min-width: 901px) {
+  .hm-plans {
+    margin-inline: -16px;
+    padding-inline: 72px;
+  }
+}
+
+.hm-plans .hm-two {
+  font-size: clamp(26px, 2.2vw, 36px);
+}
+
+.hm-plans > div > p {
+  margin: 14px 0 28px;
+  max-width: 24em;
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--ink2);
+}
+
+.hm-plans .hm-draw {
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  justify-self: end;
+}
+
 /* A narrower column: the tiles go two by two. */
 @media (max-width: 1180px) {
   .hm-around {
@@ -2280,6 +2659,15 @@ a.hm-row:hover {
     margin: 64px 0 22px;
   }
 
+  .hm-base {
+    margin-top: 64px;
+  }
+
+  .hm-pair,
+  .hm-around {
+    gap: 16px;
+  }
+
   .hm-pillar-head {
     padding: 26px 24px 0;
   }
@@ -2299,9 +2687,51 @@ a.hm-row:hover {
   }
 }
 
+@media (max-width: 1100px) {
+  .hm-depts ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .hm-depts li:nth-child(4) {
+    border-left: 0;
+  }
+
+  .hm-depts li:nth-child(n + 4) {
+    border-top: 1px solid var(--hm-line);
+  }
+}
+
+@media (max-width: 900px) {
+  .hm-plans {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 32px 24px;
+  }
+
+  .hm-plans .hm-draw {
+    justify-self: start;
+  }
+
+  .hm-pricing {
+    padding: 64px 0;
+  }
+}
+
 @media (max-width: 640px) {
   .hm-around {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hm-depts ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hm-depts li + li {
+    border-left: 0;
+    border-top: 1px solid var(--hm-line);
+  }
+
+  .hm-depts a {
+    padding: 22px 16px 24px;
   }
 
   .hm-base-art {

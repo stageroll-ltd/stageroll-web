@@ -69,7 +69,7 @@ function PageToScenes() {
 }
 
 /** A page's own drawing (drawings.ts). */
-function Draw({ of }: { of: keyof typeof drawings }) {
+export function Draw({ of }: { of: keyof typeof drawings }) {
   return <svg className="sec-rings wide" viewBox="0 0 420 200" aria-hidden="true" dangerouslySetInnerHTML={{ __html: drawings[of] }} />
 }
 
