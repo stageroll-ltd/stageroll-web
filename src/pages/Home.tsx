@@ -234,8 +234,10 @@ const blockTop = 15 * (joins.length - 1)
 const bandApart = (i: number) => i * 92 + 31
 const bandJoined = (i: number) => blockTop + i * 62 + 31
 
-/** How much taller, above and below, the band under the pointer grows on its level part (home.css squeezes it by the same). */
+/** How much taller, above and below, the band under the pointer grows on its level part (home.css makes its line thicker by twice this). */
 const LIFT = 7
+/** A place in the drawing, to a tenth. */
+const at = (v: number) => Math.round(v * 10) / 10
 
 /** A band's turn to arrive (the delays in home.css) and its colour, one of the sunset's. */
 const turn = (i: number, tone?: string) => ({ '--i': i, ...(tone && { '--tone': `var(--hm-${tone})` }) }) as CSSProperties
@@ -247,59 +249,64 @@ const turn = (i: number, tone?: string) => ({ '--i': i, ...(tone && { '--tone': 
 // then the bracket grows from its middle and its words appear
 // (home.css, once `hm-in` is set); until then, and with motion reduced or no
 // script, the finished drawing is simply there.
-// Each name is the way to its page. Once the bands have arrived (`hm-done`),
-// the one under the pointer keeps its colour while the others fall back
-// (`data-hot`); its level part on the left grows a little taller, easing back
-// into the band before the curve, and its name moves a step in (home.css).
+// Each name is the way to its page. The band under the pointer keeps its
+// colour while the others fall back (`data-hot`); its level part on the left
+// grows a little taller, narrowing all the way along the curve to its own
+// height where it joins the block, and its name moves a step in (home.css).
+// That holds while the bands are still arriving too: a band's whole shape
+// answers to the pointer whether or not it is drawn yet.
 function JoinBands() {
   const box = useRef<HTMLDivElement>(null)
   const [hot, setHot] = useState<number | null>(null)
   useEffect(() => {
     const el = box.current
     if (!el) return
-    let settled = 0
     const seen = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return
         el.classList.add('hm-in')
-        // The arrival takes about two and a half seconds; the pointer waits for it.
-        settled = window.setTimeout(() => el.classList.add('hm-done'), 2600)
         seen.disconnect()
       },
       { threshold: 0.35 },
     )
     seen.observe(el)
-    return () => {
-      seen.disconnect()
-      window.clearTimeout(settled)
-    }
+    return () => seen.disconnect()
   }, [])
-  const over = (i: number) => () => {
-    if (box.current?.classList.contains('hm-done')) setHot(i)
-  }
+  const over = (i: number) => () => setHot(i)
   const out = () => setHot(null)
   return (
-    // The classes `hm-in` and `hm-done` are set on the element itself, so what
-    // React changes here is an attribute of its own, never the class.
+    // The class `hm-in` is set on the element itself, so what React changes
+    // here is an attribute of its own, never the class.
     <div ref={box} className="hm-join" data-hot={hot ?? undefined} style={{ '--n': joins.length } as CSSProperties} onPointerLeave={out}>
       <svg viewBox={`0 0 1232 ${joinHeight}`} aria-hidden="true">
-        {/* Each band is a group of two: the band itself, a thick line along its middle so it can be drawn
-            from left to right; and its level part again, a little taller, easing back to the band's own
-            height before the curve begins. At rest that copy is squeezed to the band's height and lies
-            unseen inside it (home.css). They fade as one, so the copy never shows through. */}
+        {/* Each band is a group of three lines along its middle. The band itself, thick, so it can be
+            drawn from left to right. The same line again, drawn with it, which home.css makes thicker
+            under the pointer: that copy is cut to a shape, all of it on the level part, then less and
+            less along the curve, each edge one curve from the taller height to the band's own at the
+            block (where the cut ends), so it never turns back on itself; at rest the copy is thinner
+            than the band and lies unseen inside it. And the line once more, unseen, for the pointer:
+            it is all there from the start, so a band answers before it is drawn. They fade as one,
+            so the copy never shows through. */}
         {joins.map(({ name, tone }, i) => {
           if (!tone) return null
           const a = bandApart(i)
           const j = bandJoined(i)
-          const top = a - 31.3
-          const foot = a + 31.3
+          const tall = 31.3 + LIFT
+          const top = at(a - tall)
+          const foot = at(a + tall)
+          const joinedTop = at(j - 31.3)
+          const joinedFoot = at(j + 31.3)
+          const line = `M-2 ${a}H440C605 ${a} 605 ${j} 770 ${j}H${joinEnd}`
           return (
             <g key={name} className={hot === i ? 'hm-row hm-on' : 'hm-row'} style={turn(i, tone)}>
-              <path className="hm-band" pathLength={1} d={`M-2 ${a}H440C605 ${a} 605 ${j} 770 ${j}H${joinEnd}`} onPointerEnter={over(i)} />
-              <path
-                className="hm-lift"
-                d={`M-2 ${top - LIFT}H300C385 ${top - LIFT} 385 ${top} 470 ${top}V${foot}C385 ${foot} 385 ${foot + LIFT} 300 ${foot + LIFT}H-2Z`}
-              />
+              <path className="hm-band" pathLength={1} d={line} />
+              <clipPath id={`hm-lift-${i}`}>
+                <path
+                  d={`M-10 ${a - 60}H440V${top}C605 ${top} 605 ${joinedTop} 770 ${joinedTop}V${joinedFoot}C605 ${joinedFoot} 605 ${foot} 440 ${foot}V${a + 60}H-10Z`}
+                />
+              </clipPath>
+              <path className="hm-lift" pathLength={1} d={line} clipPath={`url(#hm-lift-${i})`} />
+              <path className="hm-hit" d={line} onPointerEnter={over(i)} />
             </g>
           )
         })}
@@ -369,7 +376,7 @@ export function Home() {
         <div className="hm-stage">
           <HeroLines />
           <div className="hm-col hm-hero-in">
-            <p className="hm-kicker">Made for costume, props, hair, makeup and set</p>
+            <p className="hm-kicker">Continuity and inventory for film and TV</p>
             {/* One block of type in two voices: the headline, then the sentence
                 that runs on from it at the same size, in the second colour. */}
             <div className="hm-two hm-lead">
@@ -414,6 +421,9 @@ export function Home() {
             <p>Script analysis, continuity, research, inventory and labels in one place.</p>
           </div>
           <JoinBands />
+          {/* A line between the bands and the panels: room to breathe, and what comes next. */}
+          <h3 className="hm-lead-in">Continuity and inventory, built as equals.</h3>
+
           {/* Continuity and inventory, side by side as equals. */}
           <div className="hm-pair">
             <article className="hm-pillar sun">

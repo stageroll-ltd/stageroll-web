@@ -613,6 +613,8 @@ html.in-app .hm-fact {
     aspect-ratio: 1232 / var(--h);
   }
 
+  /* The band under the pointer grows a little past the drawing's top and
+     foot, so those show; its sides stay cut where they were. */
   .hm-join svg {
     display: block;
     position: absolute;
@@ -620,6 +622,8 @@ html.in-app .hm-fact {
     width: 100%;
     height: 100%;
     fill: none;
+    overflow: visible;
+    clip-path: inset(-12px 0);
   }
 
   /* A touch wider than its 62 so no seam shows where two bands meet. */
@@ -743,10 +747,11 @@ html.in-app .hm-fact {
   }
 }
 
-/* Each band's name is a link to its page. Under the pointer, once the bands
-   have arrived (`hm-done`, Home.tsx), the others fall back with their
-   names; this one's level part on the left grows a little taller and its
-   words move a step in. */
+/* Each band's name is a link to its page. Under the pointer the others fall
+   back with their names; this one's level part on the left grows a little
+   taller, narrowing along the curve into the block, and its words move a
+   step in. All of it works while the bands are still arriving: none of it
+   touches what the arrival is moving (a band's dash, a row's opacity). */
 .hm-join-go {
   display: flex;
   flex-wrap: wrap;
@@ -790,53 +795,65 @@ html.in-app .hm-fact {
     transform: translateX(8px);
   }
 
-  /* The taller copy of a band's level part (Home.tsx, LIFT 7 on a half
-     height of 31.3). Squeezed by 31.3 / 38.3 it is exactly the band's
-     height and lies inside it; let out, it is 7 taller above and below.
-     It is the band's own colour and in the band's group, so whatever the
-     band fades to, it fades to with it. Not there until the bands have
-     arrived, or it would show before its band is drawn. */
+  /* The band's line again (Home.tsx), drawn along with the band. At rest
+     it is thinner than the band's 62.6 and lies inside it; under the
+     pointer it is 14 thicker than the band (LIFT 7 above and below), and
+     its clip lets all of that show on the level part and less and less
+     along the curve. It is the band's own colour and in the band's group,
+     so whatever the band fades to, it fades to with it. */
   .hm-join .hm-lift {
     display: inline;
-    visibility: hidden;
-    fill: var(--tone);
-    stroke: none;
+    fill: none;
+    stroke: var(--tone);
+    stroke-width: 60;
+    stroke-dasharray: 1;
     pointer-events: none;
-    transform-box: fill-box;
-    transform-origin: 50% 50%;
-    transform: scaleY(0.817);
-  }
-
-  .hm-join.hm-done .hm-lift {
-    visibility: visible;
   }
 
   .hm-join .hm-row.hm-on .hm-lift {
-    transform: none;
+    stroke-width: 76.6;
   }
 
-  /* The others fall back, each band and its copy as one. */
+  /* The band's line once more, for the pointer alone: nothing is painted,
+     and it is whole from the start, so the band answers before it is drawn. */
+  .hm-join .hm-hit {
+    stroke: transparent;
+    stroke-width: 62.6;
+    pointer-events: stroke;
+  }
+
+  /* The others fall back, each band and its copy as one. A name falls back
+     by its link, not its row: the row's opacity is the arrival's. */
   .hm-join[data-hot] .hm-row:not(.hm-on) {
     opacity: 0.45;
   }
 
-  .hm-join[data-hot] li:not(.hm-on):not(.hm-soon) {
+  .hm-join[data-hot] li:not(.hm-on) .hm-join-go {
     opacity: 0.6;
   }
 }
 
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
-  .hm-join.hm-done .hm-row,
-  .hm-join.hm-done li {
+  .hm-join .hm-row {
     transition: opacity 0.3s ease-out;
   }
 
   .hm-join-go {
-    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s ease-out;
   }
 
+  /* The copy is drawn exactly as its band is (above), and thickens and
+     thins under the pointer whether or not the drawing has finished. */
   .hm-join .hm-lift {
-    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    stroke-dashoffset: 1;
+    transition: stroke-width 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .hm-join.hm-in .hm-lift {
+    stroke-dashoffset: 0;
+    transition:
+      stroke-dashoffset 0.9s cubic-bezier(0.6, 0, 0.2, 1) calc(var(--i) * 0.18s),
+      stroke-width 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 }
 
@@ -1648,11 +1665,19 @@ a.hm-row:hover {
    the panel for what it is all built on. Each picture is laid out inside
    its own box (a container), in shares of that box's width, so it keeps its
    shape as the column narrows. */
+/* The line that leads into the panels, well clear of the bands above it. */
+.hm-lead-in {
+  margin: 104px 0 28px;
+  font-size: clamp(22px, 1vw + 15px, 26px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
 .hm-pair {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  margin-top: 56px;
 }
 
 .hm-pillar {
@@ -2251,8 +2276,8 @@ a.hm-row:hover {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .hm-pair {
-    margin-top: 40px;
+  .hm-lead-in {
+    margin: 64px 0 22px;
   }
 
   .hm-pillar-head {

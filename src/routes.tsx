@@ -14,7 +14,8 @@ import { Help } from './pages/Help'
 import { Department } from './pages/Department'
 import { departmentPages } from './pages/departments'
 import { featurePages, type FeaturePage } from './pages/features'
-import { Security } from './pages/Security'
+import { Showcase } from './pages/Showcase'
+import { shows } from './pages/shows'
 import { Terms } from './pages/Terms'
 
 export type Route = {
@@ -131,8 +132,23 @@ export const routes: Route[] = [
   // The feature pages, one per area of the overview (pages/features.ts).
   ...featurePages.map((page): Route => {
     const route = docRoute('/product/', page)
-    // Privacy and security has a page of its own shape (pages/Security.tsx).
-    return page.slug === 'privacy' ? { ...route, Page: () => <Security page={page} /> } : route
+    // Every feature page is told in ruled bands (shows.tsx); one without a show would be a plain document.
+    const show = shows[page.slug]
+    if (!show) return route
+    return {
+      ...route,
+      Page: () => (
+        <Showcase
+          kicker={<a href="/product/">Product</a>}
+          title={page.title}
+          lede={page.lede}
+          show={show}
+          links={page.related}
+          plan={page.plan}
+          more={page.more}
+        />
+      ),
+    }
   }),
   // The department pages, one per craft (pages/departments.ts), reached
   // from the overview's department cards.
@@ -158,7 +174,7 @@ export const routes: Route[] = [
       'StageRoll Ltd is an independent software company registered in England and Wales, making continuity and inventory software for film and TV departments.',
     nav: 'About',
     Page: About,
-    updated: '2026-11-13',
+    updated: '2026-11-18',
   },
   {
     path: '/help/',

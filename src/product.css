@@ -1073,10 +1073,10 @@
   }
 }
 
-/* The privacy and security page (pages/Security.tsx): a centred opening
-   over a line drawing, then ruled bands in the page's column: the approach
-   in two columns, the principles beside a drawing, and every safeguard as
-   a ruled cell. */
+/* A page told in ruled bands (pages/Showcase.tsx): a centred opening with
+   a picture, then bands in the page's column, each ruled off from the
+   next: two columns of text, a list or text beside a picture, or ruled
+   cells from rail to rail. */
 .sec-hero {
   padding: 72px 0 96px;
   text-align: center;
@@ -1147,6 +1147,41 @@
   stroke-dasharray: 3 6;
 }
 
+/* The opening's drawing draws itself in (Showcase.tsx): unseen until the
+   script has numbered its lines, then each is drawn in its turn, quicker
+   the more lines there are to get through. Still, with motion reduced. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .sec-hero svg {
+    opacity: 0;
+  }
+
+  .sec-hero svg.sec-go {
+    opacity: 1;
+  }
+
+  .sec-hero svg.sec-go :is(path, rect, circle, ellipse) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: sec-draw 0.9s cubic-bezier(0.3, 0, 0.2, 1) forwards;
+    animation-delay: calc(min(var(--n) * 55ms, 1.1s));
+  }
+}
+
+@keyframes sec-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* A pale line, and a white fill so one shape can stand in front of another. */
+.sec svg .soft {
+  stroke: #c9ccd6;
+}
+
+.sec svg .paper {
+  fill: #fff;
+}
+
 .sec-band {
   padding: 88px 0;
   border-top: 1px solid var(--hm-line);
@@ -1180,14 +1215,15 @@
   align-items: center;
 }
 
-.sec-principles,
-.sec-grid {
+.sec-list,
+.sec-grid,
+.sec-on ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.sec-principles li {
+.sec-list li {
   display: grid;
   grid-template-columns: 22px minmax(0, 1fr);
   column-gap: 14px;
@@ -1195,12 +1231,12 @@
   border-top: 1px solid var(--hm-line);
 }
 
-.sec-principles li:first-child {
+.sec-list li:first-child {
   padding-top: 0;
   border-top: 0;
 }
 
-.sec-principles svg,
+.sec-list svg,
 .sec-grid svg {
   width: 22px;
   height: 22px;
@@ -1211,9 +1247,52 @@
   stroke-linejoin: round;
 }
 
-.sec-principles svg {
+.sec-list svg {
   grid-row: span 2;
   margin-top: 2px;
+}
+
+/* Text in place of the list, beside the picture. */
+.sec-text p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink2);
+}
+
+.sec-text p + p {
+  margin-top: 18px;
+}
+
+.sec a:not(.hm-btn):not(.hm-kicker a) {
+  color: var(--ink);
+  text-underline-offset: 0.2em;
+}
+
+/* The picture's side of the band; `flip` puts it first. */
+.sec-art {
+  display: grid;
+  justify-items: center;
+}
+
+.sec-split.flip .sec-art {
+  order: -1;
+}
+
+/* A list with no picture runs in two columns. */
+.sec-list.cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 64px;
+}
+
+.sec-list.cols li:nth-child(-n + 2) {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.sec-rings.wide {
+  width: min(420px, 86%);
 }
 
 .sec h3 {
@@ -1255,13 +1334,87 @@
   margin-bottom: 18px;
 }
 
-.sec-more {
-  margin-top: 40px;
+/* Five to a row, for a page with ten. */
+.sec-grid.five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.sec-grid.five li:nth-child(4n + 1) {
+  border-left: 1px solid var(--hm-line);
+}
+
+.sec-grid.five li:nth-child(5n + 1) {
+  border-left: 0;
+}
+
+.sec-grid.five li:nth-child(n + 5) {
+  border-top: 0;
+}
+
+.sec-grid.five li:nth-child(n + 6) {
+  border-top: 1px solid var(--hm-line);
+}
+
+/* Three to a row, for a page with six. */
+.sec-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sec-grid.three li:nth-child(4n + 1) {
+  border-left: 1px solid var(--hm-line);
+}
+
+.sec-grid.three li:nth-child(3n + 1) {
+  border-left: 0;
+}
+
+.sec-grid.three li:nth-child(n + 4) {
+  border-top: 1px solid var(--hm-line);
+}
+
+/* The band's heading stands over the cells with the same gap as elsewhere. */
+.sec-band > .sec-grid {
+  margin-top: 0;
+}
+
+/* The way on: a line about the plans, and the pages on the same ground. */
+.sec-on {
+  padding: 48px 0;
+}
+
+.sec-on p {
+  margin: 0 0 24px;
+  font-size: 17px;
+  color: var(--ink2);
+}
+
+.sec-on ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 @media (max-width: 1100px) {
-  .sec-grid {
+  .sec-grid,
+  .sec-grid.five,
+  .sec-grid.three {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sec-grid.five li:nth-child(n),
+  .sec-grid.three li:nth-child(n) {
+    border-left: 1px solid var(--hm-line);
+    border-top: 1px solid var(--hm-line);
+  }
+
+  .sec-grid.five li:nth-child(2n + 1),
+  .sec-grid.three li:nth-child(2n + 1) {
+    border-left: 0;
+  }
+
+  .sec-grid.five li:nth-child(-n + 2),
+  .sec-grid.three li:nth-child(-n + 2) {
+    border-top: 0;
   }
 
   .sec-grid li:nth-child(4n + 1) {
@@ -1299,16 +1452,43 @@
   .sec-kept {
     max-width: 260px;
   }
-}
 
-@media (max-width: 640px) {
-  .sec-grid {
+  .sec-split.flip .sec-art {
+    order: 0;
+  }
+
+  .sec-list.cols {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .sec-grid li {
+  .sec-list.cols li:nth-child(2) {
+    padding-top: 18px;
+    border-top: 1px solid var(--hm-line);
+  }
+}
+
+@media (max-width: 640px) {
+  .sec-grid,
+  .sec-grid.five,
+  .sec-grid.three {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sec-grid li,
+  .sec-grid.five li:nth-child(n),
+  .sec-grid.three li:nth-child(n) {
     padding: 22px 0 24px;
     border-left: 0;
+  }
+
+  .sec-grid.five li:nth-child(-n + 2),
+  .sec-grid.three li:nth-child(-n + 2) {
+    border-top: 1px solid var(--hm-line);
+  }
+
+  .sec-grid.five li:first-child,
+  .sec-grid.three li:first-child {
+    border-top: 0;
   }
 
   .sec-grid li + li {
