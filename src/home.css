@@ -727,6 +727,12 @@ html.in-app .hm-fact {
   border: 1.5px dashed var(--hm-deep);
 }
 
+/* The stack's corners are rounded and the list is cut to them, so the
+   outline of its last row rounds with them, not into them. */
+.hm-join li.hm-soon:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
 .hm-join strong {
   font-size: 17px;
   font-weight: 600;
