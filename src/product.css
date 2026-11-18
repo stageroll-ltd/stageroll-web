@@ -229,9 +229,8 @@
 /* A feature page (pages/ProductScript.tsx and the rest): a plain document,
    wider than the legal pages, its steps numbered down a rule and its key
    features two to a row. Each item's lead sits on its own line. */
-.prose.prod-doc {
+.prose.prod-doc > * {
   max-width: 60rem;
-  padding-top: 56px;
 }
 
 .prod-doc h1 {
@@ -787,62 +786,254 @@
   font-weight: 600;
 }
 
-/* A department page in the home page's look (Department.tsx, `framed`): the
-   home page's column, rails, opening and buttons (home.css). What is here
-   fits this page's bands to that column: their words start where the
-   opening's do, and their rules are the column's own colour. */
-.dept.hm .hm-hero-in {
+/* A page in the home page's look (components/Page.tsx): the home page's
+   column, rails, opening and buttons (home.css). What is here fits the
+   other pages to that column: their words start where the opening's do,
+   and their rules and cards are drawn as the home page draws its own. */
+.fr .hm-hero-in {
   min-height: 0;
   padding-block: 104px 96px;
 }
 
-.dept.hm .hm-kicker {
+.fr .hm-kicker {
   color: var(--ink2);
 }
 
-.dept.hm .hm-kicker a {
+.fr .hm-kicker a {
   color: inherit;
 }
 
-.dept.hm .hm-lead {
+.fr .hm-lead {
   max-width: 21em;
   font-size: clamp(27px, 1.5vw + 20px, 42px);
 }
 
-.dept.hm .dept-band {
-  position: relative;
-  border-top-color: var(--hm-line);
-}
-
-.dept-in {
+/* Words inset as far as the opening's are. */
+.fr-in {
   padding-inline: clamp(0px, 8.4vw, 120px);
 }
 
-.dept.hm h2 {
+.fr h2 {
   font-size: clamp(28px, 2.2vw + 10px, 40px);
   letter-spacing: -0.03em;
   line-height: 1.1;
 }
 
-.dept.hm .dept-facts.cards li {
+.fr .dept-band {
+  position: relative;
+  border-top-color: var(--hm-line);
+}
+
+.fr .dept-band.tint {
+  border-block: 1px solid var(--hm-line);
+}
+
+.fr .dept-band.tint + .dept-band {
+  border-top: 0;
+}
+
+/* Cards: ruled and square-cornered, white on the page. */
+.fr .dept-facts.cards li,
+.fr .prod-card {
   border: 1px solid var(--hm-line);
   border-radius: 8px;
   background: var(--card);
 }
 
-.dept.hm .dept-band.tint {
-  border-block: 1px solid var(--hm-line);
+.fr .prod-card {
+  transition: border-color 0.2s var(--ease);
 }
 
-.dept.hm .dept-band.tint + .dept-band {
-  border-top: 0;
+.fr .prod-card:hover {
+  background: var(--card);
+  border-color: rgba(11, 16, 27, 0.4);
 }
 
-.dept-close {
+.fr .prod-lead,
+.fr .prod-grid,
+.fr .prod-plans,
+.fr .prod-compare,
+.fr .prod-notes {
+  max-width: none;
+}
+
+/* The overview's opening: the promise on the left and the departments as a
+   short ruled list on the right, each a link to its page. */
+.fr-split h1,
+.fr-top h1 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.fr-split h1 {
+  max-width: 11em;
+  margin-bottom: 22px;
+  font-size: clamp(34px, 2.4vw + 22px, 58px);
+}
+
+.fr-split .lede {
+  max-width: 30em;
+}
+
+.fr-depts {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+}
+
+.fr-depts li {
   border-top: 1px solid var(--hm-line);
 }
 
-.dept-close .hm-acts {
+.fr-depts li:last-child {
+  border-bottom: 1px solid var(--hm-line);
+}
+
+.fr-depts a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0 12px;
+  color: var(--ink2);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.fr-depts b {
+  display: block;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.fr-depts svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--mute);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s var(--ease-out);
+}
+
+.fr-depts a:hover svg {
+  stroke: var(--ink);
+  transform: translateX(3px);
+}
+
+@media (min-width: 901px) {
+  .fr-split .hm-hero-in {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 72px;
+  }
+
+  .fr-depts {
+    flex: none;
+    width: 300px;
+    margin-top: 0;
+  }
+}
+
+.fr-split {
+  border-bottom: 1px solid var(--hm-line);
+}
+
+/* Pricing's opening: one short row, the plans straight under it. */
+.fr-top {
+  padding: 72px 0 36px;
+}
+
+.fr-top h1 {
+  font-size: clamp(30px, 2vw + 18px, 46px);
+}
+
+.fr-top .lede {
+  max-width: 24em;
+  margin-top: 12px;
+}
+
+@media (min-width: 901px) {
+  .fr-top > div {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 48px;
+  }
+
+  .fr-top .lede {
+    margin-top: 0;
+  }
+}
+
+.fr .prod-areas {
+  padding-top: 16px;
+}
+
+.fr .prod-pricing {
+  padding: 0 0 112px;
+}
+
+.fr .prod-plans {
+  margin-top: 0;
+}
+
+/* The plans are solid grey tiles, so they stand off the page's rules. Each
+   has the home page's lines along its top, in the sunset's colours: one on
+   Free, and one more for each plan up. */
+.fr .prod-plans li {
+  --l: 2px;
+  --gap: 7px;
+  position: relative;
+  overflow: hidden;
+  padding: 50px 28px 26px;
+  border-radius: 8px;
+  background-color: var(--paper);
+  background-repeat: no-repeat;
+  background-size: 100% var(--l);
+  background-image: linear-gradient(var(--hm-glow), var(--hm-glow)), linear-gradient(var(--hm-top), var(--hm-top)),
+    linear-gradient(var(--hm-mid), var(--hm-mid)), linear-gradient(var(--hm-deep), var(--hm-deep));
+  background-position: 0 0, 0 var(--gap), 0 calc(var(--gap) * 2), 0 calc(var(--gap) * 3);
+}
+
+/* A line the plan has not reached is drawn off the tile. */
+.fr .prod-plans li:nth-child(1) {
+  background-position: 0 0, 0 -9px, 0 -9px, 0 -9px;
+}
+
+.fr .prod-plans li:nth-child(2) {
+  background-position: 0 0, 0 var(--gap), 0 -9px, 0 -9px;
+}
+
+.fr .prod-plans li:nth-child(3) {
+  background-position: 0 0, 0 var(--gap), 0 calc(var(--gap) * 2), 0 -9px;
+}
+
+/* The plan's name keeps its own size, not a band heading's. */
+.fr .prod-plans h2 {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+
+.fr .prod-note {
+  text-align: left;
+}
+
+.fr-close {
+  border-top: 1px solid var(--hm-line);
+}
+
+.fr-close .hm-acts {
   justify-content: center;
   margin-top: 0;
 }
@@ -865,11 +1056,19 @@
     margin-bottom: 32px;
   }
 
-  .dept.hm .hm-hero-in {
+  .fr .hm-hero-in {
     padding-block: 56px 64px;
   }
 
-  .dept-in {
+  .fr-in {
     padding-inline: 0;
+  }
+
+  .fr-top {
+    padding: 44px 0 28px;
+  }
+
+  .fr .prod-pricing {
+    padding-bottom: 72px;
   }
 }

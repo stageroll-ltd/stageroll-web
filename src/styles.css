@@ -1550,10 +1550,23 @@ html.in-app .app-only {
 }
 
 /* Prose pages: About, Help, Support, Privacy, Terms, the 404. */
+/* They sit in the page's column (home.css), their words starting where a
+   page's opening does and kept to a reading measure. */
 .prose {
-  max-width: 44rem;
+  width: calc(100% - 40px);
   margin: 0 auto;
-  padding: 48px 28px 96px;
+  padding: 56px 0 96px;
+}
+
+.prose > :where(*) {
+  max-width: 44rem;
+}
+
+@media (min-width: 901px) {
+  .prose {
+    width: var(--hm-colw);
+    padding: 88px clamp(0px, 8.4vw, 120px) 112px;
+  }
 }
 
 .prose h1 {

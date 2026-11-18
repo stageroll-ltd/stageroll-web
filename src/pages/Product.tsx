@@ -1,4 +1,5 @@
 import { Icon } from '../components/Icon'
+import { PageClose } from '../components/Page'
 import { featurePages, type FeaturePage } from './features'
 
 // The product overview, a landing page for the feature pages under /product/
@@ -8,11 +9,27 @@ import { featurePages, type FeaturePage } from './features'
 
 // Each department's card goes to its page (departments.ts).
 const departments: { name: string; line: string; href: string }[] = [
-  { name: 'Costume', line: 'Changes and what’s in them', href: '/departments/costume/' },
-  { name: 'Props', line: 'Who carries what, scene by scene', href: '/departments/props/' },
+  {
+    name: 'Costume',
+    line: 'Changes and what’s in them',
+    href: '/departments/costume/',
+  },
+  {
+    name: 'Props',
+    line: 'Who carries what, scene by scene',
+    href: '/departments/props/',
+  },
   { name: 'Hair', line: 'Styles and their pieces', href: '/departments/hair/' },
-  { name: 'Makeup', line: 'Looks and their pieces', href: '/departments/makeup/' },
-  { name: 'Sets', line: 'Every set and how it’s dressed', href: '/departments/sets/' },
+  {
+    name: 'Makeup',
+    line: 'Looks and their pieces',
+    href: '/departments/makeup/',
+  },
+  {
+    name: 'Sets',
+    line: 'Every set and how it’s dressed',
+    href: '/departments/sets/',
+  },
 ]
 
 const leading = ['continuity', 'inventory']
@@ -28,20 +45,26 @@ const rest = featurePages.filter((p) => !leading.includes(p.slug))
 
 export function Product() {
   return (
-    <div className="prod">
-      <section className="prod-hero">
-        <div className="wrap">
-          <h1>Everything your department runs on.</h1>
-          <p className="lede">
-            Built with continuity and inventory as equals, and the script, research, schedule and paperwork around
-            them, in one film or TV production every department shares.
-          </p>
-          <ul className="prod-depts" aria-label="Departments">
+    <div className="prod hm fr">
+      {/* The opening: the promise on the left, the five departments as a short list on the right. */}
+      <section className="hm-hero fr-split">
+        <div className="hm-col hm-hero-in">
+          <div>
+            <h1>Everything your department runs on.</h1>
+            <p className="lede">
+              Built with continuity and inventory as equals, and the script, research, schedule and paperwork around
+              them, in one film or TV production every department shares.
+            </p>
+          </div>
+          <ul className="fr-depts" aria-label="Departments">
             {departments.map((d) => (
               <li key={d.name}>
                 <a href={d.href}>
-                  <b>{d.name}</b>
-                  <span>{d.line}</span>
+                  <span>
+                    <b>{d.name}</b>
+                    {d.line}
+                  </span>
+                  <Icon name="chevron" />
                 </a>
               </li>
             ))}
@@ -50,7 +73,7 @@ export function Product() {
       </section>
 
       <section className="prod-areas" aria-label="What StageRoll does">
-        <div className="wrap">
+        <div className="hm-col hm-inset">
           <div className="prod-lead">
             {lead.map((area) => (
               <a key={area.slug} className="prod-card big reveal" href={`/product/${area.slug}/`}>
@@ -87,22 +110,7 @@ export function Product() {
         </div>
       </section>
 
-      <section className="prod-sec tint prod-end" aria-labelledby="next-title">
-        <div className="wrap">
-          <div className="prod-center reveal">
-            <h2 id="next-title">Ready for your next production.</h2>
-            <p className="lede">Plans are per production, and every crew account is free.</p>
-            <div className="acts">
-              <a className="pill dark sells" href="/pricing/">
-                See pricing
-              </a>
-              <a className="pill" href="/contact/">
-                Get in touch <Icon name="chevron" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageClose id="next-title" />
     </div>
   )
 }

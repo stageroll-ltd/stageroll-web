@@ -15,6 +15,8 @@
   --hm-deep: #93204a;
   --hm-mid: #c42a60;
   --hm-top: #e2366e;
+  /* Half way from top to glow, for a band between them (the home page's joining bands). */
+  --hm-ember: #f1635a;
   --hm-glow: #ff8f45;
   --hm-soft: #ffd0c8;
 }
@@ -357,7 +359,7 @@
 }
 
 /* The hero's lines (heroLines.ts): a ribbon of fine lines behind the words,
-   the full width of the page and cut off at the strip. They are made in
+   the full width of the page, fading out just above the strip. They are made in
    the browser, which shows them (`on`) once they are and fades their
    colour in as the ribbon opens; a phone has none. */
 .hm-stage {
@@ -381,6 +383,10 @@
     stroke-width: 1.2;
     pointer-events: none;
     visibility: hidden;
+    /* The lines fade out over their last 48px, so they do not end in a
+       hard edge at the strip's line. */
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 48px), transparent);
+    mask-image: linear-gradient(180deg, #000 calc(100% - 48px), transparent);
   }
 
   .hm-lines.on {
@@ -388,32 +394,129 @@
   }
 }
 
-/* The departments, where a business site puts its customers' logos. */
+/* What StageRoll does and the departments it is for, where a business
+   site puts its customers' logos: one line of names moving slowly to the
+   left in a loop, between the rails, fading out at each end. The list is
+   there twice (Home.tsx); each copy moves left by its own length, so the
+   second is where the first began as the loop comes round. It holds still
+   under the pointer. With motion reduced there is one copy, standing
+   still and wrapping if it must. */
 .hm-strip {
   position: relative;
   border-block: 1px solid var(--hm-line);
 }
 
-.hm-strip ul {
+.hm-ticker {
+  display: flex;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 64px, #000 calc(100% - 64px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 64px, #000 calc(100% - 64px), transparent);
+}
+
+.hm-ticker ul {
+  flex: none;
   list-style: none;
   min-height: 66px;
-  margin-block: 0;
-  padding: 12px clamp(0px, 8.4vw, 120px);
+  margin: 0;
+  /* The space after the last name is the space between any two. */
+  padding: 0 72px 0 0;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 6px 24px;
+  gap: 72px;
   font-size: 19px;
   font-weight: 600;
   letter-spacing: -0.02em;
+  white-space: nowrap;
+  animation: hm-tick 60s linear infinite;
+}
+
+.hm-ticker:hover ul {
+  animation-play-state: paused;
+}
+
+@keyframes hm-tick {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* At a glance (HomeGlance in Home.tsx): four plain facts, where other
+   sites put numbers, as a second ruled row straight under the departments'
+   names: four cells from rail to rail with a hairline between them, and
+   one under the row from edge to edge, as the names have. Nothing here
+   moves. A phone has them two by two. */
+.hm-glance {
+  border-bottom: 1px solid var(--hm-line);
+}
+
+.hm-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-block: 0;
+}
+
+.hm-fact {
+  padding: 20px 16px 22px 0;
+}
+
+.hm-fact:nth-child(even) {
+  padding-left: 16px;
+  border-left: 1px solid var(--hm-line);
+}
+
+.hm-fact:nth-child(n + 3) {
+  border-top: 1px solid var(--hm-line);
+}
+
+.hm-fact dt {
+  color: var(--ink2);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.hm-fact dd {
+  margin: 6px 0 0;
+  font-size: clamp(18px, 1.55vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.27;
+}
+
+@media (min-width: 901px) {
+  .hm-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .hm-fact,
+  .hm-fact:nth-child(even) {
+    padding: 28px 24px 30px;
+  }
+
+  .hm-fact:nth-child(n + 3) {
+    border-top: 0;
+  }
+
+  .hm-fact + .hm-fact {
+    border-left: 1px solid var(--hm-line);
+  }
+}
+
+/* Opened from the app, the two cells about price are gone (`.sells`,
+   styles.css): the two that are left share the row. */
+html.in-app .hm-facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+html.in-app .hm-fact {
+  border-top: 0;
 }
 
 /* What joins up in one production (JoinBands in Home.tsx): five bands in
    the sunset colours, one for each thing, that run in from the left apart
    and close into one block, with a bracket down its end and "One
-   production" beside that. The bands are thick lines in a drawing 1232 by
-   430; the words are a list laid over it. The band still to come is an
+   production" beside that. The bands are thick lines in a drawing 1232
+   wide and as tall as its --n bands need (62 each, 30 apart: --h); the
+   words are a list laid over it. The band still to come is an
    outline, and last. On a phone there is no drawing: the list is a
    stack of bars. */
 .hm-join {
@@ -482,7 +585,8 @@
 @media (min-width: 901px) {
   .hm-join {
     margin-top: 56px;
-    aspect-ratio: 1232 / 430;
+    --h: calc(var(--n) * 92 - 30);
+    aspect-ratio: 1232 / var(--h);
   }
 
   .hm-join svg {
@@ -518,8 +622,8 @@
   .hm-join li {
     position: absolute;
     left: 0;
-    top: calc(var(--i) * 92 / 430 * 100%);
-    height: calc(62 / 430 * 100%);
+    top: calc(var(--i) * 92 / var(--h) * 100%);
+    height: calc(62 / var(--h) * 100%);
     min-height: 0;
     flex-wrap: nowrap;
     padding: 0 0 0 clamp(14px, 1.9%, 24px);
@@ -554,8 +658,8 @@
     position: absolute;
     left: calc(1026 / 1232 * 100%);
     right: 0;
-    top: calc(60 / 430 * 100%);
-    height: calc(310 / 430 * 100%);
+    top: calc(15 * (var(--n) - 1) / var(--h) * 100%);
+    height: calc(62 * var(--n) / var(--h) * 100%);
     margin: 0;
     font-size: clamp(16px, 1.55vw, 22px);
     font-weight: 600;
@@ -601,15 +705,15 @@
     transition: opacity 0.5s ease-out calc(var(--i) * 0.18s + 0.15s);
   }
 
-  /* The last band is across 1.45s in. */
+  /* The last drawn band sets off (--n - 2) turns in and takes 0.9s. */
   .hm-join.hm-in .hm-brace {
     stroke-dashoffset: 0;
-    transition: stroke-dashoffset 0.6s cubic-bezier(0.3, 0, 0.2, 1) 1.5s;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.3, 0, 0.2, 1) calc((var(--n) - 2) * 0.18s + 1s);
   }
 
   .hm-join.hm-in .hm-join-one {
     opacity: 1;
-    transition: opacity 0.4s ease-out 2.1s;
+    transition: opacity 0.4s ease-out calc((var(--n) - 2) * 0.18s + 1.6s);
   }
 }
 
@@ -1247,8 +1351,9 @@ a.hm-row:hover {
     padding: 56px 0 64px;
   }
 
-  .hm-strip ul {
-    padding-inline: 0;
+  .hm-ticker ul {
+    padding-right: 48px;
+    gap: 48px;
   }
 
   .hm-cards {
@@ -1394,5 +1499,23 @@ a.hm-row:hover {
   .hm-btn:hover svg,
   .hm-card:hover .hm-go svg {
     transform: none;
+  }
+
+  .hm-ticker {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .hm-ticker ul {
+    flex: 1;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 6px 24px;
+    padding: 12px clamp(0px, 8.4vw, 120px);
+    animation: none;
+  }
+
+  .hm-ticker ul + ul {
+    display: none;
   }
 }

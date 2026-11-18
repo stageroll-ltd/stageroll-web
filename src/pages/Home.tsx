@@ -195,29 +195,63 @@ const cards: { heading: string; text: string; slug: string; look: string; art: R
   },
 ]
 
-// What joins up in one production, as five bands that close into one block
-// (JoinBands, below). Budgeting is not built yet: its band is an outline,
-// and it comes last.
-const joins: { name: string; line?: string; tone?: 'deep' | 'mid' | 'top' | 'glow' }[] = [
+// The hero's strip: what StageRoll does, then the departments it is for.
+const covers = ['Research', 'Continuity', 'Inventory', 'Reporting', ...departments.map((d) => d.name)]
+
+// Four plain facts, where other sites put numbers. The two about price are
+// ways to buy, so they go when the app opened the page (`.sells`).
+const facts: { label: string; fact: string; sells?: boolean }[] = [
+  { label: 'Built for', fact: 'iPhone, iPad and Android' },
+  { label: 'Price', fact: 'Free to start', sells: true },
+  { label: 'Plans', fact: 'Every department on every plan', sells: true },
+  { label: 'Your script', fact: 'Read on your device, never uploaded' },
+]
+
+// The facts as a second ruled row straight under the departments' names:
+// still, between the hero's lines and the bands below.
+function HomeGlance() {
+  return (
+    <section className="hm-glance" aria-label="At a glance">
+      <dl className="hm-col hm-facts">
+        {facts.map(({ label, fact, sells }) => (
+          <div key={label} className={sells ? 'hm-fact sells' : 'hm-fact'}>
+            <dt>{label}</dt>
+            <dd>{fact}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
+}
+
+// What joins up in one production, as bands that close into one block
+// (JoinBands, below), deepest colour first. Budgeting is not built yet: its
+// band is an outline, and it comes last.
+const joins: { name: string; line?: string; tone?: 'deep' | 'mid' | 'top' | 'ember' | 'glow' }[] = [
   { name: 'Research', line: 'References for every look and set', tone: 'deep' },
   { name: 'Inventory', line: 'Every piece, and where it is', tone: 'mid' },
   { name: 'Continuity', line: 'Photos and notes, scene by scene', tone: 'top' },
-  { name: 'Collaboration', line: 'Your whole team in one production', tone: 'glow' },
+  { name: 'Collaboration', line: 'Your whole team in one production', tone: 'ember' },
+  { name: 'Reporting', line: 'Breakdowns of scenes, cast and crew', tone: 'glow' },
   { name: 'Budgeting' },
 ]
 
-// The drawing is 1232 by 430: each band is 62 tall, 30 apart on the left and
-// touching on the right. The bands close up between 440 and 770 across and
-// end at 980; a bracket down the block's end ties all five to its words.
+// The drawing is 1232 wide: each band is 62 tall, 30 apart on the left and
+// touching on the right, so its height and the block's place in it follow
+// from how many bands there are (home.css works out the same from --n).
+// The bands close up between 440 and 770 across and end at 980; a bracket
+// down the block's end ties them all to its words.
+const joinHeight = joins.length * 92 - 30
+const blockTop = 15 * (joins.length - 1)
 const bandApart = (i: number) => i * 92 + 31
-const bandJoined = (i: number) => 60 + i * 62 + 31
+const bandJoined = (i: number) => blockTop + i * 62 + 31
 
 /** A band's turn to arrive (the delays in home.css) and its colour, one of the sunset's. */
 const turn = (i: number, tone?: string) => ({ '--i': i, ...(tone && { '--tone': `var(--hm-${tone})` }) }) as CSSProperties
 
-// Five bands, one for each thing a production keeps, that run in from the
+// The bands, one for each thing a production keeps, that run in from the
 // left and close into one block; a bracket as tall as the block names it:
-// "One production". On a phone they are a stack of five bars.
+// "One production". On a phone they are a stack of bars.
 // They arrive one after another the first time the drawing is on screen,
 // then the bracket grows from its middle and its words appear
 // (home.css, once `hm-in` is set); until then, and with motion reduced or no
@@ -239,8 +273,8 @@ function JoinBands() {
     return () => seen.disconnect()
   }, [])
   return (
-    <div ref={box} className="hm-join">
-      <svg viewBox="0 0 1232 430" aria-hidden="true">
+    <div ref={box} className="hm-join" style={{ '--n': joins.length } as CSSProperties}>
+      <svg viewBox={`0 0 1232 ${joinHeight}`} aria-hidden="true">
         {joins.map(({ name, tone }, i) => {
           if (!tone) return null
           const a = bandApart(i)
@@ -263,13 +297,13 @@ function JoinBands() {
           )
         })}
         {/* The bracket down the block's end, in two halves from its middle, so it can grow out to both ends. */}
-        <path className="hm-brace" pathLength={1} d="M1008 215V61H996" />
-        <path className="hm-brace" pathLength={1} d="M1008 215V369H996" />
+        <path className="hm-brace" pathLength={1} d={`M1008 ${joinHeight / 2}V${blockTop + 1}H996`} />
+        <path className="hm-brace" pathLength={1} d={`M1008 ${joinHeight / 2}V${blockTop + joins.length * 62 - 1}H996`} />
       </svg>
       <ul>
         {joins.map(({ name, line, tone }, i) => (
-          // Ink words on the orange band and on the outline; white on the rest.
-          <li key={name} className={tone ? (tone === 'glow' ? 'hm-ink' : undefined) : 'hm-ink hm-soon'} style={turn(i, tone)}>
+          // White words on every band; ink on the outline, which has no colour behind it.
+          <li key={name} className={tone ? undefined : 'hm-ink hm-soon'} style={turn(i, tone)}>
             <strong>{name}</strong>
             {line ? <span>{line}</span> : <em>Coming soon</em>}
           </li>
@@ -316,14 +350,26 @@ export function Home() {
             </div>
           </div>
         </div>
+        {/* What it does, then who it is for, moving slowly to the left in a
+            loop (home.css): the list twice over, so as one copy leaves the
+            other has taken its place. The second copy is only for the eye. */}
         <div className="hm-strip">
-          <ul className="hm-col" aria-label="Departments">
-            {departments.map((d) => (
-              <li key={d.name}>{d.name}</li>
-            ))}
-          </ul>
+          <div className="hm-col hm-ticker">
+            <ul aria-label="What StageRoll does, and the departments it is for">
+              {covers.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
+            </ul>
+            <ul aria-hidden="true">
+              {covers.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
+
+      <HomeGlance />
 
       <section className="hm-sec" aria-labelledby="hm-does">
         <div className="hm-col hm-inset">

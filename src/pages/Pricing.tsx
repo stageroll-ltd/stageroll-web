@@ -5,14 +5,44 @@ import { Icon } from '../components/Icon'
 // fair-use caps on that card are never shown here. Rows marked `soon` are
 // features still being built; the tag comes off the day each one ships.
 
-type Plan = { name: string; price: string; per: string; who: string; seats: string }
+type Plan = {
+  name: string
+  price: string
+  per: string
+  who: string
+  seats: string
+}
 
 const plans: Plan[] = [
-  { name: 'Free', price: '£0', per: 'Up to three productions per account', who: 'Trying it on your own', seats: 'Just you' },
-  { name: 'Starter', price: '£29', per: 'per production a month', who: 'A small indie or a short production', seats: '10 seats' },
+  {
+    name: 'Free',
+    price: '£0',
+    per: 'Up to three productions per account',
+    who: 'Trying it on your own',
+    seats: 'Just you',
+  },
+  {
+    name: 'Starter',
+    price: '£29',
+    per: 'per production a month',
+    who: 'A small indie or a short production',
+    seats: '10 seats',
+  },
   // Pro's price (£299 on #18) is held back while it is tested with productions.
-  { name: 'Pro', price: 'Talk to us', per: 'A monthly price per production', who: 'Features and series, with the whole crew', seats: 'Unlimited seats' },
-  { name: 'Enterprise', price: 'Talk to us', per: 'A custom price for your production', who: 'Studio productions', seats: 'Unlimited seats' },
+  {
+    name: 'Pro',
+    price: 'Talk to us',
+    per: 'A monthly price per production',
+    who: 'Features and series, with the whole crew',
+    seats: 'Unlimited seats',
+  },
+  {
+    name: 'Enterprise',
+    price: 'Talk to us',
+    per: 'A custom price for your production',
+    who: 'Studio productions',
+    seats: 'Unlimited seats',
+  },
 ]
 
 /** A cell: words (with a quieter line under them), or true for included and false for not. */
@@ -25,7 +55,10 @@ const table: { group: string; rows: Row[] }[] = [
     group: 'Team',
     rows: [
       { label: 'Seats', cells: ['1', '10', 'Unlimited', 'Unlimited'] },
-      { label: 'Who you can invite', cells: [false, 'Coordinators and crew', 'Coordinators and crew', 'Coordinators and crew'] },
+      {
+        label: 'Who you can invite',
+        cells: [false, 'Coordinators and crew', 'Coordinators and crew', 'Coordinators and crew'],
+      },
     ],
   },
   {
@@ -37,7 +70,10 @@ const table: { group: string; rows: Row[] }[] = [
       },
       { label: 'Items', cells: ['50', '1,000', 'Unlimited', 'Unlimited'] },
       { label: 'Crates', cells: ['10', '50', '300', 'Custom'] },
-      { label: 'Research references', cells: [false, '500', '3,000', 'Custom'] },
+      {
+        label: 'Research references',
+        cells: [false, '500', '3,000', 'Custom'],
+      },
       // A photo is stored at three sizes, made on the phone (stageroll-native
       // src/photos/prepare.ts): 2048, 1280 and 512 on the long edge. Photos
       // taken in the app measured about 1 MB for all three (dev project,
@@ -57,19 +93,46 @@ const table: { group: string; rows: Row[] }[] = [
     group: 'Features',
     rows: [
       { label: 'Every department', cells: [true, true, true, true] },
-      { label: 'Several scripts and episodes', cells: [false, false, true, true] },
-      { label: 'Reports as spreadsheets (CSV)', cells: [false, false, true, true] },
-      { label: 'Screenshot and recording protection', cells: [false, false, true, true] },
-      { label: 'Production-wide reports', cells: [false, false, true, true], soon: true },
-      { label: 'Production and department budgets', cells: [false, false, true, true], soon: true },
-      { label: 'QR labels printed in bulk', cells: [false, false, true, true], soon: true },
+      {
+        label: 'Several scripts and episodes',
+        cells: [false, false, true, true],
+      },
+      {
+        label: 'Reports as spreadsheets (CSV)',
+        cells: [false, false, true, true],
+      },
+      {
+        label: 'Screenshot and recording protection',
+        cells: [false, false, true, true],
+      },
+      {
+        label: 'Production-wide reports',
+        cells: [false, false, true, true],
+        soon: true,
+      },
+      {
+        label: 'Production and department budgets',
+        cells: [false, false, true, true],
+        soon: true,
+      },
+      {
+        label: 'QR labels printed in bulk',
+        cells: [false, false, true, true],
+        soon: true,
+      },
     ],
   },
   {
     group: 'Contract and support',
     rows: [
-      { label: 'Contract', cells: [false, 'Monthly, rolling', 'Monthly, rolling', 'Custom length'] },
-      { label: 'Payment', cells: [false, 'Card', 'Card', 'Invoice or purchase order'] },
+      {
+        label: 'Contract',
+        cells: [false, 'Monthly, rolling', 'Monthly, rolling', 'Custom length'],
+      },
+      {
+        label: 'Payment',
+        cells: [false, 'Card', 'Card', 'Invoice or purchase order'],
+      },
       { label: 'Support', cells: ['Help pages', 'Email', 'Email', 'Priority'] },
     ],
   },
@@ -89,7 +152,12 @@ const notes = [
 
 function Value({ cell }: { cell: Cell }) {
   if (cell === true) return <Icon name="check" className="yes" />
-  if (cell === false) return <span className="no" aria-label="Not included">–</span>
+  if (cell === false)
+    return (
+      <span className="no" aria-label="Not included">
+        –
+      </span>
+    )
   if (typeof cell === 'object') {
     return (
       <>
@@ -103,12 +171,17 @@ function Value({ cell }: { cell: Cell }) {
 
 export function Pricing() {
   return (
-    <div className="prod">
-      <section className="prod-hero prod-pricing">
-        <div className="wrap">
+    <div className="prod hm fr">
+      {/* A short opening, so the plans are the first thing on the page. */}
+      <section className="fr-top">
+        <div className="hm-col hm-inset">
           <h1>Priced per production.</h1>
           <p className="lede">That’s how the budget works: the production pays, not the people on it.</p>
+        </div>
+      </section>
 
+      <section className="prod-pricing">
+        <div className="hm-col hm-inset">
           <ul className="prod-plans">
             {plans.map((plan) => (
               <li key={plan.name}>
@@ -165,7 +238,7 @@ export function Pricing() {
           </ul>
 
           <div className="acts">
-            <a className="pill dark" href="/contact/">
+            <a className="hm-btn dark" href="/contact/">
               Get in touch
             </a>
           </div>

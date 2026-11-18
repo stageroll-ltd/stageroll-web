@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 
 import { accountPages, signedIn } from './account/pages'
 import { Icon } from './components/Icon'
-import { APP_STORE_URL, GOOGLE_PLAY_URL, framed as isFramed } from './links'
+import { APP_STORE_URL, GOOGLE_PLAY_URL } from './links'
 import { departmentPages } from './pages/departments'
 import { featurePages } from './pages/features'
 
@@ -24,8 +24,9 @@ const nav: { href: string; label: string; sells?: boolean }[] = [
 ]
 
 // The header sits straight on the page: the logo left, the links centred.
-// The home page is framed (`framed`, home.css): an announcement above the
-// header, and the header's and footer's content kept to the page's column.
+// Every page is framed (`framed`, home.css): the header's and footer's
+// content kept to the page's column, with a rail at each edge. The home
+// page has an announcement above the header too.
 // On a phone the links fold into a menu behind a burger (styles.css).
 // The footer is plain at the bottom of every page: the wordmark, links and
 // small print straight on the page. A route's `end` (the home page's closing
@@ -56,9 +57,8 @@ function useAccountLink(current: string): { href: string; label: string } | null
 
 export function Layout({ current, end, children }: { current: string; end?: ReactNode; children: ReactNode }) {
   const account = useAccountLink(current)
-  // The home page, and the pages that have taken its look so far.
+  // Only the home page has the announcement, and it draws its own rails.
   const home = current === '/'
-  const framed = isFramed(current)
   const [menu, setMenu] = useState(false)
   useEffect(() => {
     if (!menu) return
@@ -77,7 +77,7 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-  const cls = ['nav', framed && 'framed', scrolled && 'scrolled'].filter(Boolean).join(' ')
+  const cls = ['nav', 'framed', scrolled && 'scrolled'].filter(Boolean).join(' ')
   return (
     <>
       {home && (
@@ -89,6 +89,8 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
           </a>
         </p>
       )}
+      {/* The column's rails, down the whole page (home.css). */}
+      {!home && <div className="hm-rails" aria-hidden="true" />}
       <header className={cls}>
         <a className="brand" href="/" aria-label="StageRoll home">
           {/* Both wordmarks, ink and white; CSS shows the one for the ground. */}
@@ -169,7 +171,7 @@ export function Layout({ current, end, children }: { current: string; end?: Reac
       <main>{children}</main>
 
       {end && <div className="end">{end}</div>}
-      <footer className={framed ? 'foot framed' : 'foot'}>
+      <footer className="foot framed">
         <div className="foot-top">
           <div>
             <img className="wordmark" src="/brand/wordmark.svg" width={120} height={33} alt="StageRoll" />
