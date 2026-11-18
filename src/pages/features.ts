@@ -199,7 +199,7 @@ export const featurePages: FeaturePage[] = [
       ['Unified with continuity', 'Changes, styles, looks and props are made from the same items, and every item shows each scene and record it’s in, and the research it came from. Nothing is entered twice.', 'link'],
       ['Folders', 'Folders within folders, browsed like files on your phone.', 'folder'],
       ['Crates', 'Labelled boxes with their own code, photos and note, listing everything packed inside.', 'box'],
-      ['Codes and QR', 'Every item and crate gets a short code and QR, unique to the production.', 'qr'],
+      ['Codes and QR', 'Every item and crate gets a short code and QR, unique to the production, and a label to print.', 'qr'],
       ['Hire and loans', 'Who it came from, the paperwork, and when it goes back.', 'clock'],
       ['Character closets', 'Everything filed under a character, picture first.', 'user'],
       ['Status and flags', 'Anything damaged, lost or needing repair is flagged, so problems are easy to spot.', 'flag'],
@@ -236,6 +236,11 @@ export const featurePages: FeaturePage[] = [
       ['A torch built in', 'For the back of a dark truck.', 'torch'],
       ['Only your production', 'A code from another production won’t open, and you’re told why.', 'shield'],
       ['Personal codes', 'Invite the right person, with no typing and no wrong address.', 'userplus'],
+      [
+        'Printed labels',
+        'Print a label for every item and crate, and for change bags, scene bags, rail cards and return tags, on plain paper, Avery sheets or your own sheet or roll.',
+        'tag',
+      ],
     ],
   },
   {
@@ -293,6 +298,16 @@ export const featurePages: FeaturePage[] = [
       ['Props', 'Props by scene and the props inventory.', 'clapper'],
       ['Hair and makeup', 'Hair and makeup plots, their continuity books and their inventories.', 'scissors'],
       ['Sets', 'The set inventory: all the dressing and crates, with condition and cost.', 'pin'],
+      [
+        'Labels',
+        'Each department prints its own: for items, crates, change bags, scene bags, rail cards and return tags.',
+        'tag',
+      ],
+      [
+        'The production',
+        'A scene breakdown, shoot days, a cast list, a crew list and what each department’s inventory is worth.',
+        'layers',
+      ],
       [
         'Continuity books',
         'Every photo in scene order or shoot order, with or without notes, at the photo size you pick. Add a cover page, or start each character on a new page.',

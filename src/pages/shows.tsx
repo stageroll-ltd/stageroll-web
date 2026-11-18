@@ -143,7 +143,7 @@ export const shows: Record<string, Show> = {
     art: <Draw of="scanning" />,
     bands: [
       { kind: 'list', heading: 'How codes work', items: steps('scanning', ['qr', 'camera', 'userplus']) },
-      { kind: 'grid', heading: 'What a code can do', items: features('scanning'), cols: 5 },
+      { kind: 'grid', heading: 'What a code can do', items: features('scanning'), cols: 3 },
     ],
   },
 
@@ -167,7 +167,7 @@ export const shows: Record<string, Show> = {
         heading: 'From the production to the page',
         items: steps('reports', ['list', 'filter', 'layers', 'eye', 'share']),
       },
-      { kind: 'grid', heading: 'Every department’s paperwork', items: features('reports'), cols: 5 },
+      { kind: 'grid', heading: 'Every department’s paperwork', items: features('reports') },
     ],
   },
 

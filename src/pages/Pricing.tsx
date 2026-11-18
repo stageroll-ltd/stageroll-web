@@ -108,7 +108,6 @@ const table: { group: string; rows: Row[] }[] = [
       {
         label: 'Production-wide reports',
         cells: [false, false, true, true],
-        soon: true,
       },
       {
         label: 'Production and department budgets',
@@ -118,7 +117,6 @@ const table: { group: string; rows: Row[] }[] = [
       {
         label: 'QR labels printed in bulk',
         cells: [false, false, true, true],
-        soon: true,
       },
     ],
   },

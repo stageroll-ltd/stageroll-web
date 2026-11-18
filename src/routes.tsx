@@ -165,7 +165,7 @@ export const routes: Route[] = [
       'StageRoll is priced per production, not per person: Free, Starter, Pro and Enterprise plans, every department included. Crew accounts are always free.',
     nav: 'Pricing',
     Page: Pricing,
-    updated: '2026-11-17',
+    updated: '2026-11-18',
   },
   {
     path: '/about/',
