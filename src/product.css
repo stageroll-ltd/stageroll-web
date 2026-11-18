@@ -1719,3 +1719,84 @@
     padding: 24px 0 28px;
   }
 }
+
+/* A comparison page (pages/Compare.tsx): the facts in a ruled table from
+   rail to rail, the first column for what is compared and one each for the
+   two products. */
+.cmp .sec-hero {
+  padding-bottom: 72px;
+}
+
+.cmp-scroll {
+  overflow-x: auto;
+  border-block: 1px solid var(--hm-line);
+}
+
+.cmp-table {
+  width: 100%;
+  min-width: 640px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.cmp-table thead td {
+  width: 24%;
+}
+
+.cmp-table th,
+.cmp-table td {
+  padding: 18px 24px;
+  vertical-align: top;
+}
+
+.cmp-table thead th {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.cmp-table tbody tr {
+  border-top: 1px solid var(--hm-line);
+}
+
+.cmp-table tbody th {
+  font-weight: 500;
+  color: var(--ink2);
+}
+
+.cmp-table td + td,
+.cmp-table th + th,
+.cmp-table tbody th + td {
+  border-left: 1px solid var(--hm-line);
+}
+
+.cmp-source {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.cmp-note {
+  margin: 28px 0 0;
+  max-width: 46em;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--mute);
+}
+
+.cmp-fair {
+  margin: 0;
+  padding-left: 1.2em;
+  max-width: 44em;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink2);
+}
+
+.cmp-fair li + li {
+  margin-top: 8px;
+}

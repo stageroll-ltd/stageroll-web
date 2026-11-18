@@ -1,31 +1,24 @@
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 
-import { DepartmentCells, departments } from '../components/DepartmentCells'
+import { departments } from '../components/DepartmentCells'
 import { Icon } from '../components/Icon'
 import { StoreBadges } from '../components/StoreBadges'
 import { runBandLines } from '../bandLines'
 import { runHeroLines } from '../heroLines'
-import { homeDrawings } from './drawings'
 import { featurePages } from './features'
 
 // The home page: a framed column (home.css). The page's words sit in a
 // column, 1264px at its widest, with a rail at each edge; down it go the hero, the
 // facts, what joins up in one production (the bands), then the product as a
 // whole: continuity and inventory as equals, the areas round them, what it
-// is all built on, privacy, a row of doors to the departments, pricing in a
-// line and the close (HomeEnd, below).
+// is all built on, privacy, and the close (HomeEnd, below), which carries
+// the ways on to the product and the prices.
 
 /** A feature's own page under /product/ (pages/features.ts), or the overview if it has none. */
 const featureHref = (slug: string) => (featurePages.some((page) => page.slug === slug) ? `/product/${slug}/` : '/product/')
 
-/** One of the home page's small line drawings (drawings.ts). */
-function Draw({ of, box }: { of: keyof typeof homeDrawings; box: string }) {
-  return <svg className="hm-draw" viewBox={box} aria-hidden="true" dangerouslySetInnerHTML={{ __html: homeDrawings[of] }} />
-}
-
 const privacy: { heading: string; text: string }[] = [
-  // The facts row above has already said the script stays on the device, so
-  // the two things not yet said come first.
+  // The lock and the promise first, then the script.
   { heading: 'Locked to you.', text: 'A PIN and Face ID, with screen protection for productions that need it.' },
   { heading: 'No ads, no selling.', text: 'Your work is never sold, used for advertising or used to train AI.' },
   { heading: 'Read on your device.', text: 'The script file is never uploaded.' },
@@ -99,7 +92,7 @@ const pillars = {
   inventory: {
     name: 'Inventory',
     line: 'Everything the production owns, and where it is right now.',
-    tags: ['Items and crates', 'A code on every piece', 'Tied to its scenes'],
+    tags: ['Items and crates', 'Split by department', 'Tied to continuity'],
     link: 'How inventory works',
   },
 }
@@ -206,16 +199,18 @@ const covers = ['Research', 'Continuity', 'Inventory', 'Reporting', ...departmen
 // ways to buy, so they go when the app opened the page (`.sells`).
 const facts: { label: string; fact: string; sells?: boolean }[] = [
   { label: 'Built for', fact: 'iPhone, iPad and Android' },
-  { label: 'Price', fact: 'Free to start', sells: true },
+  { label: 'Priced', fact: 'Per production', sells: true },
+  { label: 'To start', fact: 'Free', sells: true },
   { label: 'Plans', fact: 'Every department on every plan', sells: true },
-  { label: 'Your script', fact: 'Read on your device, never uploaded' },
 ]
 
 // The facts as a second ruled row straight under the departments' names:
 // still, between the hero's lines and the bands below.
 function HomeGlance() {
   return (
-    <section className="hm-glance" aria-label="At a glance">
+    // Getting it, at a glance: what it runs on, how it is priced, what it costs to start and what a plan covers.
+    // Three of the four are about price, so the row goes when the app opened the page (`.sells`).
+    <section className="hm-glance sells" aria-label="At a glance">
       <dl className="hm-col hm-facts">
         {facts.map(({ label, fact, sells }) => (
           <div key={label} className={sells ? 'hm-fact sells' : 'hm-fact'}>
@@ -481,13 +476,11 @@ export function Home() {
               <PillarHead slug="continuity" />
               <div className="hm-pillar-art">
                 <img className="hm-sheet" src="/screens/page-book.webp" alt="" width={760} height={805} loading="lazy" decoding="async" />
-                <Phone screen="change" />
               </div>
             </article>
             <article className="hm-pillar inv" onPointerMove={lean} onPointerLeave={level}>
               <PillarHead slug="inventory" />
               <div className="hm-pillar-art">
-                <Phone screen="inventory-list" />
                 <img className="hm-item" src="/screens/item-card.webp" alt="" width={720} height={347} loading="lazy" decoding="async" />
                 <span className="hm-due" aria-hidden="true">
                   <span>
@@ -593,33 +586,16 @@ export function Home() {
         </div>
       </section>
 
-      {/* The departments: a ruled row of cells from rail to rail (components/DepartmentCells.tsx). */}
-      <DepartmentCells />
-
-      {/* A way to buy, so it goes when the app opened the page (`.sells`): the words, the way to the
-          pricing page, and the four plans drawn, with no prices. */}
-      <section className="hm-pricing sells" aria-label="Pricing">
-        <div className="hm-col hm-inset">
-          <div className="hm-plans">
-            <div>
-              <div className="hm-two">
-                <h2>Priced per production.</h2> <p>Crew never pay.</p>
-              </div>
-              <p>Four plans, from Free to Enterprise, with every department on every one.</p>
-              <a className="hm-btn dark" href="/pricing/">
-                See pricing <Icon name="chevron" />
-              </a>
-            </div>
-            <Draw of="plans" box="0 0 420 150" />
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
 
 // The close, under the page and above the footer (routes.tsx `End`): the
-// words, where to get the app, and the sunset bands laid flat as a horizon.
+// words, where to get the app with the ways on to the product and the
+// prices beside it, and the sunset bands laid flat as a horizon. Pricing and
+// the departments were sections of their own above; now pricing is a button
+// here, and the departments are reached through the product (and the
+// header's menu).
 export function HomeEnd() {
   return (
     <section className="hm-close" id="get">
@@ -627,6 +603,15 @@ export function HomeEnd() {
         <h2>Your next production, sorted.</h2>
         <p>One production, every department, from research to wrap.</p>
         <StoreBadges />
+        <div className="hm-close-acts">
+          <a className="hm-btn" href="/product/">
+            Explore the product <Icon name="chevron" />
+          </a>
+          {/* A way to buy, so it goes when the app opened the page (`.sells`). */}
+          <a className="hm-btn sells" href="/pricing/">
+            See pricing <Icon name="chevron" />
+          </a>
+        </div>
       </div>
       <div className="hm-bands" aria-hidden="true" />
     </section>

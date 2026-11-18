@@ -518,20 +518,57 @@ body::after {
   margin-top: 36px;
 }
 
-/* The hero's lines (heroLines.ts): a ribbon of fine lines behind the words,
-   the full width of the page, fading out just before each edge. They are made in
-   the browser, which shows them (`on`) once they are and fades their
-   colour in as the ribbon opens; a phone has none. */
+/* The hero's lines (heroLines.ts): a ribbon of fine lines, the full width
+   of the page, fading out just before each edge. On a wide screen they lie
+   behind the words. On a phone the words fill the width, so the lines have
+   a band of their own above them, under the header. They are made in the
+   browser, which shows them (`on`) once they are and fades their colour in
+   as the ribbon opens; with no script there are none, and no band. */
 .hm-stage {
   position: relative;
   overflow: hidden;
 }
 
+/* The lines fade out over the last of the way to each edge (--fade), so they
+   do not end in a hard cut: one fade down the page and one across it, and
+   the lines show only where both do. */
 .hm-lines {
   display: none;
+  fill: none;
+  stroke-width: 1.2;
+  pointer-events: none;
+  visibility: hidden;
+  --fade: 28px;
+  -webkit-mask-image:
+    linear-gradient(180deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent),
+    linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(180deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent),
+    linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+  mask-composite: intersect;
+}
+
+.hm-lines.on {
+  visibility: visible;
+}
+
+/* The phone's band: a little taller on a wider screen, and the words come
+   straight after it. */
+@media (max-width: 900px) and (scripting: enabled) {
+  .hm-lines {
+    display: block;
+    width: 100%;
+    height: clamp(160px, 28vw, 240px);
+  }
+
+  .hm-stage .hm-hero-in {
+    padding-top: 8px;
+  }
 }
 
 @media (min-width: 901px) {
+  /* Behind the words, as large as the hero, with a longer fade. */
   .hm-lines {
     display: block;
     position: absolute;
@@ -539,27 +576,7 @@ body::after {
     inset: 0;
     width: 100%;
     height: 100%;
-    fill: none;
-    stroke-width: 1.2;
-    pointer-events: none;
-    visibility: hidden;
-    /* The lines fade out over the last 40px before each edge (the strip's
-       line, the header's and the two sides of the window), so they do not
-       end in a hard cut: one fade down the page and one across it, and
-       the lines show only where both do. */
     --fade: 40px;
-    -webkit-mask-image:
-      linear-gradient(180deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent),
-      linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(180deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent),
-      linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
-    mask-composite: intersect;
-  }
-
-  .hm-lines.on {
-    visibility: visible;
   }
 }
 
@@ -668,16 +685,6 @@ body::after {
   .hm-fact + .hm-fact {
     border-left: 1px solid var(--hm-line);
   }
-}
-
-/* Opened from the app, the two cells about price are gone (`.sells`,
-   styles.css): the two that are left share the row. */
-html.in-app .hm-facts {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-html.in-app .hm-fact {
-  border-top: 0;
 }
 
 /* What joins up in one production (JoinBands in Home.tsx): five bands in
@@ -1621,8 +1628,10 @@ a.hm-row:hover {
   color: var(--ink2);
 }
 
+/* The "launching on" mark stands on its own line, over the two buttons. */
 .hm-close .stores {
   justify-content: center;
+  margin-bottom: 14px;
 }
 
 .hm-close > .hm-bands {
@@ -1940,12 +1949,15 @@ a.hm-row:hover {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
-/* A panel's picture: 608 by 430 as drawn, everything in it a share of that. */
+/* A panel's picture: a glimpse, 608 by 210 as drawn, everything in it a
+   share of that. No phones and no photographs in it: the head of the
+   printed page, the rest of it below the panel's foot; and the item's card
+   with its dates. */
 .hm-pillar-art {
   position: relative;
   align-self: end;
   container-type: inline-size;
-  aspect-ratio: 608 / 430;
+  aspect-ratio: 608 / 210;
   margin-top: 28px;
   overflow: hidden;
 }
@@ -1983,49 +1995,41 @@ a.hm-row:hover {
   border-radius: 4px;
 }
 
+/* The page is wide and set low, so the panel's foot cuts it off above its
+   first row of photographs (they start 0.358 of its width down). */
 .hm-pillar.sun .hm-sheet {
-  left: 6.6%;
-  top: 15%;
-  width: 51%;
-  rotate: -3deg;
-}
-
-.hm-pillar.sun .hm-shot {
-  right: 8.5%;
-  top: 1.5%;
-  width: 35.2%;
-}
-
-.hm-pillar.inv .hm-shot {
-  left: 8%;
-  top: 0.5%;
-  width: 36.8%;
+  left: 10%;
+  top: 22%;
+  width: 80%;
+  rotate: -2deg;
 }
 
 .hm-item {
-  right: 5.3%;
-  top: 20%;
+  left: 7%;
+  top: 7%;
   width: 52%;
   border-radius: 2.3cqw;
 }
 
+/* The dates sit over the card's lower corner, under its code. Their words
+   keep a readable size however narrow the panel. */
 .hm-due {
   position: absolute;
-  right: 5.3%;
-  top: 60.5%;
-  width: 38.8%;
+  right: 7%;
+  top: 46%;
+  width: 42%;
   border-radius: 2.3cqw;
   background: var(--card);
   color: var(--ink);
   box-shadow: 0 0 0 1px rgba(11, 16, 27, 0.07), 0 30px 60px -24px rgba(11, 16, 27, 0.45);
-  font-size: 2.2cqw;
+  font-size: clamp(10.5px, 2.2cqw, 13px);
   line-height: 1.4;
 }
 
 .hm-due span {
   display: flex;
   justify-content: space-between;
-  padding: 2cqw 2.6cqw;
+  padding: clamp(7px, 2cqw, 11px) clamp(10px, 2.6cqw, 15px);
   color: var(--ink2);
 }
 
@@ -2066,10 +2070,6 @@ a.hm-row:hover {
   /* Furthest back: the printed page moves least, and the other way. */
   .hm-pillar .hm-sheet {
     translate: calc(var(--tx) * -10px) calc(var(--ty) * -8px);
-  }
-
-  .hm-pillar .hm-shot {
-    translate: calc(var(--tx) * 14px) calc(var(--ty) * 10px);
   }
 
   .hm-pillar .hm-item {
@@ -2359,81 +2359,21 @@ a.hm-row:hover {
   border-radius: 4.3cqw;
 }
 
-/* The departments: one row of doors, joined into a single ruled group. */
-.hm-doors {
-  border-top: 1px solid var(--hm-line);
-}
-
-.hm-doors > div {
+/* In the close: under where to get the app, the ways on to the product and
+   the prices, side by side; the "launching on" mark is squared off to match
+   the buttons under it. (The departments as a group of five buttons here, and
+   as a sentence of links, were both tried and turned down.) */
+.hm-close-acts {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px 24px;
-  min-height: 118px;
-  padding-block: 28px;
+  justify-content: center;
+  gap: 10px;
 }
 
-.hm-doors h2 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.hm-doors ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  border: 1px solid var(--hm-edge);
+.hm-close .store.soon {
+  height: 44px;
   border-radius: 2px;
-  background: var(--card);
-}
-
-.hm-doors li {
-  display: flex;
-}
-
-.hm-doors li + li {
-  border-left: 1px solid var(--hm-edge);
-}
-
-/* In the group a door has no box of its own: the group's rules are its
-   edges, so the pointer shows as paper behind it, and it does not shrink
-   away from them when pressed. */
-.hm-doors .hm-btn {
-  border: 0;
-  border-radius: 0;
-  background: none;
-}
-
-.hm-doors .hm-btn:hover {
-  background: var(--paper);
-}
-
-.hm-doors .hm-btn:active {
-  transform: none;
-}
-
-/* Too narrow for the five side by side: a ruled list, one to a row. */
-@media (max-width: 700px) {
-  .hm-doors ul {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .hm-doors li + li {
-    border-left: 0;
-    border-top: 1px solid var(--hm-edge);
-  }
-
-  .hm-doors .hm-btn {
-    flex: 1;
-    justify-content: space-between;
-    height: 48px;
-    padding: 0 16px;
-  }
 }
 
 /* The home page's small line drawings (drawings.ts), in the hand of the
@@ -2633,50 +2573,6 @@ a.hm-row:hover {
   color: rgba(255, 255, 255, 0.88);
 }
 
-/* Pricing: a paper panel, the words and the way on at its left and the
-   four plans drawn at its right. */
-.hm-pricing {
-  padding: 96px 0;
-}
-
-/* A band, not a card inside the column: its fill runs from rail to rail and
-   its rules meet them square. */
-.hm-plans {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 48px;
-  align-items: center;
-  padding: 56px;
-  border-block: 1px solid var(--hm-line);
-  background: var(--paper);
-}
-
-@media (min-width: 901px) {
-  .hm-plans {
-    margin-inline: -16px;
-    padding-inline: 72px;
-  }
-}
-
-.hm-plans .hm-two {
-  font-size: clamp(26px, 2.2vw, 36px);
-}
-
-.hm-plans > div > p {
-  margin: 14px 0 28px;
-  max-width: 24em;
-  font-size: 17px;
-  line-height: 1.45;
-  color: var(--ink2);
-}
-
-.hm-plans .hm-draw {
-  width: 100%;
-  max-width: 460px;
-  height: auto;
-  justify-self: end;
-}
-
 /* A narrower column: the tiles go two by two. */
 @media (max-width: 1180px) {
   .hm-around {
@@ -2766,24 +2662,111 @@ a.hm-row:hover {
   }
 }
 
-@media (max-width: 900px) {
-  .hm-plans {
-    grid-template-columns: minmax(0, 1fr);
-    padding: 32px 24px;
-  }
-
-  .hm-plans .hm-draw {
-    justify-self: start;
-  }
-
-  .hm-pricing {
-    padding: 64px 0;
-  }
-}
-
 @media (max-width: 640px) {
+  /* On a phone the four tiles stay two by two, small, so they take one
+     screen and not four. Each is about as narrow as a tile is four across
+     on a wide screen, so its picture is drawn as it is there (the rules at
+     the top), a little shorter; the words are set smaller to fit. */
   .hm-around {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .hm-tile {
+    padding: 14px 12px 0;
+  }
+
+  .hm-tile h3 {
+    gap: 6px;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .hm-tile h3 svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .hm-tile p {
+    margin-top: 4px;
+    min-height: 0;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .hm-soon-tag {
+    height: 20px;
+    margin-top: 4px;
+    padding: 0 8px;
+    font-size: 11.5px;
+  }
+
+  .hm-tile-art {
+    aspect-ratio: 248 / 230;
+    margin-top: 14px;
+  }
+
+  .hm-tile-art .hm-shot {
+    left: 9.5%;
+    width: 81%;
+    padding: 3cqw;
+    border-radius: 14.5cqw;
+  }
+
+  .hm-tile-art .hm-shot img {
+    border-radius: 11.5cqw;
+  }
+
+  .hm-tile-art .hm-sheet {
+    left: 0;
+    width: 137%;
+  }
+
+  .hm-tree {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .hm-bars {
+    gap: 6px;
+    padding-inline: 0;
+    padding-bottom: 14px;
+  }
+
+  /* The two panels above them are quieter on a phone too: the words and
+     the tags a size smaller and less room round them, so each takes well
+     under a screen. Line drawings in place of the pictures were tried and
+     turned down. */
+  .hm-pillar-head {
+    padding: 20px 18px 0;
+  }
+
+  .hm-pillar-head h3 {
+    font-size: 24px;
+  }
+
+  .hm-pillar-head a {
+    font-size: 14px;
+  }
+
+  .hm-pillar-head p {
+    margin: 6px 0 12px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .hm-pillar-head ul {
+    gap: 6px;
+  }
+
+  .hm-pillar-head li {
+    height: 26px;
+    padding: 0 10px;
+    font-size: 12.5px;
+  }
+
+  .hm-pillar-art {
+    margin-top: 16px;
   }
 
   .hm-depts ul {

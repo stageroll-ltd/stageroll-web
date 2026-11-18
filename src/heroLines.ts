@@ -12,9 +12,13 @@
 // The ribbon is fitted to the hero whenever the hero changes size, so the
 // lines never cross a line of text or a button: the climb moves right, the
 // run sinks lower and the ribbon narrows until it is clear. Where nothing
-// fits, and on a phone, the hero has no lines. Reduced motion gets them still.
+// fits the hero has no lines. On a phone the words fill the width, so the
+// drawing is a band of its own above them (home.css) with nothing in it to
+// keep clear of, and the ribbon crosses it whole. Reduced motion gets them still.
 // A mouse moving over them pushes the lines near it gently the way it is
-// going; they settle back when it stops.
+// going, and they give way slowly, as if in something thick: a quick pass
+// barely moves them, a steady one drags them along, and they take a second
+// or two to settle back when it stops.
 
 /** A box to keep clear of, in the hero's own pixels. */
 export type Box = { x0: number; y0: number; x1: number; y1: number }
@@ -49,6 +53,11 @@ const PUSH = 11
 const PUSH_LAG = 150
 /** A pointer trailing its mark by this many pixels pushes at full strength. */
 const PUSH_FULL = 70
+/**
+ * How slowly each point of a line gives way to the push, and settles back
+ * after it, in milliseconds: the thickness of what the lines move through.
+ */
+const PUSH_THICK = 600
 /** How long the ribbon takes to open when the page loads, in milliseconds. */
 const OPENING = 2000
 /**
@@ -179,7 +188,23 @@ export function fit(w: number, h: number, words: Box[]): Ribbon | null {
 const round = (v: number) => Math.round(v * 10) / 10
 
 /** Where the pointer's push is centred, and the push there, in pixels each way. */
-export type Poke = { x: number; y: number; dx: number; dy: number }
+export type Poke = {
+  x: number
+  y: number
+  dx: number
+  dy: number
+  /**
+   * What every point of every line is holding of the push so far (x and y,
+   * line by line at each step along the ribbon). With it, a point does not
+   * jump to where the push would put it: it moves `give` of the way there
+   * each time the lines are drawn, and as slowly back.
+   */
+  held?: Float32Array
+  /** How much of the way a point moves in this drawing, from 0 (it stays) to 1 (all of it). */
+  give?: number
+  /** Set by `paths`: whether any point is still out of its place. */
+  live?: boolean
+}
 
 /**
  * The ribbon's lines `ms` into its round, each as a path's `d`. `open` is how
@@ -195,6 +220,7 @@ export function paths(r: Ribbon, ms: number, open = 1, poke?: Poke): string[] {
   // Each line is drawn through the middles of its points, with the points as
   // handles, so it bends smoothly however few there are.
   let before: number[] = []
+  let moving = false
   for (let k = 0; k <= STEPS; k++) {
     const s = k / STEPS
     const [x, y] = point(curve, s)
@@ -214,13 +240,31 @@ export function paths(r: Ribbon, ms: number, open = 1, poke?: Poke): string[] {
       const d = t * flat + (t * t - 0.08) * bow
       let px = x + nx * d
       let py = y + ny * d
-      if (poke && (poke.dx !== 0 || poke.dy !== 0)) {
-        const far = Math.hypot(px - poke.x, py - poke.y) / REACH
-        if (far < 1) {
-          const near = (1 - far * far) ** 2
-          px += poke.dx * near
-          py += poke.dy * near
+      if (poke) {
+        // Where the push would put this point, were it free to go at once.
+        let wx = 0
+        let wy = 0
+        if (poke.dx !== 0 || poke.dy !== 0) {
+          const far = Math.hypot(px - poke.x, py - poke.y) / REACH
+          if (far < 1) {
+            const near = (1 - far * far) ** 2
+            wx = poke.dx * near
+            wy = poke.dy * near
+          }
         }
+        if (poke.held) {
+          const at = (k * LINES + i) * 2
+          const give = poke.give ?? 1
+          const hx = poke.held[at] ?? 0
+          const hy = poke.held[at + 1] ?? 0
+          wx = hx + (wx - hx) * give
+          wy = hy + (wy - hy) * give
+          poke.held[at] = wx
+          poke.held[at + 1] = wy
+          if (Math.abs(wx) > 0.05 || Math.abs(wy) > 0.05) moving = true
+        }
+        px += wx
+        py += wy
       }
       here.push(px, py)
       if (k === 0) {
@@ -234,6 +278,7 @@ export function paths(r: Ribbon, ms: number, open = 1, poke?: Poke): string[] {
     }
     before = here
   }
+  if (poke) poke.live = moving
   return out
 }
 
@@ -263,7 +308,6 @@ const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (2 - 2 * t) ** 3 / 2)
 export function runHeroLines(svg: SVGSVGElement): () => void {
   const stage = svg.parentElement
   if (!stage) return () => {}
-  const wide = window.matchMedia('(min-width: 901px)')
   const calm = window.matchMedia('(prefers-reduced-motion: reduce)')
 
   const lines = Array.from({ length: LINES }, (_, i) => {
@@ -284,9 +328,12 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
 
   // The pointer, for a mouse over the hero. A mark follows the mouse a little
   // behind it, and the lines round the mark are pushed the way the mouse is
-  // heading, harder the faster it goes. When the mouse stops the mark catches
-  // up and the lines settle back, so nothing jumps and nothing stays bent.
-  const poke: Poke = { x: 0, y: 0, dx: 0, dy: 0 }
+  // heading, harder the faster it goes. They do not go at once: each point
+  // holds what it has of the push (`held`) and gives way slowly, so the
+  // lines move as if through something thick. When the mouse stops the mark
+  // catches up and they settle back as slowly, so nothing jumps and nothing
+  // stays bent.
+  const poke: Poke = { x: 0, y: 0, dx: 0, dy: 0, held: new Float32Array(LINES * (STEPS + 1) * 2), give: 0, live: false }
   let aim: { x: number; y: number } | null = null
 
   // While the ribbon opens its colour comes in with it: closed, the lines
@@ -306,7 +353,8 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
     const step = Math.min(now - last, 100)
     // With the pointer at work the lines are redrawn every frame as well.
     // (a mouse at rest over the hero costs nothing extra).
-    const pushing = poke.dx !== 0 || poke.dy !== 0 || (aim !== null && Math.hypot(aim.x - poke.x, aim.y - poke.y) > 0.3)
+    const pushing =
+      poke.live === true || poke.dx !== 0 || poke.dy !== 0 || (aim !== null && Math.hypot(aim.x - poke.x, aim.y - poke.y) > 0.3)
     if (opened < OPENING || step >= 32 || pushing) {
       clock += step
       opened = Math.min(OPENING, opened + step)
@@ -328,7 +376,10 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
         poke.dx = Math.abs(poke.dx) < 0.05 ? 0 : poke.dx * fade
         poke.dy = Math.abs(poke.dy) < 0.05 ? 0 : poke.dy * fade
       }
+      // Only a drawing that time has passed for lets the points move; one made for a new size does not.
+      poke.give = 1 - Math.exp(-step / PUSH_THICK)
       draw()
+      poke.give = 0
     }
     run()
   }
@@ -339,7 +390,9 @@ export function runHeroLines(svg: SVGSVGElement): () => void {
 
   const measure = () => {
     const box = svg.getBoundingClientRect()
-    shape = wide.matches && box.width > 0 ? fit(box.width, box.height, wordsIn(stage, box)) : null
+    // Only the words the drawing lies behind count: where it is a band above them all, none do.
+    const words = wordsIn(stage, box).filter((word) => word.y1 > 0 && word.y0 < box.height)
+    shape = box.width > 0 ? fit(box.width, box.height, words) : null
     svg.classList.toggle('on', shape !== null)
     draw()
     run()
