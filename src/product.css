@@ -1574,6 +1574,28 @@
   width: min(190px, 100%);
 }
 
+/* In the smaller cells the drawings are a set (Product.tsx, `framed`): each
+   in the same frame, 84px tall, placed and sized by its ink so they start
+   on one line at the left and weigh about the same. A drawing that has not
+   been measured stands at the frame's corner at the old size. */
+.pov-rest .pov-art {
+  display: block;
+  position: relative;
+  height: 84px;
+  margin-bottom: 24px;
+}
+
+.pov-rest .pov-art .sec-rings {
+  position: absolute;
+  left: var(--x, 0);
+  top: var(--y, 0);
+  width: var(--w, 190px);
+  max-width: none;
+  margin: 0;
+  /* Its empty canvas can reach over the cell beside it, which must stay that cell's to press. */
+  pointer-events: none;
+}
+
 .pov-lead h3 {
   margin: 0 0 8px;
   font-size: clamp(28px, 2.4vw, 38px);
