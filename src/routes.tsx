@@ -79,6 +79,7 @@ const website = {
       sameAs: [
         `https://find-and-update.company-information.service.gov.uk/company/${company.number}`,
         'https://github.com/stageroll-ltd',
+        'https://www.linkedin.com/company/stageroll-ltd',
       ],
     },
   ],
