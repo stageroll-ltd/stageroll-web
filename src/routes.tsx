@@ -67,7 +67,7 @@ const website = {
       alternateName: 'stageroll.co',
       legalName: company.name,
       url: `${siteUrl}/`,
-      logo: `${siteUrl}/brand/wordmark.svg`,
+      logo: `${siteUrl}/brand/logo.png`,
       email: company.email,
       address: {
         '@type': 'PostalAddress',

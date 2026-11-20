@@ -47,7 +47,7 @@ export function fill(shell: string, page: Page, body: string): string {
   html = setAttr(html, 'property="og:url"', 'content', url)
   html = setAttr(html, 'rel="canonical"', 'href', url)
   // The account pages and the 404 page stay out of search results.
-  if (page.noindex) html = html.replace('</head>', '  <meta name="robots" content="noindex" />\n  </head>')
+  if (page.noindex) html = setAttr(html, 'name="robots"', 'content', 'noindex')
   if (page.jsonLd?.length) html = html.replace('</head>', `  ${page.jsonLd.map(ld).join('\n    ')}\n  </head>`)
   return html.replace(hole, `<div id="root">${body}</div>`)
 }
