@@ -203,7 +203,7 @@ export const featurePages: FeaturePage[] = [
       ['Hire and loans', 'Who it came from, the paperwork, and when it goes back.', 'clock'],
       ['Character closets', 'Everything filed under a character, picture first.', 'user'],
       ['Status and flags', 'Anything damaged, lost or needing repair is flagged, so problems are easy to spot.', 'flag'],
-      ['Valued', 'Unit and replacement costs feed the inventory report’s valuation.', 'pound'],
+      ['Valued', 'Record what each item cost, and the inventory report adds up the value.', 'pound'],
     ],
     related: [
       { href: '/departments/costume/', label: 'StageRoll for costume and wardrobe' },
