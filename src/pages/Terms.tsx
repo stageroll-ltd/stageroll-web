@@ -1,15 +1,21 @@
 import { company } from '../Layout'
 
-// The terms for StageRoll as it will be at launch, written to match the
-// privacy policy (Privacy.tsx), which also describes the launch state. A
-// draft: a solicitor reviews both before launch (stageroll-docs #40), and the
+// The terms for StageRoll, written to match the privacy policy
+// (Privacy.tsx) and by the same rule (owner's call, 27 November 2026):
+// room in it, few hard promises, broad is fine and false is not. A draft:
+// a solicitor reviews both before launch (stageroll-docs #40), and the
 // re-audit (#41) checks them against the app. Change the two together.
+//
+// The numbers here ARE promises and were left alone for the solicitor:
+// 30 days' notice of a price or terms change, 60 days' notice of closing,
+// no refunds for part months, the 30 + 30 days in the data processing
+// terms, and the liability cap. They are listed on #40 to confirm.
 
 export function Terms() {
   return (
     <article className="prose">
       <h1>Terms of service</h1>
-      <p className="updated">Last updated 30 October 2026</p>
+      <p className="updated">Last updated 27 November 2026</p>
 
       <h2>The service</h2>
       <p>
@@ -21,7 +27,8 @@ export function Terms() {
       </p>
       <p>
         These terms are between us and you. If you use StageRoll for a company or a production, you
-        accept them for it too, and you confirm you&rsquo;re allowed to.
+        accept them for it too, and you confirm you&rsquo;re allowed to. We may change them at any
+        time; the date above shows when they last changed.
       </p>
 
       <h2>Who can use it</h2>
@@ -32,8 +39,8 @@ export function Terms() {
 
       <h2>Your account</h2>
       <p>
-        You sign in with a one-time code sent to your email and your password, with Apple or Google,
-        or through your organisation&rsquo;s sign-in service. Keep your device, your password and
+        You sign in with a one-time code sent to your email and your password, or through another
+        sign-in service the app offers, such as Apple or Google. Keep your device, your password and
         your PIN secure. You&rsquo;re
         responsible for what happens under your account, and you should tell us straight away if you
         think someone else has used it.
@@ -42,16 +49,17 @@ export function Terms() {
       <h2>Productions and roles</h2>
       <p>
         Whoever creates a production owns it. The owner chooses its plan and manages its team, and
-        can hand the production over to another member. The owner and coordinators are responsible
+        where the app offers it, can hand the production over to another member. The owner and coordinators are responsible
         for inviting the right people, and for removing anyone who should no longer have access.
       </p>
 
       <h2>Your content</h2>
       <p>
         Everything your team puts into a production belongs to you and your production, not to us.
-        You give us permission to store, process and show it only so we can provide StageRoll to you
-        and your team. In the app, a production&rsquo;s content is shown only to its members. We
-        never sell your content, use it for advertising, or use it to train AI. How we handle
+        You give us permission to store, process and show it only so we can provide, support and
+        protect StageRoll for you and your team. Our providers and their tools may handle it for
+        that. In the app, a production&rsquo;s content is shown only to its members. We never sell
+        your content or use it for advertising. How we handle
         personal data is in our <a href="/privacy/">privacy policy</a>.
       </p>
 
@@ -59,8 +67,8 @@ export function Terms() {
       <p>
         A production&rsquo;s content can include information about people, including people who
         don&rsquo;t use StageRoll, such as cast. The company or person running the production is the
-        controller of that information, and of the access log on a production with enhanced
-        security. We process it on their behalf, under the data processing terms below.
+        controller of that information, and of any record the production keeps of who opened
+        what. We process it on their behalf, under the data processing terms below.
       </p>
       <p>
         If you run a production, you confirm that you have a lawful basis for what your team records
@@ -162,8 +170,8 @@ export function Terms() {
       <p>
         You can delete your account in the app at any time, or ask us to do it for you. Deletion
         takes effect straight away and can&rsquo;t be undone; our privacy policy says what goes and
-        what stays. If you own a production that other people are on, hand it over to one of them
-        first, so no team is left without an owner.
+        what stays. If you own a production that other people are on, or one on a paid plan, the
+        app asks you to settle that first, so no team is left without an owner.
       </p>
       <p>
         We may suspend or close an account or a production that breaks these terms, as acceptable
@@ -173,9 +181,9 @@ export function Terms() {
 
       <h2>Changes to these terms</h2>
       <p>
-        If we change these terms in a way that matters, we&rsquo;ll email account holders at least 30
-        days before the change takes effect. If you keep using StageRoll after that, the new terms
-        apply. The date at the top shows when they last changed.
+        We may change these terms at any time. If a change matters, we&rsquo;ll tell account holders
+        at least 30 days before it takes effect, by email or in the app. If you keep using StageRoll
+        after that, the new terms apply. The date at the top shows when they last changed.
       </p>
 
       <h2>General</h2>

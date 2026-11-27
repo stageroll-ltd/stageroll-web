@@ -151,7 +151,7 @@ export const departmentPages: DepartmentPage[] = [
       questions: [
         [
           'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps the scene list and the cast, never the dialogue or action.',
+          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Can I start before the script is locked?',
@@ -267,7 +267,7 @@ export const departmentPages: DepartmentPage[] = [
       questions: [
         [
           'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps the scene list and the cast, never the dialogue or action.',
+          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Are hair and makeup one department?',
@@ -393,7 +393,7 @@ export const departmentPages: DepartmentPage[] = [
       questions: [
         [
           'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps the scene list and the cast, never the dialogue or action.',
+          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Are hair and makeup one department?',
@@ -525,7 +525,7 @@ export const departmentPages: DepartmentPage[] = [
       questions: [
         [
           'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps the scene list and the cast, never the dialogue or action.',
+          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Can one prop be in several scenes?',

@@ -1,21 +1,51 @@
 import { company } from '../Layout'
 
-// The policy for StageRoll as it will be at launch, not as the app is today:
-// the app doesn't launch until it is good (decision, 12 October 2026). Much
-// of this isn't built yet, so it must be audited against stageroll-native
-// before launch, sentence by sentence. stageroll-docs #40 lists what has to be
-// true first.
+// WRITTEN WITH ROOM IN IT (owner's call, 27 November 2026). The policy says
+// what we MAY collect and the KINDS of provider we use, and makes few hard
+// promises, so the app can change without making a sentence here false.
+// When editing:
+//
+//   - Broad is fine; false is not. "May" covers something not built yet.
+//     Never say the app does NOT do a thing unless that is certain and
+//     will stay so.
+//   - No provider is named and no mechanism is described. The law asks for
+//     the kinds of recipient, as specific as we can be about what each
+//     does. The list of names, "available on request", is kept on
+//     stageroll-docs #40.
+//   - Periods say "around" or "usually", unless the law fixes them.
+//   - A few promises are kept ON PURPOSE, because they are what the product
+//     sells: the script file is never uploaded, productions are stored in
+//     the UK, the PIN stays on the device, no selling, no advertising.
+//     Prove each against the app before every release (stageroll-docs #41).
+//   - NOT promised any more (owner, 27 November 2026): what is or is not
+//     kept from a script beyond "the file is never uploaded". Do not write
+//     "never the dialogue or action" here or anywhere on the site.
+//   - AI (owner, 27 November 2026). AI tools ARE used to check things on
+//     production ("I want to cover myself now"), and what covers that is
+//     ONE sentence under "How we use it": "We may use tools from our
+//     providers, including AI tools, to help us run, check, support and
+//     fix StageRoll", with the provider named on the list (#40). Keep it,
+//     and keep it that short: it does not say what the tools read ("Why do
+//     you need to say that?"). There is NO promise about AI anywhere, on
+//     purpose ("it's not a selling point, and we're only drawing attention
+//     to it. Let's just leave it off"). Never add one, here or on the
+//     site: not "never used to train AI", not "we don't train AI of our
+//     own".
+//
+// It replaces the 12 October 2026 text, which described the launch app in
+// detail and was untrue of the app in thirteen places (the check is a
+// comment on #40). A solicitor still reads this before launch (#40).
 
 export function Privacy() {
   return (
     <article className="prose">
       <h1>Privacy policy</h1>
-      <p className="updated">Last updated 13 November 2026</p>
+      <p className="updated">Last updated 27 November 2026</p>
 
       <p className="lede">
-        This policy covers the StageRoll app for iPhone, iPad and Android, and this website,
-        stageroll.co. It says what we collect, why, who else handles it, how we protect it, how long
-        we keep it, and what you can ask us to do.
+        This policy covers the StageRoll app and this website, stageroll.co. It says what we collect,
+        why, who else handles it, how we protect it, how long we keep it, and what you can ask us to
+        do. We may change it at any time; the date above shows when it last changed.
       </p>
 
       <h2>Who we are</h2>
@@ -31,10 +61,9 @@ export function Privacy() {
         A production&rsquo;s team uses StageRoll to record its work, and that can include
         information about people who don&rsquo;t use StageRoll: photos of cast in costume, hair and
         makeup, sizes and notes recorded against the characters they play, and the names of people
-        items are lent to. The company or person running the production decides what is recorded
-        and why, and is the controller of that content. The same goes for the access log on a
-        production with enhanced security: the production chooses to keep a record of who opened
-        what, and it is the production&rsquo;s record. We store and handle all of it on the
+        items come from or go to. The company or person running the production decides what is recorded
+        and why, and is the controller of that content. The same goes for any record a production chooses to
+        keep of who opened what, where its plan offers one: it is the production&rsquo;s record. We store and handle all of it on the
         production&rsquo;s behalf, to provide StageRoll. If
         you have a question about what a production holds about you, ask the production, or write to
         us and we&rsquo;ll pass it on.
@@ -42,22 +71,21 @@ export function Privacy() {
 
       <h2>This website</h2>
       <p>
-        This site sets no cookies and runs no analytics, and we collect no personal data through it.
-        It is hosted on GitHub Pages, and GitHub records visitors&rsquo; IP addresses for security,
-        under its own privacy statement. If you email us, your message is handled by our email
-        provider, Microsoft 365.
+        You can read this site without giving us any personal data. Our hosting provider records
+        visitors&rsquo; IP addresses for security, under its own privacy statement. Where the site
+        lets you sign in or manage a plan, what you give us there is handled as this policy
+        describes for the app. If you email us, your message is handled by our email provider.
       </p>
 
       <h2>What we collect in the app</h2>
       <p>
         <strong>Your account.</strong> Your email address, your name, your department, and a
         profile photo if you add one. You sign in with a one-time code sent to your email and a
-        password you choose, or with Apple or Google. We keep your password only in a scrambled form
-        that can&rsquo;t be turned back into it, and check it against a public list of leaked
-        passwords without the password itself leaving our servers. If you sign in with Apple or Google,
-        they share your name and email address with us; Apple may give us a private relay address
-        instead of your own. If your production signs in through its organisation&rsquo;s own
-        sign-in service, we receive your name and email address from it. You need to give your
+        password you choose, or through another sign-in service the app offers, such as Apple or
+        Google. We keep your password only in a scrambled form that can&rsquo;t be turned back into
+        it, and may check a new password against lists of leaked ones without sharing the password
+        itself. If you sign in through another service, it shares your name and email address with
+        us; Apple may give us a private relay address instead of your own. You need to give your
         email address, name and department to use StageRoll; the photo is optional.
       </p>
       <p>
@@ -69,28 +97,34 @@ export function Privacy() {
         IP address and app version it connects with, and when it signed in and was last active. You
         can see your devices in the app and sign any of them out. If you turn on notifications, we
         also keep the address your phone gives us for sending them to that device. It is removed
-        when you sign out.
+        when you sign out. When you ask for a sign-in code, a security check may run on your device
+        to tell people from automated abuse, and the app looks for updates when it opens; the
+        providers that do these for us see your device&rsquo;s IP address and basic details such as
+        the app&rsquo;s version.
       </p>
       <p>
-        <strong>What your team puts in.</strong> Scenes and characters; the schedule and its notes;
-        changes, styles, looks and props; items and crates with their photos, notes, sizes, costs
-        and supplier details; and research pictures, links and notes. From a script we keep its
-        name, its file name, the scene headings and the characters, never its dialogue or action.
+        <strong>What your team puts in.</strong> Whatever your team records, such as scenes,
+        characters and sets; the schedule and its notes; changes, styles, looks and props; items and
+        crates with their photos, notes, sizes, costs and supplier details; and research pictures,
+        links and notes. From a script we keep its name, its file name, and what the app reads from
+        it, such as scenes, characters and sets.
         From a report we keep a record of which report was made, by whom and when; the report itself
         is made on your device, and we don&rsquo;t keep a copy.
       </p>
       <p>
-        <strong>On productions with enhanced security.</strong> An access log of who opened or
-        exported scripts, reports and photos, and when. On iPhone, a screenshot of a protected screen
-        is noted in the log. Reports exported from the production carry the name and email address
-        of the person who exported them, so a leaked copy can be traced.
+        <strong>Extra security features.</strong> Some plans offer a production extra protection.
+        Depending on what the production turns on, we may keep a record of who opened or exported
+        scripts, reports and photos, and when, including screenshots of protected screens; and
+        exported reports may carry the name and email address of the person who exported them, so a
+        leaked copy can be traced.
       </p>
       <p>
-        <strong>Diagnostics and usage.</strong> When something goes wrong, the app sends us an error
-        report: what failed, the app version, the device model and your account, so we can fix it.
-        We also collect information about how the app is used, such as which screens are opened and
-        which features are used, so we can make StageRoll better. We don&rsquo;t put the content of
-        your productions in either. You can turn usage information off in the app&rsquo;s settings.
+        <strong>Diagnostics and usage.</strong> When something goes wrong, the app may send us an
+        error report: what failed, the app version, the device model and your account, so we can fix
+        it. We may also collect information about how the app is used, such as which screens are
+        opened and which features are used, so we can make StageRoll better. Both are designed to
+        leave out the content of your productions. Where usage information is collected, you can
+        turn it off in the app&rsquo;s settings.
       </p>
       <p>
         <strong>Billing.</strong> For a production on a paid plan, the person paying gives us
@@ -109,14 +143,16 @@ export function Privacy() {
       </p>
       <p>
         Your PIN is stored and checked only on your device, and Face ID is handled by your phone;
-        neither is sent to us. Your sign-in and an offline copy of your productions, including photos
-        you&rsquo;ve viewed, are kept encrypted on your device. All of it is cleared when you sign
-        out, and a production&rsquo;s copy is removed when you leave it or are removed from it.
+        neither is sent to us. Your sign-in and an offline copy of your productions are kept on your
+        device, protected by the app&rsquo;s and your phone&rsquo;s own encryption. Signing out
+        removes your sign-in and that offline copy. Pictures the app has already shown may stay in
+        its cache for a while afterwards, and go when the app is removed.
       </p>
       <p>
-        When you add a research link, StageRoll fetches its title and picture once, through our
-        servers, and keeps the picture with the production. The linked website sees a request from
-        us, not from you or your team.
+        When you add a research link, StageRoll fetches the page&rsquo;s title and picture once, and
+        keeps the picture with the production. That request may come from your device or from our
+        servers, so the linked website may see your device&rsquo;s IP address, as it would if you
+        opened the link.
       </p>
 
       <h2>How we use it, and why</h2>
@@ -129,37 +165,41 @@ export function Privacy() {
       <p>
         <strong>To keep StageRoll secure and working</strong>, because we have a legitimate interest
         in protecting the service and your account: listing your signed-in devices, signing out
-        devices left unused for 90 days, and using error reports to find and fix problems and look
-        into misuse.
+        devices left unused for a long time, checking that requests come from people and not
+        automated abuse, and using error reports to find and fix problems and look into misuse.
       </p>
       <p>
         <strong>To improve StageRoll</strong>, because we have a legitimate interest in making it
         better: using information about how the app is used, which you can turn off.
       </p>
       <p>
-        <strong>To keep the access log</strong>, on behalf of productions that use enhanced security.
+        <strong>To provide extra security features</strong>, on behalf of productions that use them.
       </p>
       <p>
         <strong>To meet our legal obligations</strong>, such as keeping tax records and answering
         lawful requests.
       </p>
-      <p>We don&rsquo;t sell your data or show advertising, and we don&rsquo;t use your work to train AI.</p>
+      <p>
+        We don&rsquo;t sell your data or show advertising. We may use tools from our providers,
+        including AI tools, to help us run, check, support and fix StageRoll.
+      </p>
 
       <h2>Who else sees it</h2>
       <p>
         The other members of your productions see your name, email address, photo and role, and
-        which records and reports you added. On productions with enhanced security, the
-        production&rsquo;s owner and coordinators also see the access log. People running a
+        which records and reports you added. Where a production keeps a record of
+        who opened what, its owner and coordinators can see it. People running a
         production can find your account by your email address to invite you.
       </p>
       <p>
-        Our providers handle data on our instructions, to run StageRoll: Supabase, for our database,
-        sign-in and file storage, running on Amazon Web Services with traffic passing through
-        Cloudflare; our email delivery provider, for sign-in codes and account alerts; Expo, which
-        passes our notifications to Apple to deliver to your phone; our payment provider, for card
-        payments; our diagnostics and analytics providers, for error reports and usage information;
-        and Microsoft, for our own email. Businesses can ask us for our data processing agreement
-        and the full list of our providers.
+        Our providers handle data on our instructions, to run StageRoll. They are companies that
+        host our database, sign-in and file storage; carry traffic to and from the app and protect
+        it from abuse; send our emails, such as sign-in codes and account alerts; deliver
+        notifications and app updates to your phone, through Apple or Google; take card payments;
+        help us find faults and understand how the app is used; provide tools that help us run,
+        check and support the service; and provide our own email.
+        Businesses can ask us for our data processing agreement and the current list of our
+        providers.
       </p>
       <p>
         We also share information when the law requires it, and with a buyer if the business is ever
@@ -179,36 +219,39 @@ export function Privacy() {
       <h2>How we protect it</h2>
       <p>
         Data is encrypted when it travels and when it&rsquo;s stored. A production&rsquo;s content
-        is available only to its members, and photos are served through links that expire within a
-        day. Our own access to customer content is limited to keeping the service working,
+        is available only to its members, and photos are served through links that expire after
+        a short time. Our own access to customer content is limited to keeping the service working,
         investigating a breach of our terms, helping when you ask us to, and what the law requires.
       </p>
       <p>
         No system is perfectly secure. If a breach puts your data at risk, we&rsquo;ll tell the
-        Information Commissioner&rsquo;s Office within 72 hours and the productions affected without
-        delay, and we&rsquo;ll tell you directly if the risk to you is high.
+        Information Commissioner&rsquo;s Office, the productions affected and you, as the law
+        requires.
       </p>
 
       <h2>How long we keep it</h2>
       <ul>
-        <li>Your account details: until you delete your account.</li>
+        <li>
+          Your account details: until you delete your account. If we close an account for breaking
+          our terms, we keep its email address so it can&rsquo;t be used to sign up again.
+        </li>
         <li>
           A production&rsquo;s content: while the production exists. A deleted production stays in
-          Recently deleted for 30 days, and is then erased with its photos.
+          Recently deleted for around 30 days, and is then erased with its photos.
         </li>
         <li>
-          The report record, the access log and what&rsquo;s kept from scripts: with the production
+          The report record, any record of who opened what, and what&rsquo;s kept from scripts: with the production
           they belong to, and deleted with it.
         </li>
-        <li>Invitations: 30 days after they are answered or expire.</li>
-        <li>A device&rsquo;s record: until it signs out, or 90 days after it was last used.</li>
+        <li>Invitations: with the production they belong to, or until we clear old ones.</li>
+        <li>A device&rsquo;s record: until it signs out, or around 90 days after it was last used.</li>
         <li>Error reports and usage information: up to 12 months.</li>
-        <li>Billing records: six years, as UK tax law requires.</li>
+        <li>Billing records: for as long as UK tax law requires, usually six years.</li>
         <li>
-          Emails you send us: two years after our last exchange, or longer if they relate to a
+          Emails you send us: around two years after our last exchange, or longer if they relate to a
           contract, a complaint or a legal claim.
         </li>
-        <li>Copies in our backups and logs: deleted within 30 days.</li>
+        <li>Copies in our backups and logs: usually deleted within 30 days.</li>
       </ul>
 
       <h2>Deleting your account</h2>
@@ -216,8 +259,8 @@ export function Privacy() {
         You can delete your account in the app&rsquo;s settings, or ask us to do it for you. It
         takes effect straight away and can&rsquo;t be undone. Your account, your profile photo and
         your personal notes are deleted, along with any production only you belong to and anything in
-        your Recently deleted. If you own a production that other people are on, hand it over to one
-        of them first, so no team is left without an owner. Work you added to other people&rsquo;s
+        your Recently deleted. If you own a production that other people are on, or one on
+        a paid plan, the app asks you to settle that first, so no team is left without an owner. Work you added to other people&rsquo;s
         productions stays with them, without your name.
       </p>
 
@@ -225,8 +268,7 @@ export function Privacy() {
       <p>
         Under UK data protection law you can ask us for a copy of your personal data, ask us to
         correct or delete it, ask us to limit how we use it, or ask for the data you gave us in a
-        format you can reuse. You can download a copy of your account data from the app&rsquo;s
-        settings at any time. For information a production holds about you, we&rsquo;ll pass your
+        format you can reuse. For information a production holds about you, we&rsquo;ll pass your
         request to the production.
       </p>
       <p>
@@ -252,8 +294,9 @@ export function Privacy() {
 
       <h2>Changes</h2>
       <p>
-        If we change this policy in a way that matters, we&rsquo;ll email account holders before the
-        change takes effect. The date at the top shows when it last changed.
+        We may change this policy at any time. If a change matters, we&rsquo;ll tell account holders
+        before it takes effect, by email or in the app. The date at the top shows when it last
+        changed.
       </p>
     </article>
   )

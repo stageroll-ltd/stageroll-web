@@ -187,7 +187,7 @@ export const shows: Record<string, Show> = {
         heading: 'Our approach',
         text: [
           'Productions hold unreleased scripts and private work. So StageRoll reads the script on your phone, and the file is never uploaded: only the scene list and the cast are kept.',
-          'Everything else in a production, its scenes, records and photos, is shown only to the people on it. Your work is never sold, used for advertising or used to train AI.',
+          'Everything else in a production, its scenes, records and photos, is shown only to the people on it. Your work is never sold or used for advertising.',
         ],
       },
       {
@@ -198,7 +198,7 @@ export const shows: Record<string, Show> = {
           ['Members only', 'A production is shown only to the people on it.', 'users'],
           ['Locked when you leave', 'A PIN or Face ID, and it locks itself when you step away.', 'shield'],
           ['Yours to sign out', 'Every signed-in device is listed, and any of them can be signed out.', 'phone'],
-          ['Never sold', 'No advertising, no selling, no training AI on your work.', 'eyeoff'],
+          ['Never sold', 'No advertising, no selling.', 'eyeoff'],
         ],
         art: <Kept />,
       },

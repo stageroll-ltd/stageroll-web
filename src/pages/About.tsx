@@ -23,7 +23,7 @@ const show: Show = {
         'Set work happens standing up, with one hand, in a hurry. So StageRoll is made for the phone or tablet you already carry, on iPhone, iPad and Android, and what you’ve opened stays readable when the signal drops. The script is read on your own device, and the file is never uploaded.',
         <>
           A production’s work stays private. In the app, breakdowns, photos and records are shown only to the people on
-          the production. We don’t sell data, show ads, or use your work to train AI. The details are in our{' '}
+          the production. We don’t sell data or show ads. The details are in our{' '}
           <a href="/privacy/">privacy policy</a>.
         </>,
       ],

@@ -20,7 +20,7 @@ const featureHref = (slug: string) => (featurePages.some((page) => page.slug ===
 const privacy: { heading: string; text: string }[] = [
   // The lock and the promise first, then the script.
   { heading: 'Locked to you.', text: 'A PIN and Face ID, with screen protection for productions that need it.' },
-  { heading: 'No ads, no selling.', text: 'Your work is never sold, used for advertising or used to train AI.' },
+  { heading: 'No ads, no selling.', text: 'Your work is never sold or used for advertising.' },
   { heading: 'Read on your device.', text: 'The script file is never uploaded.' },
 ]
 

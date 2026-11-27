@@ -64,7 +64,7 @@ export const featurePages: FeaturePage[] = [
       ],
     ],
     features: [
-      ['Read on your device', 'The script file never leaves your phone. Only the scene list and the cast are kept, never the dialogue or action.', 'phone'],
+      ['Read on your device', 'The script file never leaves your phone. StageRoll keeps what it reads from it, such as the scene list and the cast.', 'phone'],
       ['Cast numbers that hold', 'A character keeps their number through every draft, and a coordinator can change it to match the call sheet.', 'hash'],
       ['Background with head counts', 'Crowds join as background, with how many are needed in each scene.', 'users'],
       ['Merge suggestions', 'Likely misreads and duplicate names are flagged before anything joins.', 'merge'],
@@ -373,7 +373,7 @@ export const featurePages: FeaturePage[] = [
       ['Encrypted offline copy', 'The copy of your production kept for offline use is encrypted on your phone, and cleared when you sign out.', 'lock'],
       ['Members only', 'In the app, a production is shown only to the people on it.', 'users'],
       ['Private photos', 'Photos are stored privately, and their location and camera details are removed before they’re uploaded.', 'camera'],
-      ['No ads, no selling', 'Your work is never sold, used for advertising or used to train AI.', 'eyeoff'],
+      ['No ads, no selling', 'Your work is never sold or used for advertising.', 'eyeoff'],
     ],
     more: { href: '/privacy/', label: 'Read the privacy policy' },
   },
