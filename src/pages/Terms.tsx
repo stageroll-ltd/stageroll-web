@@ -6,10 +6,19 @@ import { company } from '../Layout'
 // a solicitor reviews both before launch (stageroll-docs #40), and the
 // re-audit (#41) checks them against the app. Change the two together.
 //
-// The numbers here ARE promises and were left alone for the solicitor:
-// 30 days' notice of a price or terms change, 60 days' notice of closing,
-// no refunds for part months, the 30 + 30 days in the data processing
-// terms, and the liability cap. They are listed on #40 to confirm.
+// NO FIXED NOTICE PERIODS (owner, 27 November 2026: "just loosen them").
+// A change to the terms or a price, and closing StageRoll, are told "in
+// advance" with no number of days. Do not write one back. What makes a
+// change hold without a number is the line that anyone who does not accept
+// it can leave before it applies: keep that line.
+//
+// Still hard, left for the solicitor: no refunds for part months, the
+// 30 + 30 days in the data processing terms, and the liability cap.
+//
+// LOST OR STOLEN DEVICES (owner, same day): the member signs the device
+// out, the owner and coordinators remove them from the production, and we
+// are not responsible for what is seen through a device or sign-in that
+// was not kept safe. Three places: Your account, Productions and roles.
 
 export function Terms() {
   return (
@@ -45,12 +54,21 @@ export function Terms() {
         responsible for what happens under your account, and you should tell us straight away if you
         think someone else has used it.
       </p>
+      <p>
+        If a device you&rsquo;re signed in on is lost or stolen, or someone else can get into it,
+        sign that device out as soon as you can, or ask us to, and tell the people who run your
+        productions. We aren&rsquo;t responsible for what anyone sees or does through a device that
+        is lost, stolen, shared or left unlocked, or through an account whose sign-in someone else
+        has got hold of.
+      </p>
 
       <h2>Productions and roles</h2>
       <p>
         Whoever creates a production owns it. The owner chooses its plan and manages its team, and
         where the app offers it, can hand the production over to another member. The owner and coordinators are responsible
         for inviting the right people, and for removing anyone who should no longer have access.
+        That includes a member whose device has been lost or stolen, or whose account someone else
+        may have got into, until it is safe again.
       </p>
 
       <h2>Your content</h2>
@@ -126,7 +144,7 @@ export function Terms() {
         Starter and Pro are billed monthly in advance by card, and renew each month until they are
         cancelled. You can cancel at any time, and the plan ends at the close of the month
         you&rsquo;ve paid for; we don&rsquo;t refund part months unless the law requires it.
-        We&rsquo;ll email you at least 30 days before a price change. If a payment fails and
+        We&rsquo;ll tell you in advance of a price change, so you can cancel before it applies. If a payment fails and
         isn&rsquo;t put right after we&rsquo;ve told you, we may move the production to the free plan.
       </p>
       <p>
@@ -150,8 +168,8 @@ export function Terms() {
       <p>
         We work to keep StageRoll available and your data safe, but we can&rsquo;t promise it will
         always be available or free of errors, and it is provided as it is. We may change or remove
-        features. If we ever close StageRoll altogether, we&rsquo;ll email account holders at least
-        60 days before.
+        features. If we ever close StageRoll altogether, we&rsquo;ll give account holders as much
+        notice as we reasonably can.
       </p>
 
       <h2>Our liability</h2>
@@ -182,7 +200,8 @@ export function Terms() {
       <h2>Changes to these terms</h2>
       <p>
         We may change these terms at any time. If a change matters, we&rsquo;ll tell account holders
-        at least 30 days before it takes effect, by email or in the app. If you keep using StageRoll
+        before it takes effect, by email or in the app. If you don&rsquo;t accept a change, you can
+        stop using StageRoll and close your account before it applies. If you keep using StageRoll
         after that, the new terms apply. The date at the top shows when they last changed.
       </p>
 
