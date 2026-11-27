@@ -15,6 +15,18 @@ import { company } from '../Layout'
 // Still hard, left for the solicitor: no refunds for part months, the
 // 30 + 30 days in the data processing terms, and the liability cap.
 //
+// ADDED FROM A COMPARISON WITH ANOTHER APP'S TERMS (owner agreed, same
+// day; the list is a comment on #40). All of it protects us, none of it
+// is a promise by us: the uploader has the right to what they add; members
+// keep a production's content inside it; no bots, no getting round limits
+// or checks, no harassment; we may remove content, and act at once when it
+// is serious; deleting the app does not cancel a plan; counts and reports
+// are to be checked; keep your own copies; things outside our control;
+// other companies' sites and services; a business covers claims its team
+// causes (NOT individuals: against a consumer it would not hold); the
+// whole agreement; notices by email or in the app. The liability cap was
+// not touched.
+//
 // LOST OR STOLEN DEVICES (owner, same day): the member signs the device
 // out, the owner and coordinators remove them from the production, and we
 // are not responsible for what is seen through a device or sign-in that
@@ -42,15 +54,15 @@ export function Terms() {
 
       <h2>Who can use it</h2>
       <p>
-        You must be 16 or over. Your account is for you alone: don&rsquo;t share it or your sign-in
-        codes.
+        You must be 16 or over, and we may close an account that belongs to someone younger. Your
+        account is for you alone: don&rsquo;t share it or your sign-in codes.
       </p>
 
       <h2>Your account</h2>
       <p>
         You sign in with a one-time code sent to your email and your password, or through another
         sign-in service the app offers, such as Apple or Google. Keep your device, your password and
-        your PIN secure. You&rsquo;re
+        your PIN secure, and keep the details you give us true and up to date. You&rsquo;re
         responsible for what happens under your account, and you should tell us straight away if you
         think someone else has used it.
       </p>
@@ -65,8 +77,9 @@ export function Terms() {
       <h2>Productions and roles</h2>
       <p>
         Whoever creates a production owns it. The owner chooses its plan and manages its team, and
-        where the app offers it, can hand the production over to another member. The owner and coordinators are responsible
-        for inviting the right people, and for removing anyone who should no longer have access.
+        where the app offers it, can hand the production over to another member. The owner and
+        coordinators are responsible for inviting the right people, and for removing anyone who
+        should no longer have access.
         That includes a member whose device has been lost or stolen, or whose account someone else
         may have got into, until it is safe again.
       </p>
@@ -77,8 +90,14 @@ export function Terms() {
         You give us permission to store, process and show it only so we can provide, support and
         protect StageRoll for you and your team. Our providers and their tools may handle it for
         that. In the app, a production&rsquo;s content is shown only to its members. We never sell
-        your content or use it for advertising. How we handle
-        personal data is in our <a href="/privacy/">privacy policy</a>.
+        your content or use it for advertising. How we handle personal data is in our{' '}
+        <a href="/privacy/">privacy policy</a>.
+      </p>
+      <p>
+        Whoever adds something to a production is responsible for it, and confirms they have the
+        right to add it. That includes photos of people, and pictures, links and files that come
+        from somewhere else. Members should keep a production&rsquo;s content within the production.
+        What a member does with it is between them and the production, not us.
       </p>
 
       <h2>Personal data in a production</h2>
@@ -90,7 +109,7 @@ export function Terms() {
       </p>
       <p>
         If you run a production, you confirm that you have a lawful basis for what your team records
-        about people, including anything sensitive, such as health information in a note; that you
+        about people, including children and anything sensitive, such as health information in a note; that you
         have told those people what is recorded and why; and that you&rsquo;ll deal with their
         requests about it.
       </p>
@@ -122,13 +141,17 @@ export function Terms() {
       <h2>Acceptable use</h2>
       <p>
         Use StageRoll for productions you&rsquo;re actually part of. Don&rsquo;t try to reach other
-        productions&rsquo; data, probe or overload the service, copy or take apart the app, use it to
-        store anything unlawful or anything you have no right to hold, or resell it.
+        productions&rsquo; data, probe or overload the service, use bots or scripts to sign in or
+        pull data out, get round a plan&rsquo;s limits or the sign-in, PIN or payment checks, copy
+        or take apart the app, use it to store anything unlawful or anything you have no right to
+        hold, use it to harass or abuse anyone, or resell it.
       </p>
       <p>
-        If we suspect these rules are being broken, we may look into it using the records our
-        privacy policy describes, and we may suspend or close the accounts or productions involved.
-        We&rsquo;ll tell you why, unless the law stops us.
+        If we think these rules are being broken, or there is a risk to security, we may look into
+        it using the records our privacy policy describes, and we may remove content, or suspend or
+        close the accounts or productions involved. Where it is serious, we may do that straight
+        away, without telling you first. We&rsquo;ll usually tell you why, unless the law or
+        security stops us. If you think someone is breaking these rules, write to us.
       </p>
 
       <h2>Plans and payment</h2>
@@ -143,9 +166,11 @@ export function Terms() {
       <p>
         Starter and Pro are billed monthly in advance by card, and renew each month until they are
         cancelled. You can cancel at any time, and the plan ends at the close of the month
-        you&rsquo;ve paid for; we don&rsquo;t refund part months unless the law requires it.
-        We&rsquo;ll tell you in advance of a price change, so you can cancel before it applies. If a payment fails and
-        isn&rsquo;t put right after we&rsquo;ve told you, we may move the production to the free plan.
+        you&rsquo;ve paid for; we don&rsquo;t refund part months unless the law requires it. You
+        cancel a plan from your account on our website, or by writing to us. Deleting the app or
+        signing out doesn&rsquo;t cancel it. We&rsquo;ll tell you in advance of a price change, so
+        you can cancel before it applies. If a payment fails and isn&rsquo;t put right after
+        we&rsquo;ve told you, we may move the production to the free plan.
       </p>
       <p>
         Enterprise is billed by invoice or purchase order, for the length and on the terms agreed in
@@ -159,7 +184,7 @@ export function Terms() {
 
       <h2>Our software</h2>
       <p>
-        We own StageRoll, apart from your content. While these terms apply, you may use it for your
+        We own StageRoll, including its name, logo and design, apart from your content. While these terms apply, you may use it for your
         productions; that right is yours alone and can&rsquo;t be transferred. If you send us ideas
         or feedback, we may use them freely.
       </p>
@@ -170,6 +195,26 @@ export function Terms() {
         always be available or free of errors, and it is provided as it is. We may change or remove
         features. If we ever close StageRoll altogether, we&rsquo;ll give account holders as much
         notice as we reasonably can.
+      </p>
+      <p>
+        Counts, totals, values and reports in StageRoll are there to help, and can be wrong or out
+        of date. Check them before you rely on them, above all for money, insurance or safety.
+      </p>
+      <p>
+        We can&rsquo;t promise to bring back work that is lost or deleted, beyond what Recently
+        deleted holds. Keep your own copy of anything you can&rsquo;t afford to lose.
+      </p>
+      <p>
+        We aren&rsquo;t responsible for a failure or delay caused by something outside our
+        reasonable control, such as your device or connection, a lost sign-in, or another
+        company&rsquo;s service going wrong.
+      </p>
+
+      <h2>Other companies&rsquo; sites and services</h2>
+      <p>
+        Links, pictures and services that come from other companies aren&rsquo;t ours: a website a
+        research link points to, a supplier, or the service you sign in with. Their own terms and
+        privacy policies apply, and we aren&rsquo;t responsible for them.
       </p>
 
       <h2>Our liability</h2>
@@ -182,6 +227,12 @@ export function Terms() {
         revenue, business or goodwill. For everything that happens in any 12-month period, the most
         we&rsquo;ll pay you and your production in total is what the production paid us in the 12
         months before the first claim, or &pound;100 if that is more.
+      </p>
+      <p>
+        If you use StageRoll for a business, a company or a production, it will cover our reasonable
+        costs and losses if a claim is made against us because of what its team put into StageRoll,
+        or because its team broke these terms. This doesn&rsquo;t apply to someone using StageRoll
+        as an individual consumer.
       </p>
 
       <h2>Ending things</h2>
@@ -207,9 +258,20 @@ export function Terms() {
 
       <h2>General</h2>
       <p>
-        If part of these terms can&rsquo;t be enforced, the rest still applies. We may transfer these
-        terms to a business that takes over StageRoll, and we&rsquo;ll tell you if we do. No one else
-        has rights under them.
+        These terms, our pricing page when you buy, and any contract we have both signed are the
+        whole agreement between us. What our website, a demo or a conversation says isn&rsquo;t a
+        promise unless it is written into one of those, and a customer&rsquo;s own purchase terms
+        don&rsquo;t apply unless we agree to them in writing.
+      </p>
+      <p>
+        We can tell you things under these terms by email to your account&rsquo;s address, or in the
+        app, so keep that address up to date.
+      </p>
+      <p>
+        If part of these terms can&rsquo;t be enforced, the rest still applies. If we don&rsquo;t
+        act on a right straight away, we haven&rsquo;t given it up. We may transfer these terms to a
+        business that takes over StageRoll, and we&rsquo;ll tell you if we do. No one else has
+        rights under them.
       </p>
 
       <h2>Law</h2>

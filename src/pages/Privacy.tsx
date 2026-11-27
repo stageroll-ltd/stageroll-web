@@ -35,6 +35,15 @@ import { company } from '../Layout'
 // It replaces the 12 October 2026 text, which described the launch app in
 // detail and was untrue of the app in thirteen places (the check is a
 // comment on #40). A solicitor still reads this before launch (#40).
+//
+// ADDED FROM A COMPARISON WITH ANOTHER APP'S POLICY (owner agreed, same
+// day; the list is a comment on #40): cookies on the website, sharing to
+// protect ourselves, keeping something longer for the law or a claim, news
+// emails, figures that identify no one, children in a production's
+// records, taking consent back. All "may". Two of them need the SITE to
+// behave before they are used: a cookie that is not needed for sign-in or
+// security needs a real consent choice on the site first (PECR), and a
+// news email needs consent or the soft opt-in, with a way to stop in it.
 
 export function Privacy() {
   return (
@@ -43,7 +52,8 @@ export function Privacy() {
       <p className="updated">Last updated 27 November 2026</p>
 
       <p className="lede">
-        This policy covers the StageRoll app and this website, stageroll.co. It says what we collect,
+        This policy covers the StageRoll app, this website, stageroll.co, and what you send us when
+        you get in touch. It says what we collect,
         why, who else handles it, how we protect it, how long we keep it, and what you can ask us to
         do. We may change it at any time; the date above shows when it last changed.
       </p>
@@ -59,7 +69,7 @@ export function Privacy() {
       <h2>Content a production puts in</h2>
       <p>
         A production&rsquo;s team uses StageRoll to record its work, and that can include
-        information about people who don&rsquo;t use StageRoll: photos of cast in costume, hair and
+        information about people who don&rsquo;t use StageRoll, some of whom may be children: photos of cast in costume, hair and
         makeup, sizes and notes recorded against the characters they play, and the names of people
         items come from or go to. The company or person running the production decides what is recorded
         and why, and is the controller of that content. The same goes for any record a production chooses to
@@ -74,7 +84,10 @@ export function Privacy() {
         You can read this site without giving us any personal data. Our hosting provider records
         visitors&rsquo; IP addresses for security, under its own privacy statement. Where the site
         lets you sign in or manage a plan, what you give us there is handled as this policy
-        describes for the app. If you email us, your message is handled by our email provider.
+        describes for the app. The site may use cookies or similar storage in your browser: those
+        needed to sign you in and keep it secure are used without asking, and any others only where
+        the law allows, with your consent where it needs it. If you email us, your message is
+        handled by our email provider.
       </p>
 
       <h2>What we collect in the app</h2>
@@ -152,7 +165,8 @@ export function Privacy() {
         When you add a research link, StageRoll fetches the page&rsquo;s title and picture once, and
         keeps the picture with the production. That request may come from your device or from our
         servers, so the linked website may see your device&rsquo;s IP address, as it would if you
-        opened the link.
+        opened the link. Other websites that StageRoll links to have their own privacy policies,
+        and this one doesn&rsquo;t cover them.
       </p>
 
       <h2>How we use it, and why</h2>
@@ -171,6 +185,10 @@ export function Privacy() {
       <p>
         <strong>To improve StageRoll</strong>, because we have a legitimate interest in making it
         better: using information about how the app is used, which you can turn off.
+      </p>
+      <p>
+        <strong>To keep you informed</strong>: we may email you news about StageRoll, where the law
+        allows, and you can stop those emails at any time.
       </p>
       <p>
         <strong>To provide extra security features</strong>, on behalf of productions that use them.
@@ -202,8 +220,10 @@ export function Privacy() {
         providers.
       </p>
       <p>
-        We also share information when the law requires it, and with a buyer if the business is ever
-        sold, who would have to keep to this policy.
+        We also share information when the law requires it; where we need to, to protect our rights,
+        the people who use StageRoll and the service itself, including from fraud and misuse; and
+        with a buyer if the business is ever sold, who would have to keep to this policy. We may use
+        and share figures about how StageRoll is used that can&rsquo;t identify anyone.
       </p>
 
       <h2>Where it&rsquo;s stored</h2>
@@ -252,6 +272,10 @@ export function Privacy() {
           contract, a complaint or a legal claim.
         </li>
         <li>Copies in our backups and logs: usually deleted within 30 days.</li>
+        <li>
+          Any of these may be kept longer where the law requires it, or where we need it for a legal
+          claim.
+        </li>
       </ul>
 
       <h2>Deleting your account</h2>
@@ -273,7 +297,8 @@ export function Privacy() {
       </p>
       <p>
         <strong>You can object</strong> to us using your data where we rely on our legitimate
-        interests, and we&rsquo;ll stop unless we have compelling grounds to continue.
+        interests, and we&rsquo;ll stop unless we have compelling grounds to continue. Where we rely
+        on your consent for something, you can take it back at any time.
       </p>
       <p>
         Write to <a href={`mailto:${company.email}`}>{company.email}</a>. We may ask you to confirm
@@ -289,7 +314,9 @@ export function Privacy() {
       <h2>Children</h2>
       <p>
         StageRoll is a tool for people working on productions and isn&rsquo;t meant for children.
-        You must be 16 or over to create an account.
+        You must be 16 or over to create an account, and we may close an account that belongs to
+        someone younger. What a production records about a child, such as a child cast member, is the
+        production&rsquo;s responsibility, like everything else it records.
       </p>
 
       <h2>Changes</h2>

@@ -6,7 +6,7 @@ import { company } from '../Layout'
 /**
  * Help: how to do the common things, as numbered steps, one action a step,
  * each starting with its verb, the app's words for its buttons and rows in
- * bold (after Sortly's help centre, user call 2026-11-04). The topics
+ * bold (user call 2026-11-04). The topics
  * stand at the top, grouped, as links to each.
  *
  * The app opens this page from its Help row (with ?from=app), and there
