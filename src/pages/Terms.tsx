@@ -27,6 +27,15 @@ import { company } from '../Layout'
 // whole agreement; notices by email or in the app. The liability cap was
 // not touched.
 //
+// PICTURES OF CHILDREN (owner, same day: "should we blanket say that
+// children's photos must not contain that?"). Yes: one flat rule in
+// Acceptable use, stricter than the law on purpose so nobody has to judge
+// a grey area. No picture of anyone under 18 nude, in underwear, sexual or
+// indecent, "whatever the scene calls for". This is the one place where
+// "we will" is right: remove, close, report. Never soften it. A private
+// picture of an ADULT is allowed with that person's agreement, and getting
+// it is the production's job (Personal data in a production).
+//
 // LOST OR STOLEN DEVICES (owner, same day): the member signs the device
 // out, the owner and coordinators remove them from the production, and we
 // are not responsible for what is seen through a device or sign-in that
@@ -109,7 +118,8 @@ export function Terms() {
       </p>
       <p>
         If you run a production, you confirm that you have a lawful basis for what your team records
-        about people, including children and anything sensitive, such as health information in a note; that you
+        about people, including children and anything sensitive, such as health information in a note
+        or a picture of someone undressed, which needs that person&rsquo;s agreement; that you
         have told those people what is recorded and why; and that you&rsquo;ll deal with their
         requests about it.
       </p>
@@ -133,7 +143,8 @@ export function Terms() {
         <li>tell the production&rsquo;s owner without undue delay if a breach affects it;</li>
         <li>
           delete it when the production is deleted, after its 30 days in Recently deleted, with
-          copies in backups and logs gone within a further 30 days;
+          copies in backups and logs gone within a further 30 days, or, if the production asks
+          first, give it a copy where we can;
         </li>
         <li>give you the information you need to show this is being done, and allow reasonable audits.</li>
       </ul>
@@ -143,8 +154,13 @@ export function Terms() {
         Use StageRoll for productions you&rsquo;re actually part of. Don&rsquo;t try to reach other
         productions&rsquo; data, probe or overload the service, use bots or scripts to sign in or
         pull data out, get round a plan&rsquo;s limits or the sign-in, PIN or payment checks, copy
-        or take apart the app, use it to store anything unlawful or anything you have no right to
-        hold, use it to harass or abuse anyone, or resell it.
+        or take apart the app except where the law allows it, use it to store anything unlawful or
+        anything you have no right to hold, use it to harass or abuse anyone, or resell it.
+      </p>
+      <p>
+        Never add a picture of anyone under 18 that shows them nude or in underwear, or that is
+        sexual or indecent in any way, whatever the scene calls for. We&rsquo;ll remove it, close
+        the accounts involved and report it to the authorities.
       </p>
       <p>
         If we think these rules are being broken, or there is a risk to security, we may look into
@@ -197,8 +213,9 @@ export function Terms() {
         notice as we reasonably can.
       </p>
       <p>
-        Counts, totals, values and reports in StageRoll are there to help, and can be wrong or out
-        of date. Check them before you rely on them, above all for money, insurance or safety.
+        What StageRoll reads from a script, and the counts, totals, values and reports it shows,
+        are there to help, and can be wrong or out of date. Check them before you rely on them,
+        above all for money, insurance or safety.
       </p>
       <p>
         We can&rsquo;t promise to bring back work that is lost or deleted, beyond what Recently

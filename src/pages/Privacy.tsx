@@ -14,9 +14,10 @@ import { company } from '../Layout'
 //     stageroll-docs #40.
 //   - Periods say "around" or "usually", unless the law fixes them.
 //   - A few promises are kept ON PURPOSE, because they are what the product
-//     sells: the script file is never uploaded, productions are stored in
-//     the UK, the PIN stays on the device, no selling, no advertising.
-//     Prove each against the app before every release (stageroll-docs #41).
+//     sells: the script file is never uploaded, the PIN stays on the device,
+//     no selling, no advertising. Prove each against the app before every
+//     release (stageroll-docs #41). "Stored in the UK" became "normally
+//     stored in the UK" on 27 November 2026, so a second region is possible.
 //   - NOT promised any more (owner, 27 November 2026): what is or is not
 //     kept from a script beyond "the file is never uploaded". Do not write
 //     "never the dialogue or action" here or anywhere on the site.
@@ -187,8 +188,9 @@ export function Privacy() {
         better: using information about how the app is used, which you can turn off.
       </p>
       <p>
-        <strong>To keep you informed</strong>: we may email you news about StageRoll, where the law
-        allows, and you can stop those emails at any time.
+        <strong>To keep you informed</strong>, because we have a legitimate interest in telling you
+        about StageRoll, or with your consent where the law needs it: we may email you news about
+        StageRoll, and you can stop those emails at any time.
       </p>
       <p>
         <strong>To provide extra security features</strong>, on behalf of productions that use them.
@@ -220,20 +222,21 @@ export function Privacy() {
         providers.
       </p>
       <p>
-        We also share information when the law requires it; where we need to, to protect our rights,
-        the people who use StageRoll and the service itself, including from fraud and misuse; and
-        with a buyer if the business is ever sold, who would have to keep to this policy. We may use
+        We also share information when the law requires or allows it; where we need to, to protect
+        our rights, anyone&rsquo;s safety, the people who use StageRoll and the service itself,
+        including from fraud and misuse; and with someone buying or looking to buy the business, and
+        their advisers, who would have to keep it confidential and keep to this policy. We may use
         and share figures about how StageRoll is used that can&rsquo;t identify anyone.
       </p>
 
       <h2>Where it&rsquo;s stored</h2>
       <p>
-        Your productions are stored in the UK. Some of our providers, such as those for diagnostics
+        Your productions are normally stored in the UK. Some of our providers, such as those for diagnostics
         and email, may store data in the European Economic Area, which UK law treats as protecting it
         adequately. Some are based in, or have staff in, other countries, including the United
         States, and may reach data from there. Where they do, we rely on the UK&rsquo;s adequacy
         regulations, including the UK&ndash;US data bridge, or on the UK&rsquo;s International Data
-        Transfer Agreement or Addendum.
+        Transfer Agreement or Addendum. Ask us if you&rsquo;d like a copy of the safeguard used.
       </p>
 
       <h2>How we protect it</h2>
@@ -292,7 +295,8 @@ export function Privacy() {
       <p>
         Under UK data protection law you can ask us for a copy of your personal data, ask us to
         correct or delete it, ask us to limit how we use it, or ask for the data you gave us in a
-        format you can reuse. For information a production holds about you, we&rsquo;ll pass your
+        format you can reuse. Some of these rights have limits: for example, we may need to keep
+        something to meet the law or for a legal claim. For information a production holds about you, we&rsquo;ll pass your
         request to the production.
       </p>
       <p>

@@ -167,12 +167,12 @@ const groups: { title: string; topics: Topic[] }[] = [
             Tap the lost device, then <b>Sign out</b>.
           </>,
         ],
-        note: <>A device left unused for 90 days is signed out on its own. No other device? Email {mail}.</>,
+        note: <>A device left unused for a long time is signed out on its own. No other device? Email {mail}.</>,
       },
       {
         id: 'restore',
         title: 'Restore a deleted production',
-        intro: 'A deleted production waits 30 days before it’s gone for good.',
+        intro: 'A deleted production waits about 30 days before it’s gone for good.',
         steps: [
           openSettings,
           <>

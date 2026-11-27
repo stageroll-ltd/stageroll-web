@@ -363,7 +363,7 @@ export const featurePages: FeaturePage[] = [
     steps: [
       ['Lock the app', 'StageRoll locks when you leave it and opens with your PIN or Face ID. You choose how quickly it locks.'],
       ['Work in your production', 'In the app, a production’s scenes, records and photos are shown only to its members, and photos are stored privately.'],
-      ['Sign out anywhere', 'See every device signed in to your account and sign any of them out. A device left unused for 90 days is signed out on its own.'],
+      ['Sign out anywhere', 'See every device signed in to your account and sign any of them out. A device left unused for a long time is signed out on its own.'],
     ],
     features: [
       ['Scripts stay on your device', 'The script is read on your phone and the file is never uploaded. Only the scene list and the cast are kept.', 'doc'],
