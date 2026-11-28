@@ -20,9 +20,12 @@ import 'posthog-js/dist/exception-autocapture'
  * cookieless setting must stay on, or PostHog drops these events.
  *
  * NOT RECORDED: clicks (autocapture reads the element's text, and the
- * account pages show a person's name and plan), session recordings,
- * surveys. Only on stageroll.co itself: `yarn dev`, a preview and the
- * prerender send nothing.
+ * account pages show a person's name and plan), heatmaps (where the
+ * pointer goes), page speed figures, session recordings, surveys. Each is
+ * switched off HERE, by name: PostHog's project settings can turn most of
+ * them on from its dashboard, and an option set here overrides that. Only
+ * on stageroll.co itself: `yarn dev`, a preview and the prerender send
+ * nothing.
  *
  * NO SCRIPT IS EVER OPENED ON THIS SITE, so an error here cannot carry one.
  * Its error reports do carry the error's own message, unlike the app's
@@ -45,6 +48,10 @@ export function startAnalytics(): void {
     capture_pageleave: true,
     capture_exceptions: true,
     autocapture: false,
+    rageclick: false,
+    capture_heatmaps: false,
+    capture_dead_clicks: false,
+    capture_performance: false,
     disable_session_recording: true,
     disable_surveys: true,
     person_profiles: 'identified_only',
