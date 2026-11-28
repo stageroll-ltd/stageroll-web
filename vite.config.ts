@@ -61,12 +61,17 @@ function pagesInDev(): Plugin {
 // not run here. Scripts are the site's own files, the shell's one inline
 // script (by its hash, worked out from the built page so an edit to it
 // never needs a second edit here) and Cloudflare's Turnstile; the page
-// talks only to itself and the Supabase project. Styles keep
+// talks only to itself, the Supabase project and, when the site has a
+// PostHog token, PostHog's EU address (src/analytics.ts, which fetches no
+// script from PostHog, so script-src stays as it is). Styles keep
 // 'unsafe-inline': React writes style attributes into the prerendered
 // pages. A <meta> cannot say frame-ancestors; that needs a host that sends
 // headers. Build only: the dev server's own inline scripts and socket
 // would need holes that the live page should not have.
-function contentSecurityPolicy(supabaseUrl: string): Plugin {
+/** PostHog's EU address: the same as `POSTHOG_HOST` in src/analytics.ts (not imported, so the config never loads posthog-js). */
+const POSTHOG_HOST = 'https://eu.i.posthog.com'
+
+function contentSecurityPolicy(supabaseUrl: string, posthog: boolean): Plugin {
   return {
     name: 'stageroll:csp',
     apply: 'build',
@@ -83,7 +88,7 @@ function contentSecurityPolicy(supabaseUrl: string): Plugin {
           `style-src 'self' 'unsafe-inline'`,
           `img-src 'self' data: blob:${api ? ` ${api.origin}` : ''}`,
           `font-src 'self' data:`,
-          `connect-src 'self'${api ? ` ${api.origin} wss://${api.host}` : ''}`,
+          `connect-src 'self'${api ? ` ${api.origin} wss://${api.host}` : ''}${posthog ? ` ${POSTHOG_HOST}` : ''}`,
           `frame-src https://challenges.cloudflare.com`,
           `object-src 'none'`,
           `base-uri 'self'`,
@@ -106,7 +111,10 @@ export default defineConfig(({ mode, isSsrBuild }) => ({
   plugins: [
     react(),
     pagesInDev(),
-    contentSecurityPolicy(loadEnv(mode, process.cwd(), 'VITE_').VITE_SUPABASE_URL ?? ''),
+    contentSecurityPolicy(
+      loadEnv(mode, process.cwd(), 'VITE_').VITE_SUPABASE_URL ?? '',
+      Boolean(loadEnv(mode, process.cwd(), 'VITE_').VITE_POSTHOG_KEY),
+    ),
   ],
   // A build without the account pages (VITE_ACCOUNT_PAGES not 'on': the
   // deploy; `yarn dev` turns them on itself, package.json) gets

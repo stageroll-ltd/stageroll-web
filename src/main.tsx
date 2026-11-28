@@ -1,7 +1,10 @@
 import { StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 
+import { startAnalytics } from './analytics'
 import { App } from './App'
+
+startAnalytics()
 
 const root = document.getElementById('root')
 if (!root) throw new Error('index.html has no #root')

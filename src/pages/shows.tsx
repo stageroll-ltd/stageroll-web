@@ -186,7 +186,7 @@ export const shows: Record<string, Show> = {
         kind: 'two',
         heading: 'Our approach',
         text: [
-          'Productions hold unreleased scripts and private work. So StageRoll reads the script on your phone, and the file is never uploaded: only the scene list and the cast are kept.',
+          'Productions hold unreleased scripts and private work. So StageRoll reads the script on your phone and keeps what it reads from it, such as the scene list and the cast.',
           'Everything else in a production, its scenes, records and photos, is shown only to the people on it. Your work is never sold or used for advertising.',
         ],
       },

@@ -927,7 +927,7 @@ html.js .steps li.on {
   opacity: 1;
 }
 
-/* The padlock beside "Analyse the script.": the script stays on the phone. */
+/* The padlock beside "Analyse the script.": the script is read on the phone. */
 .steps .step-icon {
   display: inline-block;
   width: 0.78em;

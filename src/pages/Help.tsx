@@ -212,8 +212,8 @@ const groups: { title: string; topics: Topic[] }[] = [
       },
       {
         id: 'scripts',
-        title: 'Is my script uploaded?',
-        answer: 'No. It’s read on your phone and the file never leaves it. Only the scene list and the cast are kept.',
+        title: 'Where is my script read?',
+        answer: 'On your phone. StageRoll keeps what it reads from it, such as the scene list and the cast.',
       },
     ],
   },

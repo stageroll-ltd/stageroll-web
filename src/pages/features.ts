@@ -39,12 +39,12 @@ export const featurePages: FeaturePage[] = [
     metaTitle: 'Script breakdown from PDF and Final Draft scripts',
     description:
       'Start the script breakdown from a PDF or Final Draft script: StageRoll finds every scene, speaking character and crowd, read on your device. New drafts match scene by scene.',
-    updated: '2026-11-18',
+    updated: '2026-11-28',
     lede: 'StageRoll reads your script and starts the script breakdown for you, building the production’s scene list and cast from it. Every department then breaks down against the same scenes and characters.',
     steps: [
       [
         'Import the script',
-        'A PDF with selectable text, or a Final Draft (.fdx) file. It’s read on your device, and the file is never uploaded.',
+        'A PDF with selectable text, or a Final Draft (.fdx) file. It’s read on your device.',
       ],
       [
         'StageRoll reads it',
@@ -64,7 +64,7 @@ export const featurePages: FeaturePage[] = [
       ],
     ],
     features: [
-      ['Read on your device', 'The script file never leaves your phone. StageRoll keeps what it reads from it, such as the scene list and the cast.', 'phone'],
+      ['Read on your device', 'StageRoll reads the script on your phone and keeps what it reads from it, such as the scene list and the cast.', 'phone'],
       ['Cast numbers that hold', 'A character keeps their number through every draft, and a coordinator can change it to match the call sheet.', 'hash'],
       ['Background with head counts', 'Crowds join as background, with how many are needed in each scene.', 'users'],
       ['Merge suggestions', 'Likely misreads and duplicate names are flagged before anything joins.', 'merge'],
@@ -354,11 +354,11 @@ export const featurePages: FeaturePage[] = [
     slug: 'privacy',
     title: 'Privacy and security',
     icon: 'lock',
-    summary: 'Scripts stay on your device. Work stays with your team.',
+    summary: 'Scripts are read on your device. Work stays with your team.',
     metaTitle: 'Script security and privacy for productions',
     description:
-      'Scripts are read on your device and never uploaded. A code and password to sign in, an app lock, device sign-out and an encrypted offline copy do the rest.',
-    updated: '2026-11-18',
+      'Scripts are read on your device. A code and password to sign in, an app lock, device sign-out and an encrypted offline copy do the rest.',
+    updated: '2026-11-28',
     lede: 'Productions hold unreleased scripts and private work, so StageRoll keeps what it can on your device and shows the rest only to the people on the production.',
     steps: [
       ['Lock the app', 'StageRoll locks when you leave it and opens with your PIN or Face ID. You choose how quickly it locks.'],
@@ -366,7 +366,7 @@ export const featurePages: FeaturePage[] = [
       ['Sign out anywhere', 'See every device signed in to your account and sign any of them out. A device left unused for a long time is signed out on its own.'],
     ],
     features: [
-      ['Scripts stay on your device', 'The script is read on your phone and the file is never uploaded. Only the scene list and the cast are kept.', 'doc'],
+      ['Scripts read on your device', 'The script is read on your phone. StageRoll keeps what it reads from it, such as the scene list and the cast.', 'doc'],
       ['Code and password', 'A one-time code from your email and your password, so your inbox alone never opens your account.', 'key'],
       ['App lock', 'PIN or Face ID, and it locks itself when you step away.', 'shield'],
       ['Signed-in devices', 'Every device on your account, and any of them can be signed out.', 'phone'],

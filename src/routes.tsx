@@ -118,7 +118,7 @@ export const routes: Route[] = [
       'StageRoll keeps continuity and inventory for costume, props, hair, makeup and sets on film and TV productions. Built for iPhone, iPad and Android.',
     Page: Home,
     End: HomeEnd,
-    updated: '2026-11-18',
+    updated: '2026-11-28',
     jsonLd: [website],
   },
   {
@@ -128,7 +128,7 @@ export const routes: Route[] = [
       'Everything StageRoll does for film and TV departments: script analysis, scenes, continuity, research, inventory, QR codes, the schedule, reports and team.',
     nav: 'Product',
     Page: Product,
-    updated: '2026-11-18',
+    updated: '2026-11-28',
   },
   // The feature pages, one per area of the overview (pages/features.ts).
   ...featurePages.map((page): Route => {
@@ -175,7 +175,7 @@ export const routes: Route[] = [
       'StageRoll Ltd is an independent software company registered in England and Wales, making continuity and inventory software for film and TV departments.',
     nav: 'About',
     Page: About,
-    updated: '2026-11-18',
+    updated: '2026-11-28',
   },
   {
     path: '/help/',
@@ -183,7 +183,7 @@ export const routes: Route[] = [
     description:
       'How to join or upgrade a production, change or reset your password, sign out a lost device, restore a deleted production and delete your StageRoll account.',
     Page: Help,
-    updated: '2026-11-13',
+    updated: '2026-11-28',
   },
   {
     path: '/contact/',
@@ -200,7 +200,7 @@ export const routes: Route[] = [
       'How StageRoll Ltd collects, uses and protects personal data in the StageRoll app and on this website.',
     Page: Privacy,
     // The policy's own "Last updated" date (Privacy.tsx): keep the two in step.
-    updated: '2026-10-30',
+    updated: '2026-11-28',
   },
   {
     path: '/terms/',

@@ -14,13 +14,23 @@ import { company } from '../Layout'
 //     stageroll-docs #40.
 //   - Periods say "around" or "usually", unless the law fixes them.
 //   - A few promises are kept ON PURPOSE, because they are what the product
-//     sells: the script file is never uploaded, the PIN stays on the device,
-//     no selling, no advertising. Prove each against the app before every
-//     release (stageroll-docs #41). "Stored in the UK" became "normally
-//     stored in the UK" on 27 November 2026, so a second region is possible.
-//   - NOT promised any more (owner, 27 November 2026): what is or is not
-//     kept from a script beyond "the file is never uploaded". Do not write
-//     "never the dialogue or action" here or anywhere on the site.
+//     sells: the PIN stays on the device, no selling, no advertising. Prove
+//     each against the app before every release (stageroll-docs #41).
+//     "Stored in the UK" became "normally stored in the UK" on 27 November
+//     2026, so a second region is possible.
+//   - THE SCRIPT: say HOW it is read, promise nothing about where it goes
+//     (owner, 28 November 2026). "Scripts are read on your device" is the
+//     whole of it, here and on every page of the site. NOT promised any
+//     more: "the script file is never uploaded", "never leaves your phone",
+//     "scripts stay on your device", and "only the scene list and the cast
+//     are kept" (say "keeps what it reads from it, such as the scene list
+//     and the cast"). The reason: an error report or a log could one day
+//     carry a line of a script, and a "never" would then be false. The app
+//     is still BUILT so that it cannot (stageroll-native `src/analytics`);
+//     the pages just do not stake a promise on it. And since 27 November
+//     2026, nothing is promised about what is or is not kept from a
+//     script: do not write "never the dialogue or action" here or anywhere
+//     on the site.
 //   - AI (owner, 27 November 2026). AI tools ARE used to check things on
 //     production ("I want to cover myself now"), and what covers that is
 //     ONE sentence under "How we use it": "We may use tools from our
@@ -45,12 +55,18 @@ import { company } from '../Layout'
 // behave before they are used: a cookie that is not needed for sign-in or
 // security needs a real consent choice on the site first (PECR), and a
 // news email needs consent or the soft opt-in, with a way to stop in it.
+//
+// 28 November 2026: "You can read this site without giving us any personal
+// data" was dropped, because the site now sends page visits and errors to
+// an analytics provider that sees each visitor's IP address and device. In
+// its place, one "may" line on site usage and errors. The site's analytics
+// keep nothing in the browser, so no consent choice is needed for them.
 
 export function Privacy() {
   return (
     <article className="prose">
       <h1>Privacy policy</h1>
-      <p className="updated">Last updated 27 November 2026</p>
+      <p className="updated">Last updated 28 November 2026</p>
 
       <p className="lede">
         This policy covers the StageRoll app, this website, stageroll.co, and what you send us when
@@ -82,7 +98,8 @@ export function Privacy() {
 
       <h2>This website</h2>
       <p>
-        You can read this site without giving us any personal data. Our hosting provider records
+        We may collect information about how the site is used, such as which pages are opened, and
+        reports of errors. Our hosting provider records
         visitors&rsquo; IP addresses for security, under its own privacy statement. Where the site
         lets you sign in or manage a plan, what you give us there is handled as this policy
         describes for the app. The site may use cookies or similar storage in your browser: those
@@ -152,8 +169,7 @@ export function Privacy() {
         The app asks for camera access to take photos and scan StageRoll codes, and adds photos from
         your library only when you choose them. Photos are resized on your device before they are
         uploaded, and their location and camera details are removed. We don&rsquo;t collect your
-        device&rsquo;s location. Scripts are read on your device, and the script file is never
-        uploaded.
+        device&rsquo;s location. Scripts are read on your device.
       </p>
       <p>
         Your PIN is stored and checked only on your device, and Face ID is handled by your phone;

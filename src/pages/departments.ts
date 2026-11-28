@@ -52,7 +52,7 @@ export const departmentPages: DepartmentPage[] = [
     metaTitle: 'Costume continuity and wardrobe inventory software',
     description:
       'Costume continuity and wardrobe inventory for film and TV: every change on record against the script with photos, the stock behind it, costume plots and continuity books.',
-    updated: '2026-11-17',
+    updated: '2026-11-28',
     lede: 'StageRoll gives the costume department one place for continuity and the wardrobe: every character’s changes against the script, and every piece those changes are made of.',
     features: [
       ['Costume changes', 'Numbered per character, each with its photos, note, pieces and scenes.', 'shirt'],
@@ -82,7 +82,7 @@ export const departmentPages: DepartmentPage[] = [
         ],
       },
       facts: [
-        ['Read on your device', 'Your script is never uploaded. Only the scene list and the cast are kept.'],
+        ['Read on your device', 'StageRoll reads your script on your phone and keeps what it reads from it, such as the scene list and the cast.'],
         [
           'One production, every department',
           'Costume, props, hair, makeup and sets work against the same scenes and characters.',
@@ -150,8 +150,8 @@ export const departmentPages: DepartmentPage[] = [
       },
       questions: [
         [
-          'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
+          'Where is my script read?',
+          'On your device. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Can I start before the script is locked?',
@@ -183,7 +183,7 @@ export const departmentPages: DepartmentPage[] = [
     metaTitle: 'Hair continuity software for film and TV',
     description:
       'Hair continuity for film and TV: every style on record against the script with photos and notes, the wigs, hairpieces in each, the hair plot and the continuity book.',
-    updated: '2026-11-17',
+    updated: '2026-11-28',
     lede: 'StageRoll is the hair department’s record of every style, every photo and every wig and hairpiece, tied to the script it’s shot from.',
     features: [
       ['Styles', 'Numbered per character, each with its photos, note, pieces and scenes.', 'scissors'],
@@ -209,7 +209,7 @@ export const departmentPages: DepartmentPage[] = [
         ],
       },
       facts: [
-        ['Read on your device', 'Your script is never uploaded. Only the scene list and the cast are kept.'],
+        ['Read on your device', 'StageRoll reads your script on your phone and keeps what it reads from it, such as the scene list and the cast.'],
         ['A department of its own', 'Hair has its own records, photos, notes and reports, apart from makeup’s.'],
         ['Free for crew', 'The production holds the plan. Everyone you invite joins free.'],
       ],
@@ -266,8 +266,8 @@ export const departmentPages: DepartmentPage[] = [
       },
       questions: [
         [
-          'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
+          'Where is my script read?',
+          'On your device. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Are hair and makeup one department?',
@@ -305,7 +305,7 @@ export const departmentPages: DepartmentPage[] = [
     metaTitle: 'Makeup continuity software for film and TV',
     description:
       'Makeup continuity for film and TV: every look on record against the script with photos and notes, the appliances in each, the makeup plot and the continuity book.',
-    updated: '2026-11-17',
+    updated: '2026-11-28',
     lede: 'StageRoll is the makeup department’s record of every look, every photo and every piece that goes into it, tied to the script it’s shot from.',
     features: [
       ['Looks', 'Numbered per character, each with its photos, note, pieces and scenes.', 'eye'],
@@ -335,7 +335,7 @@ export const departmentPages: DepartmentPage[] = [
         ],
       },
       facts: [
-        ['Read on your device', 'Your script is never uploaded. Only the scene list and the cast are kept.'],
+        ['Read on your device', 'StageRoll reads your script on your phone and keeps what it reads from it, such as the scene list and the cast.'],
         ['A department of its own', 'Makeup has its own records, photos, notes and reports, apart from hair’s.'],
         ['Free for crew', 'The production holds the plan. Everyone you invite joins free.'],
       ],
@@ -392,8 +392,8 @@ export const departmentPages: DepartmentPage[] = [
       },
       questions: [
         [
-          'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
+          'Where is my script read?',
+          'On your device. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Are hair and makeup one department?',
@@ -425,7 +425,7 @@ export const departmentPages: DepartmentPage[] = [
     metaTitle: 'Props continuity and inventory software for film and TV',
     description:
       'Props continuity and inventory for film and TV: what each character carries in every scene, the set props, hire returns, QR codes and a props list by scene.',
-    updated: '2026-11-17',
+    updated: '2026-11-28',
     lede: 'StageRoll is the props department’s record of what’s in every scene, who carries it, and where each prop is now.',
     features: [
       [
@@ -459,7 +459,7 @@ export const departmentPages: DepartmentPage[] = [
         ],
       },
       facts: [
-        ['Read on your device', 'Your script is never uploaded. Only the scene list and the cast are kept.'],
+        ['Read on your device', 'StageRoll reads your script on your phone and keeps what it reads from it, such as the scene list and the cast.'],
         [
           'One production, every department',
           'Costume, props, hair, makeup and sets work against the same scenes and characters.',
@@ -524,8 +524,8 @@ export const departmentPages: DepartmentPage[] = [
       },
       questions: [
         [
-          'Is my script uploaded?',
-          'No. The script is read on your device and the file never leaves it. StageRoll keeps what it reads from it, such as the scene list and the cast.',
+          'Where is my script read?',
+          'On your device. StageRoll keeps what it reads from it, such as the scene list and the cast.',
         ],
         [
           'Can one prop be in several scenes?',
